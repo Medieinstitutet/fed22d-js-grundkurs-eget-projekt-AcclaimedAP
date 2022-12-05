@@ -64,8 +64,8 @@ const player = {
   portrait: document.getElementById('playerPortrait'),
   image: document.getElementById('playerImage'),
   frameState: {
-    idle: ['public/assets/combatzone/player/player_idle_1.svg'],
-    dead: 'public/assets/combatzone/universal/gravestone.svg',
+    idle: ['assets/combatzone/player/player_idle_1.svg'],
+    dead: 'assets/combatzone/universal/gravestone.svg',
   },
   healthBar: document.getElementById('playerHealthBar'),
   attackTimerBar: document.getElementById('playerAttackBar'),
@@ -120,8 +120,8 @@ const enemy = {
   portrait: document.getElementById('enemyPortrait'),
   image: document.getElementById('enemyImage'),
   frameState: {
-    idle: ['public/assets/combatzone/enemy/slime_idle_1.svg'],
-    dead: 'public/assets/combatzone/universal/gravestone.svg',
+    idle: ['assets/combatzone/enemy/slime_idle_1.svg'],
+    dead: 'assets/combatzone/universal/gravestone.svg',
   },
   healthBar: document.getElementById('enemyHealthBar'),
   attackTimerBar: document.getElementById('enemyAttackBar'),
