@@ -1,5 +1,7 @@
-@use "utils/a11y"; // Om det inte funkar, byt @use mot @import
-@use "vendor/reset";
+/* stylelint-disable selector-id-pattern */
+/* stylelint-disable selector-class-pattern */
+@use 'utils/a11y'; // Om det inte funkar, byt @use mot @import
+@use 'vendor/reset';
 
 :root {
   // TODO: Går bra att radera kod även här!
@@ -17,48 +19,135 @@
   text-size-adjust: 100%;
 }
 
-// TODO: Radera mig! Jag är bara ett exempel.
-main {
-  padding: 20px;
+/* Functionalities */
+.unselectable {
+  user-select: none;
 }
 
-.app {
-  margin-block: 20px;
+.flexContainer {
   display: flex;
-  gap: 20px;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: rgb(29 29 29);
+}
 
-  .card {
-    $card-size: 250px;
+.flexContent {
+  height: calc(100vh - 660px);
+  margin: 10px;
+  padding: 20px;
+  background-color: cadetblue;
+  flex-grow: 1;
+  overflow: auto;
+  min-width: 20%;
+  max-width: calc(25% - 30px);
 
-    width: 0.6413 * $card-size;
-    height: $card-size;
-    cursor: pointer;
-    background: #102a3f;
-    border-radius: 8px;
-    display: flex;
-    font-weight: bold;
-    align-items: center;
-    justify-content: space-around;
-    text-align: center;
-    box-shadow: 5px 5px 5px rgb(0 0 0 / 20%);
-
-    .front {
-      font-size: rem(50px);
-    }
-
-    .back {
-      display: none;
-    }
-
-    &.visible {
-      .front {
-        display: none;
-      }
-
-      .back {
-        display: block;
-      }
-    }
+  label {
+    display: block;
   }
+}
+
+/* The shop */
+#shopButtons {
+  display: flex;
+  flex-wrap: wrap;
+
+  button {
+    margin: 0;
+    border: none;
+    padding: 5px;
+    min-width: 50%;
+    cursor: pointer;
+    background-color: rgb(255 173 66);
+  }
+
+  button:hover {
+    background-color: rgb(226 142 32);
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  button:disabled {
+    background-color: rgb(192 144 81);
+    cursor: not-allowed;
+  }
+}
+
+/* CANVAS AND VISUAL ON COMBAT ZONE */
+#canvas {
+  width: 100%;
+  position: relative;
+  background-color: antiquewhite;
+  height: 600px;
+  overflow: hidden;
+
+  #dayNight {
+    max-width: 100%;
+    height: auto;
+    position: relative;
+    left: 0;
+    bottom: 50%;
+    transform: rotate(180deg), translate(-50%, 0);
+    z-index: 10;
+  }
+
+  img {
+    position: absolute;
+  }
+
+  #grass {
+    width: 100%;
+    bottom: 0%;
+    z-index: 20;
+  }
+}
+
+#goldDisplay {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  background-color: blanchedalmond;
+  padding: 4px;
+  box-shadow: 0 4px 4px rgba(0 0 0 / 22%);
+}
+
+.portrait {
+  min-height: 500px;
+  min-width: 300px;
+  z-index: 15;
+  bottom: 50px;
+  position: absolute;
+
+  meter {
+    display: block;
+    width: 100%;
+  }
+
+  progress {
+    width: 100%;
+    display: block;
+  }
+}
+
+#playerPortrait {
+  left: 10px;
+}
+
+#enemyPortrait {
+  right: 10px;
+
+  #enemyImage {
+    opacity: 0.8;
+  }
+}
+
+/* DEBUG */
+#tickCounter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2000;
+  background-color: cornflowerblue;
+  margin: 4px;
+  padding: 2px;
+  box-shadow: 2px 2px 2px rgba(0 0 0 / 22.6%);
 }
