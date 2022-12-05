@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable arrow-parens */
 /* eslint-disable @typescript-eslint/comma-dangle */
 /* eslint-disable operator-linebreak */
@@ -512,11 +513,13 @@ function animate() {
   // Causes player to lunge forward if it is time to attack
   const speed = 1; // How many % they will move every tick.
   const startDistance = 5;
+  const playerPortrait = player.portrait as HTMLDivElement;
+  const enemyPortrait = enemy.portrait as HTMLDivElement;
   if (player.IS_ATTACKING) {
     // As long as it hasn't arrived, keep moving
     if (!player.IS_FRONT_OF_OPPONENT) {
       player.xPos += speed;
-      player.portrait.style.left = `${player.xPos}%`;
+      playerPortrait.style.left = `${player.xPos}%`;
     }
 
     if (player.xPos + enemy.xPosReversed >= distance) {
@@ -535,13 +538,13 @@ function animate() {
   } else if (!player.IS_ATTACKING && player.xPos > startDistance) {
     // Moves it back
     player.xPos -= speed;
-    player.portrait.style.left = `${player.xPos}%`;
+    playerPortrait.style.left = `${player.xPos}%`;
   }
 
   if (enemy.IS_ATTACKING) {
     if (!enemy.IS_FRONT_OF_OPPONENT) {
       enemy.xPosReversed += speed;
-      enemy.portrait.style.right = `${enemy.xPosReversed}%`;
+      enemyPortrait.style.right = `${enemy.xPosReversed}%`;
     }
     if (player.xPos + enemy.xPosReversed >= distance) {
       // If close enough, perform attack
@@ -558,7 +561,7 @@ function animate() {
   } else if (!enemy.IS_ATTACKING && enemy.xPosReversed > startDistance) {
     // Moves it back
     enemy.xPosReversed -= speed;
-    enemy.portrait.style.right = `${enemy.xPosReversed}%`;
+    enemyPortrait.style.right = `${enemy.xPosReversed}%`;
   }
 
   backgroundCycle();
@@ -578,7 +581,7 @@ btnDebugState.addEventListener('click', () => {
 });
 
 // NOTE: trying to calculate how many updates per second we get.
-const tpsSpan = document.getElementById('ticksPerSecond');
+const tpsSpan = document.getElementById('ticksPerSecond') as HTMLSpanElement;
 const d = new Date();
 let pastSecond = d.getTime();
 let x = 0;
@@ -622,12 +625,20 @@ function gameLoop() {
   setTimeout(gameLoop, tickRate);
 }
 // Loops over all shop buttons to give them their info.
+/*
 Object.keys(shop).forEach(key => {
   shop[key].DOM.addEventListener('click', () => {
     shopBuy(shop[key]);
   });
   updateShop(shop[key]);
 });
+*/
+
+shop.ATTACK.DOM?.addEventListener('click', () => {
+  shopBuy(shop.ATTACK);
+  updateShop(shop.ATTACK);
+});
+
 // Makes player and enemy stats accurate on start.
 calculatePlayerStats();
 updateStatFrame(player);
