@@ -1,24 +1,73 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- TODO: glöm ej att byta språk här -->
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/ico" href="/js-template/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Projekt</title>
-    <script type="module" crossorigin src="/js-template/assets/index.288365a0.js"></script>
-    <link rel="stylesheet" href="/js-template/assets/index.09951560.css">
-  </head>
-  <body>
-    <main>
-      <div class="app" id="app"></div> <!-- TODO: går bra att radera -->
-      <!-- TODO: skriv din kod här, innan script-taggen -->
-    </main>
+<html lang="en">
+<!-- TODO: glöm ej att byta språk här -->
 
-    <!-- TODO
-    - Validera HTML (kopiera den renderade HTML-koden): https://validator.w3.org/#validate_by_input
-    - Kontrollera tillgänglighet: https://www.a11yproject.com/checklist/ & Chrome Lighthouse/Firefox Accessibility Tools
-    - Validera genererade CSS: https://jigsaw.w3.org/css-validator/#validate_by_input
-    -->
-    
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/ico" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projekt</title>
+  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.c72722ce.js"></script>
+  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.02ef5fc6.css">
+</head>
+
+<body>
+  <div class="flexContainer">
+    <div id="canvas" class="unselectable">
+      <!--Combat zone canvas-->
+      <label id="goldDisplay"><span id="goldCount">0</span> Gold</label>
+      <!--player portrait-->
+      <div class="portrait" id="playerPortrait">
+        <meter class="healthBar" id="playerHealthBar" min="0" low="33" high="50" optimum="67" value="100" max="100"
+          aria-label="Player Health points"></meter>
+        <progress class="attackBar" id="playerAttackBar" min="0" max="220" value="0"
+          aria-label="Player attack timer progress bar"></progress>
+        <img id="playerImage" src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/player_idle_1.cd7d3002.svg" alt="player character" />
+      </div>
+
+      <!--enemy portrait-->
+      <div class="portrait" id="enemyPortrait">
+        <meter class="healthBar" id="enemyHealthBar" min="0" low="7" high="10" optimum="15" value="20" max="20"
+          aria-label="Player Health points"></meter>
+        <progress class="attackBar" id="enemyAttackBar" min="0" max="220" value="0"
+          aria-label="Player attack timer progress bar"></progress>
+        <img id="enemyImage" src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/slime_idle_1.dbe2c376.svg" alt="enemy character" />
+      </div>
+
+      <!--Visual clutter-->
+      <img id="grass" src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/grass.3fa69e15.svg" alt="grass" />
+      <img id="dayNight" src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/daynightcycle.3d11e9c9.svg" alt="day and night cycle" />
+    </div>
+
+    <div class="flexContent" id="textOutput">Starting combat!</div>
+    <div class="flexContent" id="playerInfo">
+      <h2>Player Stats</h2>
+      <label>Attack: <span id="spnPlayerAttack"></span></label>
+      <label>Max Health: <span id="spnPlayerHealthMax"></span></label>
+      <label>Attacks per second: <span id="spnPlayerAttackSpeed"></span></label>
+    </div>
+
+    <div class="flexContent" id="shop">
+      <h2>Shop</h2>
+      <div id="shopButtons">
+        <button class="shopButton" id="shopBtnAttack">Attack</button>
+        <button class="shopButton" id="shopBtnHealth">Health</button>
+        <button class="shopButton" id="shopBtnHealthRegen" disabled>Health Regen</button>
+        <button class="shopButton" id="shopBtnAttackSpeed" disabled>Attack Speed</button>
+        <button class="shopButton" id="shopBtnCritChance" disabled>Crit Chance</button>
+        <button class="shopButton" id="shopBtnCritMultiplier" disabled>Crit Multiplier</button>
+        <button class="shopButton" id="shopBtnBlockChance" disabled>Block Chance</button>
+      </div>
+    </div>
+    <div class="flexContent" id="debug">
+      <h2>Debug</h2>
+      <button id="debugButton" title="console logs the current player and enemy object.">Get state</button><br />
+      <label title="Updates per second, should be between 15 and 18, if there's a vastly higher number, panic.">UPS:
+        <span id="ticksPerSecond"></span></label>
+      <span id="tickCounter">0</span>
+    </div>
+  </div>
+  
+</body>
+
 </html>
