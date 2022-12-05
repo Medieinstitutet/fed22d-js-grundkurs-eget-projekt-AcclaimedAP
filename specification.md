@@ -1,8 +1,8 @@
 ## Spelflöde:
 
-- Spelare och monster automatiskts engageras i combat.
-- När monstret dör, får spelaren guld som den kan spendera på uppgraderingar.
-- Monsret kommer tillbaka lite starkare.
+- Spelare och monster automatiskts engageras i combat. Spelet är ett Idle spel, vilket gör att spelaren inte gör några inputs för att fortsätta combat.
+- När monstret dör, får spelaren guld som den kan spendera på uppgraderingar så som mera HP, Attack, Crit chans, hur mycket critical hits skadar, hur länge man väntar mellan attacks, och block chans. Kan lägga till flera ifall jag har tid.
+- Monsret kommer tillbaka en level starkare. Ifall spelaren dör, blir monstret svagare med ca 10 levlar(om den är över level 10 till att börja med)
 - Repeat.
 
 ### G:
