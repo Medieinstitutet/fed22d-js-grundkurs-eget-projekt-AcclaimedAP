@@ -32,5 +32,6 @@ module.exports = {
     'linebreak-style': ['error', 'windows'],
     'no-param-reassign': 'off',
     'prefer-destructuring': ['error', { object: true, array: false }],
+    'arrow-parens': ['error', 'as-needed'],
   },
 };

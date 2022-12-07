@@ -30,7 +30,7 @@ type UtilityStats = {
   GOLD_DROP?: number;
   LEVEL?: number;
 };
-
+// FIXME: This fucker doesn't work it seems, any use related to it currently has "any" to temporary fix, look over this
 type UIElements = {
   healthBar: HTMLMeterElement;
   attackTimerBar: HTMLMeterElement;
@@ -401,6 +401,7 @@ function updateShop(shopItem: any): void {
     // Everything else.
     shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>+ ${power}`;
   }
+  console.log(`updated shop${shopItem}`);
 }
 
 function calculatePlayerStats(): void {
@@ -548,26 +549,31 @@ function adjustColor(color: number, target: number, speed = 1): number {
 // ANIMATION FUNCTIONS
 // Rotates the background, gets called every tick.
 function backgroundCycle() {
-  degree += 0.2;
+  const sunSetTime = 50;
+  const nightStartTime = 90;
+  const sunRiseTime = 230;
+  const dayTime = 270;
+  const colorChangeSpeed = 0.6;
+  degree += 0.15;
   if (degree >= 360) {
     degree = 0; // Resets degree to reduce headache
   }
   dayAndNight.style.transform = `rotate(${degree}deg)`;
   if (degree >= 280 || degree <= 80) {
-    red = adjustColor(red, day.red);
-    green = adjustColor(green, day.green);
-    blue = adjustColor(blue, day.blue);
+    red = adjustColor(red, day.red, colorChangeSpeed);
+    green = adjustColor(green, day.green, colorChangeSpeed);
+    blue = adjustColor(blue, day.blue, colorChangeSpeed);
 
     // Sunset & rise
-  } else if ((degree < 280 && degree > 240) || (degree > 80 && degree < 120)) {
-    red = adjustColor(red, sunSetAndRise.red);
-    green = adjustColor(green, sunSetAndRise.green);
-    blue = adjustColor(blue, sunSetAndRise.blue);
+  } else if ((degree < dayTime && degree > sunRiseTime) || (degree > sunSetTime && degree < nightStartTime)) {
+    red = adjustColor(red, sunSetAndRise.red, colorChangeSpeed);
+    green = adjustColor(green, sunSetAndRise.green, colorChangeSpeed);
+    blue = adjustColor(blue, sunSetAndRise.blue, colorChangeSpeed);
     // Night
-  } else if (degree > 120 && degree < 240) {
-    red = adjustColor(red, night.red);
-    green = adjustColor(green, night.green);
-    blue = adjustColor(blue, night.blue);
+  } else if (degree > nightStartTime && degree < sunRiseTime) {
+    red = adjustColor(red, night.red, colorChangeSpeed);
+    green = adjustColor(green, night.green, colorChangeSpeed);
+    blue = adjustColor(blue, night.blue, colorChangeSpeed);
   }
   canvas.style.backgroundColor = `rgb(${red},${green},${blue})`;
 }
@@ -700,7 +706,10 @@ function gameLoop() {
   setTimeout(gameLoop, tickRate);
 }
 // Loops over all shop buttons to give them their info.
+
 /*
+FIXME: Typescript doesn't like this one
+
 Object.keys(shop).forEach(key => {
   shop[key].DOM.addEventListener('click', () => {
     shopBuy(shop[key]);
@@ -709,10 +718,18 @@ Object.keys(shop).forEach(key => {
 });
 */
 
+// NOTE: Temporary fix for above...
 shop.ATTACK.DOM?.addEventListener('click', () => {
   shopBuy(shop.ATTACK);
   updateShop(shop.ATTACK);
 });
+shop.HEALTH.DOM?.addEventListener('click', () => {
+  shopBuy(shop.HEALTH);
+  updateShop(shop.HEALTH);
+});
+
+updateShop(shop.ATTACK);
+updateShop(shop.HEALTH);
 
 // Makes player and enemy stats accurate on start.
 calculatePlayerStats();
