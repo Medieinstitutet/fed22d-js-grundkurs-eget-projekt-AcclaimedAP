@@ -110,7 +110,7 @@ const player = {
   NAME: 'PlayerName',
   HEALTH_MAX: 100,
   HEALTH_CURRENT: 100,
-  HEALTH_REGEN: 5,
+  HEALTH_REGEN: 1,
   DAMAGE: 5,
   ATTACK_TIMER: 0,
   ATTACK_COOLDOWN: 220,
@@ -503,7 +503,12 @@ function respawn(target: any) {
     updateHealthBar(target);
   }
 }
-
+function regeneration(target: any) {
+  if (target.HEALTH_CURRENT < target.HEALTH_MAX) {
+    heal(target, target.HEALTH_REGEN / (1000 / tickRate));
+    updateHealthBar(target);
+  }
+}
 // Checks whenever they're dead
 function checkDeath(victim: Health & LogicBooleans & UIElements & CombatStats & UtilityStats): void {
   if (Math.floor(victim.HEALTH_CURRENT) <= 0) {
@@ -712,7 +717,8 @@ function gameLoop() {
 
   attackCount(player, enemy);
   attackCount(enemy, player);
-
+  regeneration(player);
+  regeneration(enemy);
   // If they're in respawning state, initiate that.
   if (player.IS_RESPAWNING) {
     respawn(player);
