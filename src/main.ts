@@ -1,17 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/indent */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable arrow-parens */
-/* eslint-disable @typescript-eslint/comma-dangle */
-/* eslint-disable operator-linebreak */
-/* eslint-disable max-len */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* hehe... eslint go boom */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import './style/style.scss';
 
@@ -344,7 +337,7 @@ function updateGoldDisplay(): void {
 // If you want to update the max values of the healthbar, you can pass on true to make it update those values as well.
 
 function updateHealthBar(target: any, updateMax = false): void {
-  const healthBar = target.healthBar;
+  const { healthBar } = target;
   const healthMax = target.HEALTH_MAX;
   const healthCurrent = target.HEALTH_CURRENT;
   healthBar.value = healthCurrent;
@@ -412,8 +405,7 @@ function updateShop(shopItem: any): void {
 
 function calculatePlayerStats(): void {
   player.DAMAGE = player.base.DAMAGE + shop.ATTACK.BASE_POWER + shop.ATTACK.BOUGHT * shop.ATTACK.POWER_MULTIPLIER;
-  player.HEALTH_MAX =
-    player.base.HEALTH_MAX + shop.HEALTH.BASE_POWER + shop.HEALTH.BOUGHT * shop.HEALTH.POWER_MULTIPLIER;
+  player.HEALTH_MAX = player.base.HEALTH_MAX + shop.HEALTH.BASE_POWER + shop.HEALTH.BOUGHT * shop.HEALTH.POWER_MULTIPLIER;
 }
 
 function calculateEnemyStats() {

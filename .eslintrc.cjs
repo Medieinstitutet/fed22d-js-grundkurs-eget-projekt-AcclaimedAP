@@ -7,10 +7,7 @@ module.exports = {
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
-      extends: [
-        'plugin:@typescript-eslint/recommended',
-        'plugin:@typescript-eslint/recommended-requiring-type-checking',
-      ],
+      extends: ['plugin:@typescript-eslint/recommended', 'plugin:@typescript-eslint/recommended-requiring-type-checking'],
       parserOptions: {
         project: ['./tsconfig.json'],
       },
@@ -25,7 +22,7 @@ module.exports = {
   rules: {
     'curly': ['error', 'all'],
     'indent': ['error', 2, { SwitchCase: 1 }],
-    'max-len': ['error', { code: 120 }],
+    'max-len': ['error', { code: 160 }],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
@@ -34,5 +31,6 @@ module.exports = {
     'no-undef': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     'linebreak-style': ['error', 'windows'],
     'no-param-reassign': 'off',
+    'prefer-destructuring': ['error', { object: true, array: false }],
   },
 };
