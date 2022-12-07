@@ -7,7 +7,7 @@
   <link rel="icon" type="image/ico" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projekt</title>
-  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.b0035cb8.js"></script>
+  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.1da22580.js"></script>
   <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.02ef5fc6.css">
 </head>
 
@@ -62,10 +62,13 @@
     <div class="flexContent" id="debug">
       <h2>Debug</h2>
       <button id="debugButton" title="console logs the current player and enemy object.">Get state</button><br />
-      <label title="Updates per second, should be between 15 and 18, if there's a vastly higher number, panic.">UPS:
+      <label
+        title="Updates per second, should be around 50-55 because of Javascript's inaccurate timing methods that I'm using, but can peak to up to 66,67">UPS:
         <span id="ticksPerSecond"></span></label>
       <span id="tickCounter">0</span>
+      <label title="Stats for background color and spin">Degree: <span id="degreeSpn"></span></label>
     </div>
+
   </div>
   
 </body>
