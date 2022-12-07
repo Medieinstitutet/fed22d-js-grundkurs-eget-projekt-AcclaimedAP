@@ -10,8 +10,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import './style/style.scss';
 
 /*
@@ -54,6 +53,7 @@ const player = {
   // Keeps tracks on how many is bought for each item for the purpose of calculating the cost of future upgrades
 
   // Logic booleans
+  IS_PLAYABLE_CHARACTER: true,
   IS_ATTACKING: false,
   IS_FRONT_OF_OPPONENT: false,
   IS_ALIVE: true,
@@ -110,6 +110,7 @@ const enemy = {
     GOLD_DROP: 1.5,
   },
   // Logic booleans
+  IS_PLAYABLE_CHARACTER: false,
   IS_ATTACKING: false,
   IS_FRONT_OF_OPPONENT: false,
   IS_ALIVE: true,
@@ -232,6 +233,54 @@ let degree = 0;
 const tickCounterSpan = document.getElementById('tickCounter') as HTMLSpanElement;
 const btnDebugState = document.getElementById('debugButton') as HTMLButtonElement;
 
+type Health = {
+  HEALTH_MAX: number;
+  HEALTH_CURRENT: number;
+  HEALTH_REGEN: number;
+};
+type CombatStats = {
+  DAMAGE: number;
+  ATTACK_TIMER: number;
+  ATTACK_COOLDOWN: number;
+  CHARGE_TIMER: number;
+  CHARGE_COOLDOWN: number;
+  CRIT_CHANCE: number;
+  CRIT_MULTIPLIER: number;
+  BLOCK_CHANCE: number;
+};
+type UtilityStats = {
+  NAME: 'PlayerName';
+  RESPAWN_TIMER: number;
+  GOLD?: number;
+  GOLD_DROP: number;
+  LEVEL?: number;
+};
+
+type UIElements = {
+  healthBar: HTMLMeterElement;
+  attackTimerBar: HTMLMeterElement;
+  xPosReversed: number;
+  portrait: HTMLDivElement;
+  image: HTMLImageElement;
+  frameState: {
+    idle: string;
+    dead: string;
+  };
+};
+type LogicBooleans = {
+  IS_ATTACKING: boolean;
+  IS_FRONT_OF_OPPONENT: boolean;
+  IS_ALIVE: boolean;
+  IS_RESPAWNING: boolean;
+  IS_PLAYABLE_CHARACTER: boolean;
+};
+type StatFrame = {
+  statFrame: {
+    spnAttack: HTMLSpanElement;
+    spnHealthMax: HTMLSpanElement;
+    spnAttackSpeed: HTMLSpanElement;
+  };
+};
 /*
 
 FUNCTIONS
@@ -241,9 +290,9 @@ FUNCTIONS
                         DOM updates
 ######################################################### */
 
-function updateStatFrame(target: any): void {
-  target.statFrame.spnAttack.innerHTML = Math.round(target.DAMAGE);
-  target.statFrame.spnHealthMax.innerHTML = Math.round(target.HEALTH_MAX);
+function updateStatFrame(target: UIElements & CombatStats & Health & StatFrame): void {
+  target.statFrame.spnAttack.innerHTML = Math.round(target.DAMAGE).toString();
+  target.statFrame.spnHealthMax.innerHTML = Math.round(target.HEALTH_MAX).toString();
   target.statFrame.spnAttackSpeed.innerHTML = ((tickRate / target.ATTACK_COOLDOWN) * 10).toFixed(2);
 }
 
@@ -253,7 +302,8 @@ function updateGoldDisplay(): void {
 
 // Updates healthbar
 // If you want to update the max values of the healthbar, you can pass on true to make it update those values as well.
-function updateHealthBar(target: any, updateMax = false): void {
+
+function updateHealthBar(target: Health & UIElements, updateMax = false): void {
   target.healthBar.value = target.HEALTH_CURRENT;
 
   // Only runs when you want it to.
@@ -265,7 +315,7 @@ function updateHealthBar(target: any, updateMax = false): void {
   }
 }
 // Updates the attack progressbar, like updateHealthBar, the boolean decides if it updates max value too
-function updateAttackTimerBar(target: any, updateMax = false): void {
+function updateAttackTimerBar(target: CombatStats & UIElements, updateMax = false): void {
   target.attackTimerBar.value = target.ATTACK_TIMER;
   if (updateMax) {
     target.attackTimerBar.max = target.ATTACK_COOLDOWN;
@@ -284,24 +334,31 @@ function output(text?: string, style?: string): void {
 /* #########################################################
                         Shop and UI and Stats
 ######################################################### */
-function shopMath(shopItem: any): number {
-  const powerCalc = shopItem.BASE_POWER + shopItem.BOUGHT * shopItem.POWER_MULTIPLIER;
+function shopMath(shopItem: { BASE_POWER: number; BOUGHT: number; POWER_MULTIPLIER: number }): number {
+  const powerCalc: number = shopItem.BASE_POWER + shopItem.BOUGHT * shopItem.POWER_MULTIPLIER;
   if (powerCalc >= 1) {
-    console.log(powerCalc.toFixed(0));
-    return powerCalc.toFixed(0);
+    return Number(powerCalc.toFixed(0));
   }
   if (powerCalc >= 0.1) {
-    return powerCalc.toFixed(1);
+    return Number(powerCalc.toFixed(1));
   }
   if (powerCalc >= 0.01) {
-    return powerCalc.toFixed(2);
+    return Number(powerCalc.toFixed(2));
   }
-  return powerCalc.toFixed(3);
+  return Number(powerCalc.toFixed(3));
 }
-function shopCost(shopItem: any): number {
+function shopCost(shopItem: { BASE_COST: number; COST_MULTIPLIER: number; BOUGHT: number }): number {
   return Math.round(shopItem.BASE_COST + shopItem.BASE_COST * shopItem.COST_MULTIPLIER * shopItem.BOUGHT);
 }
-function updateShop(shopItem: any): void {
+function updateShop(shopItem: {
+  BASE_POWER: number;
+  BOUGHT: number;
+  POWER_MULTIPLIER: number;
+  NAME: string;
+  BASE_COST: number;
+  COST_MULTIPLIER: number;
+  DOM: { innerHTML: string };
+}): void {
   const cost = shopCost(shopItem);
   let power = shopMath(shopItem);
   // If it is supposed to show in %, do so
@@ -333,7 +390,16 @@ function calculateEnemyStats() {
   updateHealthBar(enemy, true);
 }
 
-function shopBuy(shopItem: any): void {
+function shopBuy(shopItem: {
+  COST: number;
+  BOUGHT: number;
+  BASE_COST: number;
+  COST_MULTIPLIER: number;
+  BASE_POWER: number;
+  POWER_MULTIPLIER: number;
+  NAME: string;
+  DOM: { innerHTML: string };
+}): void {
   shopItem.COST = shopCost(shopItem);
 
   if (player.GOLD >= shopItem.COST) {
@@ -351,7 +417,7 @@ function shopBuy(shopItem: any): void {
 ######################################################### */
 
 // Heals a target
-function heal(target: any, amount?: number) {
+function heal(target: Health & LogicBooleans, amount?: number) {
   if (target.IS_ALIVE && amount != null) {
     // If alive, and amount is given, heal that amount
     target.HEALTH_CURRENT += amount;
@@ -365,7 +431,7 @@ function heal(target: any, amount?: number) {
 }
 
 // Respawns a target that has fallen 💀
-function respawn(target: any) {
+function respawn(target: LogicBooleans & UIElements & UtilityStats & Health & CombatStats) {
   // gives target max hp
   target.IS_RESPAWNING = true;
   if (target.image.src !== target.frameState.dead) {
@@ -375,7 +441,7 @@ function respawn(target: any) {
   target.RESPAWN_TIMER += 1;
   if (target.RESPAWN_TIMER >= respawnCooldown) {
     // If it is the enemy that dies, level it up, give gold to player, etc.
-    if (target === enemy) {
+    if (target.IS_PLAYABLE_CHARACTER === false) {
       enemy.LEVEL += 1;
       player.GOLD += enemy.GOLD_DROP;
       updateGoldDisplay();
@@ -401,7 +467,7 @@ function respawn(target: any) {
 }
 
 // Checks whenever they're dead
-function checkDeath(victim: { HEALTH_CURRENT: number; IS_ALIVE: boolean }): void {
+function checkDeath(victim: Health & LogicBooleans & UIElements & CombatStats & UtilityStats): void {
   if (Math.floor(victim.HEALTH_CURRENT) <= 0) {
     // If their hp is 0 is below, cause respawn
     victim.IS_ALIVE = false;
@@ -439,7 +505,10 @@ function damageCalculation(
   return damageDealt;
 }
 
-function attack(attacker: any, defender: any): void {
+function attack(
+  attacker: CombatStats & UtilityStats,
+  defender: Health & CombatStats & UIElements & LogicBooleans & UtilityStats
+): void {
   const damage = damageCalculation(attacker, defender);
   defender.HEALTH_CURRENT -= damage;
   attacker.ATTACK_TIMER = 0;
@@ -448,7 +517,7 @@ function attack(attacker: any, defender: any): void {
   checkDeath(defender);
 }
 
-function attackCount(attacker: any, defender: any): void {
+function attackCount(attacker: LogicBooleans & CombatStats & UIElements, defender: LogicBooleans): void {
   // If the player is dead, or already attacking, end this function(optimization?)
   if (!attacker.IS_ALIVE || !defender.IS_ALIVE) {
     return;
@@ -497,7 +566,7 @@ function backgroundCycle() {
   canvas.style.backgroundColor = `rgb(${red},${green},${blue})`;
 }
 
-function resetAttackState(target: any) {
+function resetAttackState(target: LogicBooleans & CombatStats) {
   target.IS_ATTACKING = false;
   target.ATTACK_TIMER = 0;
   target.CHARGE_TIMER = 0;

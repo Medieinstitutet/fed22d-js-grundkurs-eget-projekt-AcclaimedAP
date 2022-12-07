@@ -33,5 +33,6 @@ module.exports = {
     'no-unreachable': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     'no-undef': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     'linebreak-style': ['error', 'windows'],
+    'no-param-reassign': 'off',
   },
 };
