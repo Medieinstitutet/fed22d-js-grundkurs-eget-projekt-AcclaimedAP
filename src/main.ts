@@ -243,7 +243,7 @@ const shop = {
   ATTACK_SPEED: {
     NAME: 'ATTACK SPEED',
     COST: 0,
-    BASE_COST: 6,
+    BASE_COST: 30,
     BASE_POWER: 3,
     COST_MULTIPLIER: 2.1,
     POWER_MULTIPLIER: 0.9,
@@ -254,10 +254,10 @@ const shop = {
     NAME: 'CRIT CHANCE',
     COST: 0,
     BASE_COST: 6,
-    BASE_POWER: 0.005,
+    BASE_POWER: 0.05,
     COST_MULTIPLIER: 1.5,
-    POWER_MULTIPLIER: 1.04,
-    BOUGHT: 0,
+    POWER_MULTIPLIER: 0.6,
+    BOUGHT: 1,
     DOM: document.getElementById('shopBtnCritChance'),
   },
   CRIT_MULTIPLIER: {
@@ -274,7 +274,7 @@ const shop = {
     NAME: 'BLOCK CHANCE',
     COST: 0,
     BASE_COST: 6,
-    BASE_POWER: 0.005,
+    BASE_POWER: 0.05,
     COST_MULTIPLIER: 1.9,
     POWER_MULTIPLIER: 1.04,
     BOUGHT: 0,
@@ -372,8 +372,17 @@ function output(text?: string, style?: string): void {
 /* #########################################################
                         Shop and UI and Stats
 ######################################################### */
-function shopMath(shopItem: { BASE_POWER: number; BOUGHT: number; POWER_MULTIPLIER: number }): number {
-  const powerCalc: number = shopItem.BASE_POWER + shopItem.BOUGHT * shopItem.POWER_MULTIPLIER;
+function shopMath(shopItem: { NAME: string; BASE_POWER: number; BOUGHT: number; POWER_MULTIPLIER: number }): number {
+  let powerCalc: number = shopItem.BASE_POWER + shopItem.BOUGHT * shopItem.POWER_MULTIPLIER;
+  if (shopItem.NAME === shop.ATTACK_SPEED.NAME) {
+    powerCalc = shopItem.BASE_POWER / (1 + shopItem.BOUGHT * shopItem.POWER_MULTIPLIER);
+  }
+  if (shopItem.NAME === shop.CRIT_CHANCE.NAME || shopItem === shop.BLOCK_CHANCE) {
+    powerCalc = shopItem.BASE_POWER + (shopItem.BOUGHT / 1000) * shopItem.POWER_MULTIPLIER;
+  }
+  if (shopItem === shop.CRIT_MULTIPLIER) {
+    powerCalc = shopItem.BASE_POWER + (shopItem.BOUGHT / 100) * shopItem.POWER_MULTIPLIER;
+  }
   if (powerCalc >= 1) {
     return Number(powerCalc.toFixed(0));
   }
@@ -392,13 +401,16 @@ function updateShop(shopItem: any): void {
   const cost = shopCost(shopItem);
   let power = shopMath(shopItem);
   // If it is supposed to show in %, do so
-  if (shopItem === shop.BLOCK_CHANCE || shopItem === shop.CRIT_CHANCE || shopItem === shop.CRIT_MULTIPLIER) {
-    power *= 100;
+  if (shopItem === shop.BLOCK_CHANCE || shopItem === shop.CRIT_CHANCE) {
     const powerString = `${power.toString()}%`;
     shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>+ ${powerString}`;
   } else if (shopItem === shop.ATTACK_SPEED) {
     // Special case for attack speed
-    shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>- ${power * 10} ms`;
+    shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>- ${power * 15} ms`;
+  } else if (shopItem === shop.CRIT_MULTIPLIER) {
+    power *= 100;
+    const powerString = `${power.toString()}%`;
+    shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>+ ${powerString}`;
   } else {
     // Everything else.
     shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>+ ${power}`;
@@ -408,7 +420,12 @@ function updateShop(shopItem: any): void {
 
 function calculatePlayerStats(): void {
   player.DAMAGE += shopMath(shop.ATTACK);
-  player.HEALTH_MAX += shop.HEALTH.BASE_POWER + shop.HEALTH.BOUGHT * shop.HEALTH.POWER_MULTIPLIER;
+  player.HEALTH_MAX += shopMath(shop.ATTACK);
+  player.HEALTH_REGEN += shopMath(shop.HEALTH_REGEN);
+  player.CRIT_CHANCE += shopMath(shop.CRIT_CHANCE) / 100;
+  player.CRIT_MULTIPLIER += shopMath(shop.CRIT_MULTIPLIER);
+  player.BLOCK_CHANCE += shopMath(shop.BLOCK_CHANCE);
+  player.ATTACK_COOLDOWN -= shopMath(shop.ATTACK_SPEED);
 }
 
 function calculateEnemyStats() {
