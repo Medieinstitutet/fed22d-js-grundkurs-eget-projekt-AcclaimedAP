@@ -8,6 +8,8 @@
 
 import './style/style.scss';
 
+// I'm sorry Jenni, for what you're about to see.
+
 type Health = {
   HEALTH_MAX: number;
   HEALTH_CURRENT: number;
@@ -323,7 +325,7 @@ FUNCTIONS
 
 function updateStatFrame(target: any): void {
   if (target.statFrame !== undefined) {
-    target.statFrame.spnAttack.innerHTML = Math.round(target.DAMAGE).toString();
+    target.statFrame.spnAttack.innerHTML = Math.round(target.DAMAGE).toFixed(0);
     target.statFrame.spnHealthMax.innerHTML = Math.round(target.HEALTH_MAX).toString();
     target.statFrame.spnAttackSpeed.innerHTML = ((tickRate / target.ATTACK_COOLDOWN) * 10).toFixed(2);
   }
@@ -405,8 +407,8 @@ function updateShop(shopItem: any): void {
 }
 
 function calculatePlayerStats(): void {
-  player.DAMAGE = player.base.DAMAGE + shop.ATTACK.BASE_POWER + shop.ATTACK.BOUGHT * shop.ATTACK.POWER_MULTIPLIER;
-  player.HEALTH_MAX = player.base.HEALTH_MAX + shop.HEALTH.BASE_POWER + shop.HEALTH.BOUGHT * shop.HEALTH.POWER_MULTIPLIER;
+  player.DAMAGE += shopMath(shop.ATTACK);
+  player.HEALTH_MAX += shop.HEALTH.BASE_POWER + shop.HEALTH.BOUGHT * shop.HEALTH.POWER_MULTIPLIER;
 }
 
 function calculateEnemyStats() {
@@ -423,11 +425,11 @@ function shopBuy(shopItem: any): void {
 
   if (player.GOLD >= shopItem.COST) {
     player.GOLD -= shopItem.COST;
-    shopItem.BOUGHT += 1;
     updateGoldDisplay();
+    updateShop(shopItem);
     calculatePlayerStats();
     updateStatFrame(player);
-    updateShop(shopItem);
+    shopItem.BOUGHT += 1;
   }
 }
 
@@ -548,18 +550,19 @@ function adjustColor(color: number, target: number, speed = 1): number {
 
 // ANIMATION FUNCTIONS
 // Rotates the background, gets called every tick.
+
 function backgroundCycle() {
   const sunSetTime = 50;
   const nightStartTime = 90;
-  const sunRiseTime = 230;
-  const dayTime = 270;
+  const sunRiseTime = 250;
+  const dayTime = 300;
   const colorChangeSpeed = 0.6;
-  degree += 0.15;
+  degree += 0.1;
   if (degree >= 360) {
     degree = 0; // Resets degree to reduce headache
   }
   dayAndNight.style.transform = `rotate(${degree}deg)`;
-  if (degree >= 280 || degree <= 80) {
+  if (degree >= dayTime || degree <= sunSetTime) {
     red = adjustColor(red, day.red, colorChangeSpeed);
     green = adjustColor(green, day.green, colorChangeSpeed);
     blue = adjustColor(blue, day.blue, colorChangeSpeed);
@@ -655,11 +658,15 @@ LOGIC
 */
 // NOTE: Temporary, just for debugging.
 btnDebugState.addEventListener('click', () => {
-  // eslint-disable-next-line no-console
   console.log(player);
-  // eslint-disable-next-line no-console
   console.log(enemy);
+  console.log(shop);
 });
+
+function degreeDisplay() {
+  const spnDegree = document.getElementById('degreeSpn') as HTMLSpanElement;
+  spnDegree.innerHTML = `${degree.toFixed(1)}<br>red: ${red.toFixed(1)}<br>green: ${green.toFixed(1)}<br>blue: ${blue.toFixed(1)}`;
+}
 
 // NOTE: trying to calculate how many updates per second we get.
 const tpsSpan = document.getElementById('ticksPerSecond') as HTMLSpanElement;
@@ -671,8 +678,8 @@ function ticksPerSecond() {
   if (x === 100) {
     const d2 = new Date();
     const currentTime = d2.getTime();
-    const difference: number = (currentTime - pastSecond) / 100;
-    tpsSpan.innerHTML = difference.toString();
+    const difference: number = 1000 / ((currentTime - pastSecond) / 100);
+    tpsSpan.innerHTML = difference.toFixed(2);
     pastSecond = currentTime;
     x = 0;
   }
@@ -702,7 +709,7 @@ function gameLoop() {
 
   // Loopieloop loop - setInterval? Heard it is better with setTimeout for this, but got to ask
   ticksPerSecond();
-
+  degreeDisplay();
   setTimeout(gameLoop, tickRate);
 }
 // Loops over all shop buttons to give them their info.
@@ -727,12 +734,34 @@ shop.HEALTH.DOM?.addEventListener('click', () => {
   shopBuy(shop.HEALTH);
   updateShop(shop.HEALTH);
 });
-
+shop.HEALTH_REGEN.DOM?.addEventListener('click', () => {
+  shopBuy(shop.HEALTH_REGEN);
+  updateShop(shop.HEALTH_REGEN);
+});
+shop.ATTACK_SPEED.DOM?.addEventListener('click', () => {
+  shopBuy(shop.ATTACK_SPEED);
+  updateShop(shop.ATTACK_SPEED);
+});
+shop.CRIT_CHANCE.DOM?.addEventListener('click', () => {
+  shopBuy(shop.CRIT_CHANCE);
+  updateShop(shop.CRIT_CHANCE);
+});
+shop.CRIT_MULTIPLIER.DOM?.addEventListener('click', () => {
+  shopBuy(shop.CRIT_MULTIPLIER);
+  updateShop(shop.CRIT_MULTIPLIER);
+});
+shop.BLOCK_CHANCE.DOM?.addEventListener('click', () => {
+  shopBuy(shop.BLOCK_CHANCE);
+  updateShop(shop.BLOCK_CHANCE);
+});
 updateShop(shop.ATTACK);
 updateShop(shop.HEALTH);
-
+updateShop(shop.HEALTH_REGEN);
+updateShop(shop.ATTACK_SPEED);
+updateShop(shop.CRIT_CHANCE);
+updateShop(shop.CRIT_MULTIPLIER);
+updateShop(shop.BLOCK_CHANCE);
 // Makes player and enemy stats accurate on start.
-calculatePlayerStats();
 updateStatFrame(player);
 updateHealthBar(player);
 updateGoldDisplay();
