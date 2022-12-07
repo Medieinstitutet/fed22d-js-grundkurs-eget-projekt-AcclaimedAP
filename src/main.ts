@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable arrow-parens */
 /* eslint-disable @typescript-eslint/comma-dangle */
@@ -55,6 +57,7 @@ type LogicBooleans = {
   IS_RESPAWNING: boolean;
   IS_PLAYABLE_CHARACTER: boolean;
 };
+/*
 type StatFrame = {
   statFrame: {
     spnAttack: HTMLSpanElement;
@@ -85,7 +88,6 @@ type Character = Health &
   UIElements &
   StatFrame;
 
-/*
 interface Character {
   health: Health;
   combat: CombatStats;
@@ -326,7 +328,7 @@ FUNCTIONS
                         DOM updates
 ######################################################### */
 
-function updateStatFrame(target: Character): void {
+function updateStatFrame(target: any): void {
   if (target.statFrame !== undefined) {
     target.statFrame.spnAttack.innerHTML = Math.round(target.DAMAGE).toString();
     target.statFrame.spnHealthMax.innerHTML = Math.round(target.HEALTH_MAX).toString();
@@ -341,7 +343,7 @@ function updateGoldDisplay(): void {
 // Updates healthbar
 // If you want to update the max values of the healthbar, you can pass on true to make it update those values as well.
 
-function updateHealthBar(target: Character, updateMax = false): void {
+function updateHealthBar(target: any, updateMax = false): void {
   const healthBar = target.healthBar;
   const healthMax = target.HEALTH_MAX;
   const healthCurrent = target.HEALTH_CURRENT;
@@ -356,7 +358,7 @@ function updateHealthBar(target: Character, updateMax = false): void {
   }
 }
 // Updates the attack progressbar, like updateHealthBar, the boolean decides if it updates max value too
-function updateAttackTimerBar(target: CombatStats & UIElements, updateMax = false): void {
+function updateAttackTimerBar(target: any, updateMax = false): void {
   target.attackTimerBar.value = target.ATTACK_TIMER;
   if (updateMax) {
     target.attackTimerBar.max = target.ATTACK_COOLDOWN;
@@ -391,15 +393,7 @@ function shopMath(shopItem: { BASE_POWER: number; BOUGHT: number; POWER_MULTIPLI
 function shopCost(shopItem: { BASE_COST: number; COST_MULTIPLIER: number; BOUGHT: number }): number {
   return Math.round(shopItem.BASE_COST + shopItem.BASE_COST * shopItem.COST_MULTIPLIER * shopItem.BOUGHT);
 }
-function updateShop(shopItem: {
-  BASE_POWER: number;
-  BOUGHT: number;
-  POWER_MULTIPLIER: number;
-  NAME: string;
-  BASE_COST: number;
-  COST_MULTIPLIER: number;
-  DOM: { innerHTML: string };
-}): void {
+function updateShop(shopItem: any): void {
   const cost = shopCost(shopItem);
   let power = shopMath(shopItem);
   // If it is supposed to show in %, do so
@@ -431,16 +425,7 @@ function calculateEnemyStats() {
   updateHealthBar(enemy, true);
 }
 
-function shopBuy(shopItem: {
-  COST: number;
-  BOUGHT: number;
-  BASE_COST: number;
-  COST_MULTIPLIER: number;
-  BASE_POWER: number;
-  POWER_MULTIPLIER: number;
-  NAME: string;
-  DOM: { innerHTML: string };
-}): void {
+function shopBuy(shopItem: any): void {
   shopItem.COST = shopCost(shopItem);
 
   if (player.GOLD >= shopItem.COST) {
@@ -472,7 +457,7 @@ function heal(target: Health & LogicBooleans, amount?: number) {
 }
 
 // Respawns a target that has fallen 💀
-function respawn(target: LogicBooleans & UIElements & UtilityStats & Health & CombatStats) {
+function respawn(target: any) {
   // gives target max hp
   target.IS_RESPAWNING = true;
   if (target.image.src !== target.frameState.dead) {
@@ -537,10 +522,7 @@ function damageCalculation(attacker: CombatStats, defender: { BLOCK_CHANCE: numb
   return damageDealt;
 }
 
-function attack(
-  attacker: CombatStats & UtilityStats,
-  defender: Health & CombatStats & UIElements & LogicBooleans & UtilityStats
-): void {
+function attack(attacker: CombatStats & UtilityStats, defender: any): void {
   const damage = damageCalculation(attacker, defender);
   defender.HEALTH_CURRENT -= damage;
   attacker.ATTACK_TIMER = 0;
@@ -549,7 +531,7 @@ function attack(
   checkDeath(defender);
 }
 
-function attackCount(attacker: LogicBooleans & CombatStats & UIElements, defender: LogicBooleans): void {
+function attackCount(attacker: any, defender: LogicBooleans): void {
   // If the player is dead, or already attacking, end this function(optimization?)
   if (!attacker.IS_ALIVE || !defender.IS_ALIVE) {
     return;
