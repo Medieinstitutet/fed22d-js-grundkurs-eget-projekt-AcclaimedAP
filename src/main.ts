@@ -476,16 +476,7 @@ function checkDeath(victim: Health & LogicBooleans & UIElements & CombatStats & 
 }
 
 // Calculates the damage dealt
-function damageCalculation(
-  attacker: {
-    DAMAGE: number;
-    CRIT_CHANCE: number;
-    CRIT_MULTIPLIER: number;
-  },
-  defender: {
-    BLOCK_CHANCE: number;
-  }
-): number {
+function damageCalculation(attacker: CombatStats, defender: { BLOCK_CHANCE: number }): number {
   let damageDealt = 0;
   const blockRNG: number = Math.random();
   if (defender.BLOCK_CHANCE >= blockRNG) {
@@ -694,20 +685,20 @@ function gameLoop() {
   setTimeout(gameLoop, tickRate);
 }
 // Loops over all shop buttons to give them their info.
-/*
+
 Object.keys(shop).forEach(key => {
   shop[key].DOM.addEventListener('click', () => {
     shopBuy(shop[key]);
   });
   updateShop(shop[key]);
 });
-*/
 
+/*
 shop.ATTACK.DOM?.addEventListener('click', () => {
   shopBuy(shop.ATTACK);
   updateShop(shop.ATTACK);
 });
-
+*/
 // Makes player and enemy stats accurate on start.
 calculatePlayerStats();
 updateStatFrame(player);
