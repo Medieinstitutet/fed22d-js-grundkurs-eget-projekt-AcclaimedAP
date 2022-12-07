@@ -13,6 +13,90 @@
 
 import './style/style.scss';
 
+type Health = {
+  HEALTH_MAX: number;
+  HEALTH_CURRENT: number;
+  HEALTH_REGEN: number;
+};
+type CombatStats = {
+  DAMAGE: number;
+  ATTACK_TIMER: number;
+  ATTACK_COOLDOWN: number;
+  CHARGE_TIMER: number;
+  CHARGE_COOLDOWN: number;
+  CRIT_CHANCE: number;
+  CRIT_MULTIPLIER: number;
+  BLOCK_CHANCE: number;
+};
+type UtilityStats = {
+  NAME: string;
+  RESPAWN_TIMER: number;
+  GOLD?: number;
+  GOLD_DROP?: number;
+  LEVEL?: number;
+};
+
+type UIElements = {
+  healthBar: HTMLMeterElement;
+  attackTimerBar: HTMLMeterElement;
+  xPos?: number;
+  xPosReversed?: number;
+  portrait: HTMLDivElement;
+  image: HTMLImageElement;
+  frameState: {
+    idle: string;
+    dead: string;
+  };
+};
+type LogicBooleans = {
+  IS_ATTACKING: boolean;
+  IS_FRONT_OF_OPPONENT: boolean;
+  IS_ALIVE: boolean;
+  IS_RESPAWNING: boolean;
+  IS_PLAYABLE_CHARACTER: boolean;
+};
+type StatFrame = {
+  statFrame: {
+    spnAttack: HTMLSpanElement;
+    spnHealthMax: HTMLSpanElement;
+    spnAttackSpeed: HTMLSpanElement;
+  };
+};
+type BaseType = {
+  HEALTH_MAX: number;
+  HEALTH_REGEN: number;
+  DAMAGE: number;
+  GOLD_DROP: number;
+};
+
+type MultiplierType = {
+  HEALTH_MAX: number;
+  HEALTH_REGEN: number;
+  DAMAGE: number;
+  GOLD_DROP: number;
+};
+
+type Character = Health &
+  CombatStats &
+  UtilityStats &
+  BaseType &
+  MultiplierType &
+  LogicBooleans &
+  UIElements &
+  StatFrame;
+
+/*
+interface Character {
+  health: Health;
+  combat: CombatStats;
+  common: UtilityStats;
+  base: BaseType;
+  multiplier: MultiplierType;
+  logic: LogicBooleans;
+  ui: UIElements;
+  uiFrame?: StatFrame;
+}
+*/
 /*
 
 VARIABLES AND DEFINITIONS
@@ -233,54 +317,6 @@ let degree = 0;
 const tickCounterSpan = document.getElementById('tickCounter') as HTMLSpanElement;
 const btnDebugState = document.getElementById('debugButton') as HTMLButtonElement;
 
-type Health = {
-  HEALTH_MAX: number;
-  HEALTH_CURRENT: number;
-  HEALTH_REGEN: number;
-};
-type CombatStats = {
-  DAMAGE: number;
-  ATTACK_TIMER: number;
-  ATTACK_COOLDOWN: number;
-  CHARGE_TIMER: number;
-  CHARGE_COOLDOWN: number;
-  CRIT_CHANCE: number;
-  CRIT_MULTIPLIER: number;
-  BLOCK_CHANCE: number;
-};
-type UtilityStats = {
-  NAME: 'PlayerName';
-  RESPAWN_TIMER: number;
-  GOLD?: number;
-  GOLD_DROP: number;
-  LEVEL?: number;
-};
-
-type UIElements = {
-  healthBar: HTMLMeterElement;
-  attackTimerBar: HTMLMeterElement;
-  xPosReversed: number;
-  portrait: HTMLDivElement;
-  image: HTMLImageElement;
-  frameState: {
-    idle: string;
-    dead: string;
-  };
-};
-type LogicBooleans = {
-  IS_ATTACKING: boolean;
-  IS_FRONT_OF_OPPONENT: boolean;
-  IS_ALIVE: boolean;
-  IS_RESPAWNING: boolean;
-  IS_PLAYABLE_CHARACTER: boolean;
-};
-type StatFrame = {
-  statFrame: {
-    spnAttack: HTMLSpanElement;
-    spnHealthMax: HTMLSpanElement;
-    spnAttackSpeed: HTMLSpanElement;
-  };
-};
 /*
 
 FUNCTIONS
@@ -290,10 +326,12 @@ FUNCTIONS
                         DOM updates
 ######################################################### */
 
-function updateStatFrame(target: UIElements & CombatStats & Health & StatFrame): void {
-  target.statFrame.spnAttack.innerHTML = Math.round(target.DAMAGE).toString();
-  target.statFrame.spnHealthMax.innerHTML = Math.round(target.HEALTH_MAX).toString();
-  target.statFrame.spnAttackSpeed.innerHTML = ((tickRate / target.ATTACK_COOLDOWN) * 10).toFixed(2);
+function updateStatFrame(target: Character): void {
+  if (target.statFrame !== undefined) {
+    target.statFrame.spnAttack.innerHTML = Math.round(target.DAMAGE).toString();
+    target.statFrame.spnHealthMax.innerHTML = Math.round(target.HEALTH_MAX).toString();
+    target.statFrame.spnAttackSpeed.innerHTML = ((tickRate / target.ATTACK_COOLDOWN) * 10).toFixed(2);
+  }
 }
 
 function updateGoldDisplay(): void {
@@ -303,15 +341,18 @@ function updateGoldDisplay(): void {
 // Updates healthbar
 // If you want to update the max values of the healthbar, you can pass on true to make it update those values as well.
 
-function updateHealthBar(target: Health & UIElements, updateMax = false): void {
-  target.healthBar.value = target.HEALTH_CURRENT;
+function updateHealthBar(target: Character, updateMax = false): void {
+  const healthBar = target.healthBar;
+  const healthMax = target.HEALTH_MAX;
+  const healthCurrent = target.HEALTH_CURRENT;
+  healthBar.value = healthCurrent;
 
   // Only runs when you want it to.
   if (updateMax) {
-    target.healthBar.max = target.HEALTH_MAX;
-    target.healthBar.low = target.HEALTH_MAX / 3;
-    target.healthBar.high = target.HEALTH_MAX / 2;
-    target.healthBar.optimum = target.HEALTH_MAX * 0.67;
+    healthBar.max = healthMax;
+    healthBar.low = healthMax / 3;
+    healthBar.high = healthMax / 2;
+    healthBar.optimum = healthMax * 0.67;
   }
 }
 // Updates the attack progressbar, like updateHealthBar, the boolean decides if it updates max value too
@@ -685,20 +726,20 @@ function gameLoop() {
   setTimeout(gameLoop, tickRate);
 }
 // Loops over all shop buttons to give them their info.
-
+/*
 Object.keys(shop).forEach(key => {
   shop[key].DOM.addEventListener('click', () => {
     shopBuy(shop[key]);
   });
   updateShop(shop[key]);
 });
+*/
 
-/*
 shop.ATTACK.DOM?.addEventListener('click', () => {
   shopBuy(shop.ATTACK);
   updateShop(shop.ATTACK);
 });
-*/
+
 // Makes player and enemy stats accurate on start.
 calculatePlayerStats();
 updateStatFrame(player);
