@@ -4,10 +4,12 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/ico" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/favicon.ico" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projekt</title>
-  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.7c0a6f53.js"></script>
-  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.6ca9c930.css">
+  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.7352bcad.js"></script>
+  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.c86720b2.css">
 </head>
 
 <body>
@@ -37,37 +39,50 @@
       <img id="grass" src="assets/combatzone/grass.svg" alt="grass" />
       <img id="dayNight" src="assets/combatzone/daynightcycle.svg" alt="day and night cycle" />
     </div>
+    <div id="menuContainer">
+      <nav>
+        <button class="btnMenu material-symbols-outlined" id="btnMenuCombatLog" title="Combat log"
+          aria-label="Combat log button">article</button>
+        <button class="btnMenu material-symbols-outlined" id="btnMenuPlayerStats" title="Player Stats"
+          aria-label="player stats button">query_stats</button>
+        <button class="btnMenu material-symbols-outlined" id="btnMenuShop" title="Shop for upgrades"
+          aria-label="shop for upgrades button">storefront</button>
+        <button class="btnMenu material-symbols-outlined" id="btnMenuDebug" title="Debug menu"
+          aria-label="debug menu button">logo_dev</button>
+      </nav>
+      <div class="flexContent MenuFrame" id="textOutput">
+        Starting combat!
+      </div>
 
-    <div class="flexContent" id="textOutput">Starting combat!</div>
-    <div class="flexContent" id="playerInfo">
-      <h2>Player Stats</h2>
-      <label>Attack: <span id="spnPlayerAttack"></span></label>
-      <label>Max Health: <span id="spnPlayerHealthMax"></span></label>
-      <label>Attacks per second: <span id="spnPlayerAttackSpeed"></span></label>
-    </div>
+      <div class="flexContent MenuFrame hidden" id="playerInfo">
+        <h2>Player Stats</h2>
+        <label>Attack: <span id="spnPlayerAttack"></span></label>
+        <label>Max Health: <span id="spnPlayerHealthMax"></span></label>
+        <label>Attacks per second: <span id="spnPlayerAttackSpeed"></span></label>
+      </div>
 
-    <div class="flexContent" id="shop">
-      <h2>Shop</h2>
-      <div id="shopButtons">
-        <button class="shopButton" id="shopBtnAttack">Attack</button>
-        <button class="shopButton" id="shopBtnHealth">Health</button>
-        <button class="shopButton" id="shopBtnHealthRegen">Health Regen</button>
-        <button class="shopButton" id="shopBtnAttackSpeed">Attack Speed</button>
-        <button class="shopButton" id="shopBtnCritChance">Crit Chance</button>
-        <button class="shopButton" id="shopBtnCritMultiplier">Crit Multiplier</button>
-        <button class="shopButton" id="shopBtnBlockChance">Block Chance</button>
+      <div class="flexContent MenuFrame hidden" id="shop">
+        <h2>Shop</h2>
+        <div id="shopButtons">
+          <button class="shopButton" id="shopBtnAttack">Attack</button>
+          <button class="shopButton" id="shopBtnHealth">Health</button>
+          <button class="shopButton" id="shopBtnHealthRegen">Health Regen</button>
+          <button class="shopButton" id="shopBtnAttackSpeed">Attack Speed</button>
+          <button class="shopButton" id="shopBtnCritChance">Crit Chance</button>
+          <button class="shopButton" id="shopBtnCritMultiplier">Crit Multiplier</button>
+          <button class="shopButton" id="shopBtnBlockChance">Block Chance</button>
+        </div>
+      </div>
+      <div class="flexContent MenuFrame hidden" id="debug">
+        <h2>Debug</h2>
+        <button id="debugButton" title="console logs the current player and enemy object.">Get state</button><br />
+        <label
+          title="Updates per second, should be around 50-55 because of Javascript's inaccurate timing methods that I'm using, but can peak to up to 66,67">UPS:
+          <span id="ticksPerSecond"></span></label>
+        <span id="tickCounter">0</span>
+        <label title="Stats for background color and spin">Degree: <span id="degreeSpn"></span></label>
       </div>
     </div>
-    <div class="flexContent" id="debug">
-      <h2>Debug</h2>
-      <button id="debugButton" title="console logs the current player and enemy object.">Get state</button><br />
-      <label
-        title="Updates per second, should be around 50-55 because of Javascript's inaccurate timing methods that I'm using, but can peak to up to 66,67">UPS:
-        <span id="ticksPerSecond"></span></label>
-      <span id="tickCounter">0</span>
-      <label title="Stats for background color and spin">Degree: <span id="degreeSpn"></span></label>
-    </div>
-
   </div>
   
 </body>
