@@ -312,6 +312,9 @@ let blue = 255;
 let green = 255;
 let degree = 0;
 
+// Menu button array
+const btnMenu = document.querySelectorAll('.btnMenu');
+const divMenu = document.querySelectorAll('.MenuFrame');
 // Debug
 const tickCounterSpan = document.getElementById('tickCounter') as HTMLSpanElement;
 const btnDebugState = document.getElementById('debugButton') as HTMLButtonElement;
@@ -325,6 +328,20 @@ FUNCTIONS
                         DOM updates
 ######################################################### */
 
+// Menu functionality
+function menuChange(uiElement: Element) {
+  if (uiElement.classList.contains('hidden')) {
+    for (let i = 0; i < divMenu.length; i += 1) {
+      if (!divMenu[i].classList.contains('hidden')) {
+        divMenu[i].classList.add('hidden');
+      }
+    }
+    uiElement.classList.remove('hidden');
+  }
+}
+
+// Text is any input you want to show, positionTarget is which element you want it to base its position on,
+// you can input if there's a crit(makes text bigger and changes color), or if it is related to gold, which makes the text golden and outputs "+ x gold" instead
 function createText(text: string, positionTarget: any, crit = false, gold?: boolean) {
   const leftRandomOffset = Math.random() * 100 - 50;
   const topRandomOffset = Math.random() * 100 - 50;
@@ -821,6 +838,13 @@ shop.BLOCK_CHANCE.DOM?.addEventListener('click', () => {
   shopBuy(shop.BLOCK_CHANCE);
   updateShop(shop.BLOCK_CHANCE);
 });
+
+for (let i = 0; i < btnMenu.length; i += 1) {
+  btnMenu[i].addEventListener('click', () => {
+    menuChange(divMenu[i]);
+  });
+}
+
 updateShop(shop.ATTACK);
 updateShop(shop.HEALTH);
 updateShop(shop.HEALTH_REGEN);
