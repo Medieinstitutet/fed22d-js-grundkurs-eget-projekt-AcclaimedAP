@@ -325,7 +325,7 @@ FUNCTIONS
                         DOM updates
 ######################################################### */
 
-function createText(text: string, positionTarget: any, crit: boolean) {
+function createText(text: string, positionTarget: any, crit = false, gold?: boolean) {
   const leftRandomOffset = Math.random() * 100 - 50;
   const topRandomOffset = Math.random() * 100 - 50;
   const leftOffset = -120;
@@ -335,6 +335,11 @@ function createText(text: string, positionTarget: any, crit: boolean) {
   textElement.classList.add('displayText');
   if (crit) {
     textElement.classList.add('displayTextCrit');
+    textElement.innerHTML += '!';
+  }
+  if (gold) {
+    textElement.classList.add('displayTextGold');
+    textElement.innerHTML = `+${textElement.innerHTML} Gold`;
   }
   const position = positionTarget.image?.getBoundingClientRect();
   textElement.style.left = `${(position.left - leftOffset + leftRandomOffset).toString()}px`;
@@ -516,6 +521,7 @@ function respawn(target: any) {
     if (target.IS_PLAYABLE_CHARACTER === false) {
       enemy.LEVEL += 1;
       player.GOLD += enemy.GOLD_DROP;
+      createText(enemy.GOLD_DROP.toString(), player, false, true);
       updateGoldDisplay();
     } else {
       // if it was the player that died, reduce level of enemy to make it easier, and heal it up again.
@@ -582,7 +588,7 @@ function attack(attacker: CombatStats & UtilityStats, defender: any): void {
   attacker.ATTACK_TIMER = 0;
   updateHealthBar(defender);
   output(`${attacker.NAME} attacks ${defender.NAME} and deals ${damageResult[0]} damage!`);
-  createText(damageResult[0].toString(), defender, damageResult[1]);
+  createText(damageResult[0].toFixed(0), defender, damageResult[1]);
   checkDeath(defender);
 }
 

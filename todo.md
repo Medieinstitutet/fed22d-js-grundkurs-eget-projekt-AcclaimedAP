@@ -18,3 +18,4 @@
 - add more frames on player and enemy
 - name select before game begins and info
 - load & save
+- redo some animations with animate function or css
