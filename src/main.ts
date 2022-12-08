@@ -188,7 +188,7 @@ const enemy = {
   // Determines how much stronger the enemy gets per level
   multiplier: {
     HEALTH_MAX: 1.6,
-    HEALTH_REGEN: 1.05,
+    HEALTH_REGEN: 0.1,
     DAMAGE: 1.4,
     GOLD_DROP: 1.5,
   },
@@ -326,6 +326,8 @@ FUNCTIONS
 ######################################################### */
 
 function createText(text: string, positionTarget: any, crit: boolean) {
+  const leftRandomOffset = Math.random() * 100 - 50;
+  const topRandomOffset = Math.random() * 100 - 50;
   const leftOffset = -120;
   const topOffset = -100;
   const textElement = document.createElement('span');
@@ -335,8 +337,8 @@ function createText(text: string, positionTarget: any, crit: boolean) {
     textElement.classList.add('displayTextCrit');
   }
   const position = positionTarget.image?.getBoundingClientRect();
-  textElement.style.left = `${(position.left - leftOffset).toString()}px`;
-  textElement.style.top = `${(position.top - topOffset).toString()}px`;
+  textElement.style.left = `${(position.left - leftOffset + leftRandomOffset).toString()}px`;
+  textElement.style.top = `${(position.top - topOffset + topRandomOffset).toString()}px`;
   canvas.appendChild(textElement);
 
   const animation = textElement.animate(
@@ -354,8 +356,6 @@ function createText(text: string, positionTarget: any, crit: boolean) {
   animation.onfinish = () => {
     textElement.remove();
   };
-  console.log(position);
-  console.log(textElement);
 }
 
 function updateStatFrame(target: any): void {
@@ -450,7 +450,6 @@ function updateShop(shopItem: any): void {
     // Everything else.
     shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>+ ${power}`;
   }
-  console.log(`updated shop${shopItem}`);
 }
 
 function calculatePlayerStats(): void {
