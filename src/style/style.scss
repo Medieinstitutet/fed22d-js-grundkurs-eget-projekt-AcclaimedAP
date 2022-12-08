@@ -80,14 +80,20 @@
   height: 600px;
   overflow: hidden;
 
+  img {
+    position: absolute;
+  }
+
   #dayNight {
-    max-width: 100%;
-    height: auto;
-    position: relative;
-    left: 0;
-    bottom: 50%;
-    transform: rotate(180deg), translate(-50%, 0);
+    min-width: 1920px;
+    max-width: 1920px;
+    aspect-ratio: 1 / 1;
+    position: absolute;
+    bottom: -960px;
+    left: 50%;
+    margin-left: -960px;
     z-index: 10;
+    transform-origin: center;
   }
 
   .displayText {
@@ -106,14 +112,12 @@
     color: rgb(223 179 68);
   }
 
-  img {
-    position: absolute;
-  }
-
   #grass {
-    width: 100%;
+    min-width: 3000px;
     bottom: 0%;
     z-index: 20;
+    left: 50%;
+    margin-left: -960px;
   }
 }
 
