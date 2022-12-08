@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/comma-dangle */
 /* hehe... eslint go boom */
 
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -323,6 +325,39 @@ FUNCTIONS
                         DOM updates
 ######################################################### */
 
+function createText(text: string, positionTarget: any, crit: boolean) {
+  const leftOffset = -120;
+  const topOffset = -100;
+  const textElement = document.createElement('span');
+  textElement.innerHTML = text;
+  textElement.classList.add('displayText');
+  if (crit) {
+    textElement.classList.add('displayTextCrit');
+  }
+  const position = positionTarget.image?.getBoundingClientRect();
+  textElement.style.left = `${(position.left - leftOffset).toString()}px`;
+  textElement.style.top = `${(position.top - topOffset).toString()}px`;
+  canvas.appendChild(textElement);
+
+  const animation = textElement.animate(
+    [
+      { transform: 'translateY(0px)', opacity: '1' },
+      { transform: 'translateY(-100px)', opacity: '0' },
+    ],
+    {
+      duration: 2500,
+      iterations: 1,
+      easing: 'ease-in-out',
+    }
+  );
+  animation.play();
+  animation.onfinish = () => {
+    textElement.remove();
+  };
+  console.log(position);
+  console.log(textElement);
+}
+
 function updateStatFrame(target: any): void {
   if (target.statFrame !== undefined) {
     target.statFrame.spnAttack.innerHTML = Math.round(target.DAMAGE).toFixed(0);
@@ -519,9 +554,10 @@ function checkDeath(victim: Health & LogicBooleans & UIElements & CombatStats & 
 }
 
 // Calculates the damage dealt
-function damageCalculation(attacker: CombatStats, defender: { BLOCK_CHANCE: number }): number {
+function damageCalculation(attacker: CombatStats, defender: { BLOCK_CHANCE: number }): [number, boolean] {
   let damageDealt = 0;
   const blockRNG: number = Math.random();
+  let critHit = false;
   if (defender.BLOCK_CHANCE >= blockRNG) {
     // Blocks damage
     damageDealt = attacker.DAMAGE * 0.2; // Deals only 20% of damage if blocked
@@ -532,19 +568,22 @@ function damageCalculation(attacker: CombatStats, defender: { BLOCK_CHANCE: numb
     if (attacker.CRIT_CHANCE >= critRNG) {
       // If crit, deals damage * multiplier!
       damageDealt = attacker.DAMAGE * attacker.CRIT_MULTIPLIER;
+      critHit = true;
     } else {
       damageDealt = attacker.DAMAGE;
     }
   }
-  return damageDealt;
+  const damageResult: [number, boolean] = [damageDealt, critHit];
+  return damageResult;
 }
 
 function attack(attacker: CombatStats & UtilityStats, defender: any): void {
-  const damage = damageCalculation(attacker, defender);
-  defender.HEALTH_CURRENT -= damage;
+  const damageResult = damageCalculation(attacker, defender);
+  defender.HEALTH_CURRENT -= damageResult[0];
   attacker.ATTACK_TIMER = 0;
   updateHealthBar(defender);
-  output(`${attacker.NAME} attacks ${defender.NAME} and deals ${damage} damage!`);
+  output(`${attacker.NAME} attacks ${defender.NAME} and deals ${damageResult[0]} damage!`);
+  createText(damageResult[0].toString(), defender, damageResult[1]);
   checkDeath(defender);
 }
 
