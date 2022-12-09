@@ -165,7 +165,12 @@ const player = {
   statFrame: {
     spnAttack: document.getElementById('spnPlayerAttack'),
     spnHealthMax: document.getElementById('spnPlayerHealthMax'),
+    spnHealthRegen: document.getElementById('spnPlayerHealthRegen'),
     spnAttackSpeed: document.getElementById('spnPlayerAttackSpeed'),
+    spnCritChance: document.getElementById('spnPlayerCritChance'),
+    spnCritMultiplier: document.getElementById('spnPlayerCritMultiplier'),
+    spnBlockChance: document.getElementById('spnPlayerBlockChance'),
+    spnLevel: document.getElementById('spnEnemyLevel'),
   },
 };
 
@@ -227,7 +232,7 @@ const shop = {
   ATTACK: {
     NAME: 'ATTACK',
     COST: 0,
-    BASE_COST: 6,
+    BASE_COST: 5,
     BASE_POWER: 2,
     COST_MULTIPLIER: 1.6,
     POWER_MULTIPLIER: 1.3,
@@ -237,7 +242,7 @@ const shop = {
   HEALTH: {
     NAME: 'HEALTH',
     COST: 0,
-    BASE_COST: 6,
+    BASE_COST: 4,
     BASE_POWER: 5,
     COST_MULTIPLIER: 1.4,
     POWER_MULTIPLIER: 1.25,
@@ -250,7 +255,7 @@ const shop = {
     BASE_COST: 6,
     BASE_POWER: 1,
     COST_MULTIPLIER: 1.2,
-    POWER_MULTIPLIER: 1.15,
+    POWER_MULTIPLIER: 0.15,
     BOUGHT: 0,
     DOM: document.getElementById('shopBtnHealthRegen'),
   },
@@ -404,7 +409,12 @@ function updateStatFrame(target: any): void {
   if (target.statFrame !== undefined) {
     target.statFrame.spnAttack.innerHTML = Math.round(target.DAMAGE).toFixed(0);
     target.statFrame.spnHealthMax.innerHTML = Math.round(target.HEALTH_MAX).toString();
+    target.statFrame.spnHealthRegen.innerHTML = target.HEALTH_REGEN.toFixed(1);
     target.statFrame.spnAttackSpeed.innerHTML = ((tickRate / target.ATTACK_COOLDOWN) * 10).toFixed(2);
+    target.statFrame.spnCritChance.innerHTML = `${(target.CRIT_CHANCE * 100).toFixed(2)}%`;
+    target.statFrame.spnCritMultiplier.innerHTML = `${(target.CRIT_MULTIPLIER * 100).toString()}%`;
+    target.statFrame.spnBlockChance.innerHTML = `${(target.BLOCK_CHANCE * 100).toFixed(2)}%`;
+    target.statFrame.spnLevel.innerHTML = `${enemy.LEVEL}`;
   }
 }
 
@@ -613,6 +623,7 @@ function respawn(target: any) {
       player.GOLD += enemy.GOLD_DROP;
       createText(enemy.GOLD_DROP.toString(), player, false, true);
       updateGoldDisplay();
+      updateStatFrame(player);
       if (player.HIGHEST_LEVEL_REACHED <= enemy.LEVEL) {
         player.HIGHEST_LEVEL_REACHED = enemy.LEVEL;
       }

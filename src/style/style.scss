@@ -108,12 +108,16 @@ label {
     padding: 5px;
     min-width: 50%;
     cursor: pointer;
-    background-color: rgb(255 173 66);
+    background-color: rgb(209 141 53);
   }
 
   button:hover {
-    background-color: rgb(226 142 32);
+    background-color: rgb(231 163 74);
     transition: background-color 0.3s ease-in-out;
+  }
+
+  button:active {
+    background-color: rgb(177 126 60);
   }
 
   button:disabled {
