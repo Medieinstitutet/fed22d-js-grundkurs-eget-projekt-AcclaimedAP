@@ -56,6 +56,11 @@ nav {
     background-color: rgb(230 184 124);
     transition: background-color 0.3s ease-in-out;
   }
+
+  button:disabled {
+    background-color: rgb(167 126 73);
+    cursor: not-allowed;
+  }
 }
 
 .flexContent {
@@ -71,6 +76,25 @@ nav {
 
 label {
   display: block;
+}
+
+#prestige {
+  display: flex;
+  overflow: auto;
+
+  #prestigeTitle {
+    position: absolute;
+  }
+
+  .prestigeFlex {
+    text-align: center;
+    margin: 5px;
+    padding: 15px;
+    margin-top: 40px;
+    min-height: 100%;
+    min-width: 200px;
+    background-color: blue;
+  }
 }
 
 /* The shop */
@@ -126,12 +150,14 @@ label {
     position: absolute;
     font-size: 2rem;
     z-index: 50;
+    color: rgb(206 33 33);
     text-shadow: 0 0 3px black;
   }
 
   .displayTextCrit {
     font-size: 2.5rem;
-    color: goldenrod;
+    font-weight: bolder;
+    color: rgb(235 60 60);
   }
 
   .displayTextGold {
@@ -199,5 +225,5 @@ label {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }

@@ -121,17 +121,25 @@ const player = {
   CRIT_CHANCE: 0.05,
   CRIT_MULTIPLIER: 1.2,
   BLOCK_CHANCE: 0.05,
-  GOLD: 500,
+  GOLD: 5,
   RESPAWN_TIMER: 0,
+  PRESTIGE_LEVEL: 0,
+  PRESTIGE_EXP: 0,
+  PRESTIGE_EXP_LEVELUP: 10,
+  PRESTIGE_EXP_LEVELUP_MULTIPLIER: 1.7,
+  HIGHEST_LEVEL_REACHED: 0,
+  HIGHEST_LEVEL_PRESTIGED_AT: 0,
+  PRESTIGE_POINTS: 0,
   // Used to calculate and able to backtrack
   base: {
     HEALTH_MAX: 100,
-    HEALTH_REGEN: 5,
+    HEALTH_REGEN: 1,
     DAMAGE: 5,
     ATTACK_COOLDOWN: 220,
     CRIT_CHANCE: 0.05,
     CRIT_MULTIPLIER: 1.2,
     BLOCK_CHANCE: 0.05,
+    GOLD: 5,
   },
   // Keeps tracks on how many is bought for each item for the purpose of calculating the cost of future upgrades
 
@@ -183,6 +191,10 @@ const enemy = {
     HEALTH_MAX: 20,
     HEALTH_REGEN: 0.1,
     DAMAGE: 3,
+    ATTACK_COOLDOWN: 310,
+    CRIT_CHANCE: 0.05,
+    CRIT_MULTIPLIER: 1.2,
+    BLOCK_CHANCE: 0.05,
     GOLD_DROP: 5,
   },
   // Determines how much stronger the enemy gets per level
@@ -316,6 +328,13 @@ let degree = 0;
 const btnMenu = document.querySelectorAll('.btnMenu');
 const divMenu = document.querySelectorAll('.MenuFrame');
 
+// Prestige Shop
+const spnPrestigePoints = document.getElementById('spnPoints') as HTMLSpanElement;
+const spnPrestigeLevel = document.getElementById('spnLevel') as HTMLSpanElement;
+const spnPrestigeExpCurrent = document.getElementById('spnCurrentExp') as HTMLSpanElement;
+const spnPrestigeExpMax = document.getElementById('spnMaxExp') as HTMLSpanElement;
+const btnPrestige = document.getElementById('btnPrestige') as HTMLButtonElement;
+
 // Debug
 const tickCounterSpan = document.getElementById('tickCounter') as HTMLSpanElement;
 const btnDebugState = document.getElementById('debugButton') as HTMLButtonElement;
@@ -393,6 +412,13 @@ function updateGoldDisplay(): void {
   goldCounter.innerHTML = player.GOLD.toString();
 }
 
+function updatePrestigeDisplay(): void {
+  spnPrestigePoints.innerHTML = player.PRESTIGE_POINTS.toString();
+  spnPrestigeLevel.innerHTML = player.PRESTIGE_LEVEL.toString();
+  spnPrestigeExpCurrent.innerHTML = player.PRESTIGE_EXP.toString();
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  spnPrestigeExpMax.innerHTML = maxExpRequired().toString();
+}
 // Updates healthbar
 // If you want to update the max values of the healthbar, you can pass on true to make it update those values as well.
 
@@ -476,13 +502,13 @@ function updateShop(shopItem: any): void {
 }
 
 function calculatePlayerStats(): void {
-  player.DAMAGE += shopMath(shop.ATTACK);
-  player.HEALTH_MAX += shopMath(shop.ATTACK);
-  player.HEALTH_REGEN += shopMath(shop.HEALTH_REGEN);
-  player.CRIT_CHANCE += shopMath(shop.CRIT_CHANCE) / 100;
-  player.CRIT_MULTIPLIER += shopMath(shop.CRIT_MULTIPLIER);
-  player.BLOCK_CHANCE += shopMath(shop.BLOCK_CHANCE);
-  player.ATTACK_COOLDOWN -= shopMath(shop.ATTACK_SPEED);
+  player.DAMAGE = player.base.DAMAGE + shopMath(shop.ATTACK);
+  player.HEALTH_MAX = player.base.HEALTH_MAX + shopMath(shop.HEALTH);
+  player.HEALTH_REGEN = player.base.HEALTH_REGEN + shopMath(shop.HEALTH_REGEN);
+  player.CRIT_CHANCE = player.base.CRIT_CHANCE + shopMath(shop.CRIT_CHANCE) / 100;
+  player.CRIT_MULTIPLIER = player.base.CRIT_MULTIPLIER + shopMath(shop.CRIT_MULTIPLIER);
+  player.BLOCK_CHANCE = player.base.BLOCK_CHANCE + shopMath(shop.BLOCK_CHANCE);
+  player.ATTACK_COOLDOWN = player.base.ATTACK_COOLDOWN - shopMath(shop.ATTACK_SPEED);
 }
 
 function calculateEnemyStats() {
@@ -507,6 +533,52 @@ function shopBuy(shopItem: any): void {
   }
 }
 
+function maxExpRequired(): number {
+  return player.PRESTIGE_EXP_LEVELUP + player.PRESTIGE_EXP_LEVELUP * player.PRESTIGE_LEVEL * player.PRESTIGE_EXP_LEVELUP_MULTIPLIER;
+}
+
+function levelUpCheck() {
+  const expRequired = maxExpRequired();
+  if (player.PRESTIGE_EXP >= expRequired) {
+    player.PRESTIGE_LEVEL += 1;
+    player.PRESTIGE_POINTS += 1;
+    player.PRESTIGE_EXP -= expRequired;
+    levelUpCheck();
+  }
+}
+
+function calculateExpGain() {
+  const levelsClimbed = enemy.LEVEL - player.HIGHEST_LEVEL_PRESTIGED_AT;
+  let gainedExp = 0;
+  console.log(`levels climbed${levelsClimbed}`);
+  if (levelsClimbed > 0) {
+    player.HIGHEST_LEVEL_PRESTIGED_AT = player.HIGHEST_LEVEL_REACHED;
+    gainedExp = levelsClimbed / 4 + enemy.LEVEL / 100;
+  } else {
+    gainedExp = enemy.LEVEL / 100;
+  }
+  player.PRESTIGE_EXP += Math.round(gainedExp);
+}
+function updateAllShops() {
+  updateShop(shop.ATTACK);
+  updateShop(shop.HEALTH);
+  updateShop(shop.HEALTH_REGEN);
+  updateShop(shop.ATTACK_SPEED);
+  updateShop(shop.CRIT_CHANCE);
+  updateShop(shop.CRIT_MULTIPLIER);
+  updateShop(shop.BLOCK_CHANCE);
+}
+function initialize() {
+  calculatePlayerStats();
+  updateStatFrame(player);
+  updateHealthBar(player);
+  updateGoldDisplay();
+  updateAttackTimerBar(player, true);
+  updateHealthBar(enemy);
+  updateAttackTimerBar(enemy, true);
+  updatePrestigeDisplay();
+  updateAllShops();
+}
 /* #########################################################
                  Attack and death logic
 ######################################################### */
@@ -541,6 +613,9 @@ function respawn(target: any) {
       player.GOLD += enemy.GOLD_DROP;
       createText(enemy.GOLD_DROP.toString(), player, false, true);
       updateGoldDisplay();
+      if (player.HIGHEST_LEVEL_REACHED <= enemy.LEVEL) {
+        player.HIGHEST_LEVEL_REACHED = enemy.LEVEL;
+      }
     } else {
       // if it was the player that died, reduce level of enemy to make it easier, and heal it up again.
       if (enemy.LEVEL > 10) {
@@ -774,16 +849,27 @@ LOGIC
 
 */
 
-function initialize() {
-  updateStatFrame(player);
-  updateHealthBar(player);
-  updateGoldDisplay();
-  updateAttackTimerBar(player, true);
-  updateHealthBar(enemy);
-  updateAttackTimerBar(enemy, true);
+function resetStats() {
+  player.DAMAGE = player.base.DAMAGE;
+  player.HEALTH_MAX = player.base.HEALTH_MAX;
+  player.HEALTH_CURRENT = player.base.HEALTH_MAX;
+  player.HEALTH_REGEN = player.base.HEALTH_REGEN;
+  player.ATTACK_COOLDOWN = player.base.ATTACK_COOLDOWN;
+  player.ATTACK_TIMER = 0;
+  player.BLOCK_CHANCE = player.base.BLOCK_CHANCE;
+  player.CRIT_CHANCE = player.base.CRIT_CHANCE;
+  player.CRIT_MULTIPLIER = player.base.CRIT_MULTIPLIER;
+  player.GOLD = player.base.GOLD;
+  enemy.DAMAGE = enemy.base.DAMAGE;
+  enemy.HEALTH_MAX = enemy.base.HEALTH_MAX;
+  enemy.HEALTH_CURRENT = enemy.base.HEALTH_MAX;
+  enemy.HEALTH_REGEN = enemy.base.HEALTH_REGEN;
+  enemy.ATTACK_COOLDOWN = enemy.base.ATTACK_COOLDOWN;
+  enemy.ATTACK_TIMER = 0;
+  enemy.BLOCK_CHANCE = enemy.base.BLOCK_CHANCE;
+  enemy.CRIT_CHANCE = enemy.base.CRIT_CHANCE;
+  enemy.CRIT_MULTIPLIER = enemy.base.CRIT_MULTIPLIER;
 }
-
-// Unsure on the best way to do this, because it needs the parent parameter.
 
 // Main loop, runs each x tickrate and keeps the game rolling
 function gameLoop() {
@@ -860,13 +946,14 @@ for (let i = 0; i < btnMenu.length; i += 1) {
   });
 }
 
-updateShop(shop.ATTACK);
-updateShop(shop.HEALTH);
-updateShop(shop.HEALTH_REGEN);
-updateShop(shop.ATTACK_SPEED);
-updateShop(shop.CRIT_CHANCE);
-updateShop(shop.CRIT_MULTIPLIER);
-updateShop(shop.BLOCK_CHANCE);
+btnPrestige.addEventListener('click', () => {
+  console.log('prestige!');
+  calculateExpGain();
+  levelUpCheck();
+  updatePrestigeDisplay();
+  resetStats();
+  initialize();
+});
 
 // Makes player and enemy stats accurate on start.
 
