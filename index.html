@@ -8,8 +8,8 @@
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projekt</title>
-  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.81f43be2.js"></script>
-  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.c86720b2.css">
+  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.89d7bc4c.js"></script>
+  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.d590db61.css">
 </head>
 
 <body>
@@ -47,6 +47,8 @@
           aria-label="player stats button">query_stats</button>
         <button class="btnMenu material-symbols-outlined" id="btnMenuShop" title="Shop for upgrades"
           aria-label="shop for upgrades button">storefront</button>
+        <button class="btnMenu material-symbols-outlined" id="btnMenuPrestige" title="Prestige upgrades"
+          aria-label="Prestige upgrades button">self_improvement</button>
         <button class="btnMenu material-symbols-outlined" id="btnMenuDebug" title="Debug menu"
           aria-label="debug menu button">logo_dev</button>
       </nav>
@@ -73,6 +75,30 @@
           <button class="shopButton" id="shopBtnBlockChance">Block Chance</button>
         </div>
       </div>
+
+      <div class="flexContent MenuFrame hidden" id="prestige">
+        <h2 id="prestigeTitle">Prestige upgrades</h2>
+        <div class="prestigeFlex">
+          <label>Points Available: <span id="spnPoints"></span> / <span id="spnLevel"></span></label>
+          <label>Experience: <span id="spnCurrentExp"></span> / <span id="spnMaxExp"></span></label>
+          <progress id="expBar" value="0" max="10"></progress><br>
+          <button class="btnPrestigeShop" id="btnPrestige"
+            title="OBS! RESETS YOUR CURRENT PROGRESS FOR PERMANENT PRESTIGE EXPERIENCE">PRESTIGE</button>
+        </div>
+        <div class="prestigeFlex" id="tier0">
+          <h2>Tier 0</h2>
+        </div>
+        <div class="prestigeFlex" id="tier1">
+          <h2>Tier 1</h2>
+        </div>
+        <div class="prestigeFlex" id="tier2">
+          <h2>Tier 2</h2>
+        </div>
+        <div class="prestigeFlex" id="tier3">
+          <h2>Tier 3</h2>
+        </div>
+      </div>
+
       <div class="flexContent MenuFrame hidden" id="debug">
         <h2>Debug</h2>
         <button id="debugButton" title="console logs the current player and enemy object.">Get state</button><br />
