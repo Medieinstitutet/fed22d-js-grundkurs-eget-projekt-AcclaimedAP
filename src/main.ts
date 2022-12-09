@@ -315,6 +315,7 @@ let degree = 0;
 // Menu button array
 const btnMenu = document.querySelectorAll('.btnMenu');
 const divMenu = document.querySelectorAll('.MenuFrame');
+
 // Debug
 const tickCounterSpan = document.getElementById('tickCounter') as HTMLSpanElement;
 const btnDebugState = document.getElementById('debugButton') as HTMLButtonElement;
@@ -734,11 +735,6 @@ function animate() {
   backgroundCycle();
 }
 
-/*
-
-LOGIC
-
-*/
 // NOTE: Temporary, just for debugging.
 btnDebugState.addEventListener('click', () => {
   console.log(player);
@@ -750,7 +746,11 @@ function degreeDisplay() {
   const spnDegree = document.getElementById('degreeSpn') as HTMLSpanElement;
   spnDegree.innerHTML = `${degree.toFixed(1)}<br>red: ${red.toFixed(1)}<br>green: ${green.toFixed(1)}<br>blue: ${blue.toFixed(1)}`;
 }
+/*
 
+DEBUG
+
+*/
 // NOTE: trying to calculate how many updates per second we get.
 const tpsSpan = document.getElementById('ticksPerSecond') as HTMLSpanElement;
 const d = new Date();
@@ -766,6 +766,21 @@ function ticksPerSecond() {
     pastSecond = currentTime;
     x = 0;
   }
+}
+
+/*
+
+LOGIC
+
+*/
+
+function initialize() {
+  updateStatFrame(player);
+  updateHealthBar(player);
+  updateGoldDisplay();
+  updateAttackTimerBar(player, true);
+  updateHealthBar(enemy);
+  updateAttackTimerBar(enemy, true);
 }
 
 // Unsure on the best way to do this, because it needs the parent parameter.
@@ -852,12 +867,8 @@ updateShop(shop.ATTACK_SPEED);
 updateShop(shop.CRIT_CHANCE);
 updateShop(shop.CRIT_MULTIPLIER);
 updateShop(shop.BLOCK_CHANCE);
-// Makes player and enemy stats accurate on start.
-updateStatFrame(player);
-updateHealthBar(player);
-updateGoldDisplay();
-updateAttackTimerBar(player, true);
-updateHealthBar(enemy);
-updateAttackTimerBar(enemy, true);
 
+// Makes player and enemy stats accurate on start.
+
+initialize();
 gameLoop(); // Finally we can start playing the game!
