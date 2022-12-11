@@ -953,7 +953,8 @@ shop.BLOCK_CHANCE.DOM?.addEventListener('click', () => {
 
 for (let i = 0; i < btnMenu.length; i += 1) {
   btnMenu[i].addEventListener('click', () => {
-    menuChange(divMenu[i]););
+    menuChange(divMenu[i]);
+  });
 }
 
 btnPrestige.addEventListener('click', () => {
