@@ -331,7 +331,7 @@ let degree = 0;
 
 // Menu button array
 const btnMenu = document.querySelectorAll('.btnMenu');
-const divMenu = document.querySelectorAll('.MenuFrame');
+const divMenu = document.querySelectorAll('.menuFrame');
 
 // Prestige Shop
 const spnPrestigePoints = document.getElementById('spnPoints') as HTMLSpanElement;
@@ -953,8 +953,7 @@ shop.BLOCK_CHANCE.DOM?.addEventListener('click', () => {
 
 for (let i = 0; i < btnMenu.length; i += 1) {
   btnMenu[i].addEventListener('click', () => {
-    menuChange(divMenu[i]);
-  });
+    menuChange(divMenu[i]););
 }
 
 btnPrestige.addEventListener('click', () => {
