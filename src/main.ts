@@ -74,7 +74,41 @@ FUNCTIONS
 /* #########################################################
                         DOM updates
 ######################################################### */
+// Counts the amount of digits in a number
+function digitCounter(number: number, count = 0): number {
+  if (number) {
+    count += 1;
+    return digitCounter(Math.floor(number / 10), count);
+  }
+  return count;
+}
+// Visual aid to convert large numbers to a number that is easier to understand.
+function numberToAsciiConverter(number: number): string {
+  let stringLength = digitCounter(number);
+  const ascii = 96;
+  let loopCount = 0;
+  console.log(`Number: ${number}`);
+  let finalString = number.toFixed();
+  console.log(`Finalstring: ${finalString}, stringLength: ${stringLength}`);
+  if (stringLength >= 4) {
+    while (stringLength >= 4) {
+      loopCount += 1;
+      stringLength -= 3;
+    }
+    const divided = 1000 ** loopCount;
+    number /= divided;
+    console.log(number);
+    if (number > 100) {
+      finalString = Math.round(number).toString() + String.fromCharCode(ascii + loopCount);
+    } else if (number > 10) {
+      finalString = number.toFixed(1) + String.fromCharCode(ascii + loopCount);
+    } else {
+      finalString = number.toFixed(2) + String.fromCharCode(ascii + loopCount);
+    }
+  }
 
+  return finalString;
+}
 // Menu functionality
 function menuChange(uiElement: Element) {
   if (uiElement.classList.contains('hidden')) {
@@ -141,7 +175,7 @@ function updateStatFrame(target: any): void {
 }
 
 function updateGoldDisplay(): void {
-  goldCounter.innerHTML = unit.player.GOLD.toString();
+  goldCounter.innerHTML = numberToAsciiConverter(unit.player.GOLD);
 }
 
 function updatePrestigeDisplay(): void {
@@ -285,9 +319,9 @@ function calculateExpGain() {
   console.log(`levels climbed${levelsClimbed}`);
   if (levelsClimbed > 0) {
     unit.player.HIGHEST_LEVEL_PRESTIGED_AT = unit.player.HIGHEST_LEVEL_REACHED;
-    gainedExp = levelsClimbed / 4 + unit.enemy.LEVEL / 100;
+    gainedExp = levelsClimbed / 2.5 + unit.enemy.LEVEL / 80;
   } else {
-    gainedExp = unit.enemy.LEVEL / 100;
+    gainedExp = unit.enemy.LEVEL / 80;
   }
   unit.player.PRESTIGE_EXP += Math.round(gainedExp);
 }
@@ -342,6 +376,10 @@ function respawn(target: any) {
     // If it is the enemy that dies, level it up, give gold to player, etc.
     if (target.IS_PLAYABLE_CHARACTER === false) {
       unit.enemy.LEVEL += 1;
+      if (!unit.player.PRESTIGE_ENABLED && unit.enemy.LEVEL >= 50) {
+        unit.player.PRESTIGE_ENABLED = true;
+        btnPrestige.disabled = false;
+      }
       unit.player.GOLD += unit.enemy.GOLD_DROP;
       createText(unit.enemy.GOLD_DROP.toString(), unit.player, false, true);
       updateGoldDisplay();
