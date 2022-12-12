@@ -9,93 +9,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import './style/style.scss';
-
+import * as types from './types';
+import * as unit from './units';
 // I'm sorry Jenni, for what you're about to see.
 
-type Health = {
-  HEALTH_MAX: number;
-  HEALTH_CURRENT: number;
-  HEALTH_REGEN: number;
-};
-type CombatStats = {
-  DAMAGE: number;
-  ATTACK_TIMER: number;
-  ATTACK_COOLDOWN: number;
-  CHARGE_TIMER: number;
-  CHARGE_COOLDOWN: number;
-  CRIT_CHANCE: number;
-  CRIT_MULTIPLIER: number;
-  BLOCK_CHANCE: number;
-};
-type UtilityStats = {
-  NAME: string;
-  RESPAWN_TIMER: number;
-  GOLD?: number;
-  GOLD_DROP?: number;
-  LEVEL?: number;
-};
-// FIXME: This fucker doesn't work it seems, any use related to it currently has "any" to temporary fix, look over this
-type UIElements = {
-  healthBar: HTMLMeterElement;
-  attackTimerBar: HTMLMeterElement;
-  xPos?: number;
-  xPosReversed?: number;
-  portrait: HTMLDivElement;
-  image: HTMLImageElement;
-  frameState: {
-    idle: string;
-    dead: string;
-  };
-};
-type LogicBooleans = {
-  IS_ATTACKING: boolean;
-  IS_FRONT_OF_OPPONENT: boolean;
-  IS_ALIVE: boolean;
-  IS_RESPAWNING: boolean;
-  IS_PLAYABLE_CHARACTER: boolean;
-};
-/*
-type StatFrame = {
-  statFrame: {
-    spnAttack: HTMLSpanElement;
-    spnHealthMax: HTMLSpanElement;
-    spnAttackSpeed: HTMLSpanElement;
-  };
-};
-type BaseType = {
-  HEALTH_MAX: number;
-  HEALTH_REGEN: number;
-  DAMAGE: number;
-  GOLD_DROP: number;
-};
-
-type MultiplierType = {
-  HEALTH_MAX: number;
-  HEALTH_REGEN: number;
-  DAMAGE: number;
-  GOLD_DROP: number;
-};
-
-type Character = Health &
-  CombatStats &
-  UtilityStats &
-  BaseType &
-  MultiplierType &
-  LogicBooleans &
-  UIElements &
-  StatFrame;
-
-interface Character {
-  health: Health;
-  combat: CombatStats;
-  common: UtilityStats;
-  base: BaseType;
-  multiplier: MultiplierType;
-  logic: LogicBooleans;
-  ui: UIElements;
-  uiFrame?: StatFrame;
-}
-*/
 /*
 
 VARIABLES AND DEFINITIONS
@@ -104,202 +21,7 @@ VARIABLES AND DEFINITIONS
 // Logic variables
 const tickRate = 15; // Anything lower returns the same result.
 let tickCount = 0;
-
 // Player Object
-
-const player = {
-  // player stats
-  NAME: 'PlayerName',
-  HEALTH_MAX: 100,
-  HEALTH_CURRENT: 100,
-  HEALTH_REGEN: 1,
-  DAMAGE: 5,
-  ATTACK_TIMER: 0,
-  ATTACK_COOLDOWN: 220,
-  CHARGE_TIMER: 0,
-  CHARGE_COOLDOWN: 50,
-  CRIT_CHANCE: 0.05,
-  CRIT_MULTIPLIER: 1.2,
-  BLOCK_CHANCE: 0.05,
-  GOLD: 5,
-  RESPAWN_TIMER: 0,
-  PRESTIGE_LEVEL: 0,
-  PRESTIGE_EXP: 0,
-  PRESTIGE_EXP_LEVELUP: 10,
-  PRESTIGE_EXP_LEVELUP_MULTIPLIER: 1.7,
-  HIGHEST_LEVEL_REACHED: 0,
-  HIGHEST_LEVEL_PRESTIGED_AT: 0,
-  PRESTIGE_POINTS: 0,
-  // Used to calculate and able to backtrack
-  base: {
-    HEALTH_MAX: 100,
-    HEALTH_REGEN: 1,
-    DAMAGE: 5,
-    ATTACK_COOLDOWN: 220,
-    CRIT_CHANCE: 0.05,
-    CRIT_MULTIPLIER: 1.2,
-    BLOCK_CHANCE: 0.05,
-    GOLD: 5,
-  },
-  // Keeps tracks on how many is bought for each item for the purpose of calculating the cost of future upgrades
-
-  // Logic booleans
-  IS_PLAYABLE_CHARACTER: true,
-  IS_ATTACKING: false,
-  IS_FRONT_OF_OPPONENT: false,
-  IS_ALIVE: true,
-  IS_RESPAWNING: false,
-
-  // DOM on canvas and position
-  xPos: 0,
-  portrait: document.getElementById('playerPortrait'),
-  image: document.getElementById('playerImage'),
-  frameState: {
-    idle: ['assets/combatzone/player/player_idle_1.svg'],
-    dead: 'assets/combatzone/universal/gravestone.svg',
-  },
-  healthBar: document.getElementById('playerHealthBar'),
-  attackTimerBar: document.getElementById('playerAttackBar'),
-
-  // Player info DOM
-  statFrame: {
-    spnAttack: document.getElementById('spnPlayerAttack'),
-    spnHealthMax: document.getElementById('spnPlayerHealthMax'),
-    spnHealthRegen: document.getElementById('spnPlayerHealthRegen'),
-    spnAttackSpeed: document.getElementById('spnPlayerAttackSpeed'),
-    spnCritChance: document.getElementById('spnPlayerCritChance'),
-    spnCritMultiplier: document.getElementById('spnPlayerCritMultiplier'),
-    spnBlockChance: document.getElementById('spnPlayerBlockChance'),
-    spnLevel: document.getElementById('spnEnemyLevel'),
-  },
-};
-
-// Enemy object
-const enemy = {
-  NAME: 'Slime',
-  HEALTH_MAX: 20,
-  HEALTH_CURRENT: 20,
-  HEALTH_REGEN: 0.1,
-  DAMAGE: 3,
-  ATTACK_TIMER: 0,
-  ATTACK_COOLDOWN: 310,
-  CHARGE_TIMER: 0,
-  CHARGE_COOLDOWN: 50,
-  CRIT_CHANCE: 0.05,
-  CRIT_MULTIPLIER: 1.2,
-  BLOCK_CHANCE: 0.05,
-  GOLD_DROP: 5,
-  RESPAWN_TIMER: 0,
-  LEVEL: 1,
-  // Used to calculate and able to backtrack
-  base: {
-    HEALTH_MAX: 20,
-    HEALTH_REGEN: 0.1,
-    DAMAGE: 3,
-    ATTACK_COOLDOWN: 310,
-    CRIT_CHANCE: 0.05,
-    CRIT_MULTIPLIER: 1.2,
-    BLOCK_CHANCE: 0.05,
-    GOLD_DROP: 5,
-  },
-  // Determines how much stronger the enemy gets per level
-  multiplier: {
-    HEALTH_MAX: 1.6,
-    HEALTH_REGEN: 0.1,
-    DAMAGE: 1.4,
-    GOLD_DROP: 1.5,
-  },
-  // Logic booleans
-  IS_PLAYABLE_CHARACTER: false,
-  IS_ATTACKING: false,
-  IS_FRONT_OF_OPPONENT: false,
-  IS_ALIVE: true,
-  IS_RESPAWNING: false,
-
-  // DOM and position
-  xPosReversed: 0,
-  portrait: document.getElementById('enemyPortrait'),
-  image: document.getElementById('enemyImage'),
-  frameState: {
-    idle: ['assets/combatzone/enemy/slime_idle_1.svg'],
-    dead: 'assets/combatzone/universal/gravestone.svg',
-  },
-  healthBar: document.getElementById('enemyHealthBar'),
-  attackTimerBar: document.getElementById('enemyAttackBar'),
-};
-
-const shop = {
-  ATTACK: {
-    NAME: 'ATTACK',
-    COST: 0,
-    BASE_COST: 5,
-    BASE_POWER: 2,
-    COST_MULTIPLIER: 1.6,
-    POWER_MULTIPLIER: 1.3,
-    BOUGHT: 0,
-    DOM: document.getElementById('shopBtnAttack'),
-  },
-  HEALTH: {
-    NAME: 'HEALTH',
-    COST: 0,
-    BASE_COST: 4,
-    BASE_POWER: 5,
-    COST_MULTIPLIER: 1.4,
-    POWER_MULTIPLIER: 1.25,
-    BOUGHT: 0,
-    DOM: document.getElementById('shopBtnHealth'),
-  },
-  HEALTH_REGEN: {
-    NAME: 'HEALTH REGENERATION',
-    COST: 0,
-    BASE_COST: 6,
-    BASE_POWER: 1,
-    COST_MULTIPLIER: 1.2,
-    POWER_MULTIPLIER: 0.15,
-    BOUGHT: 0,
-    DOM: document.getElementById('shopBtnHealthRegen'),
-  },
-  ATTACK_SPEED: {
-    NAME: 'ATTACK SPEED',
-    COST: 0,
-    BASE_COST: 30,
-    BASE_POWER: 3,
-    COST_MULTIPLIER: 2.1,
-    POWER_MULTIPLIER: 0.9,
-    BOUGHT: 0,
-    DOM: document.getElementById('shopBtnAttackSpeed'),
-  },
-  CRIT_CHANCE: {
-    NAME: 'CRIT CHANCE',
-    COST: 0,
-    BASE_COST: 6,
-    BASE_POWER: 0.05,
-    COST_MULTIPLIER: 1.5,
-    POWER_MULTIPLIER: 0.6,
-    BOUGHT: 1,
-    DOM: document.getElementById('shopBtnCritChance'),
-  },
-  CRIT_MULTIPLIER: {
-    NAME: 'CRIT MULTIPLIER',
-    COST: 0,
-    BASE_COST: 6,
-    BASE_POWER: 0.1,
-    COST_MULTIPLIER: 1.1,
-    POWER_MULTIPLIER: 1.1,
-    BOUGHT: 0,
-    DOM: document.getElementById('shopBtnCritMultiplier'),
-  },
-  BLOCK_CHANCE: {
-    NAME: 'BLOCK CHANCE',
-    COST: 0,
-    BASE_COST: 6,
-    BASE_POWER: 0.05,
-    COST_MULTIPLIER: 1.9,
-    POWER_MULTIPLIER: 1.04,
-    BOUGHT: 0,
-    DOM: document.getElementById('shopBtnBlockChance'),
-  },
-};
 
 // DOM
 
@@ -414,18 +136,18 @@ function updateStatFrame(target: any): void {
     target.statFrame.spnCritChance.innerHTML = `${(target.CRIT_CHANCE * 100).toFixed(2)}%`;
     target.statFrame.spnCritMultiplier.innerHTML = `${(target.CRIT_MULTIPLIER * 100).toString()}%`;
     target.statFrame.spnBlockChance.innerHTML = `${(target.BLOCK_CHANCE * 100).toFixed(2)}%`;
-    target.statFrame.spnLevel.innerHTML = `${enemy.LEVEL}`;
+    target.statFrame.spnLevel.innerHTML = `${unit.enemy.LEVEL}`;
   }
 }
 
 function updateGoldDisplay(): void {
-  goldCounter.innerHTML = player.GOLD.toString();
+  goldCounter.innerHTML = unit.player.GOLD.toString();
 }
 
 function updatePrestigeDisplay(): void {
-  spnPrestigePoints.innerHTML = player.PRESTIGE_POINTS.toString();
-  spnPrestigeLevel.innerHTML = player.PRESTIGE_LEVEL.toString();
-  spnPrestigeExpCurrent.innerHTML = player.PRESTIGE_EXP.toString();
+  spnPrestigePoints.innerHTML = unit.player.PRESTIGE_POINTS.toString();
+  spnPrestigeLevel.innerHTML = unit.player.PRESTIGE_LEVEL.toString();
+  spnPrestigeExpCurrent.innerHTML = unit.player.PRESTIGE_EXP.toString();
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   spnPrestigeExpMax.innerHTML = maxExpRequired().toString();
 }
@@ -468,13 +190,13 @@ function output(text?: string, style?: string): void {
 ######################################################### */
 function shopMath(shopItem: { NAME: string; BASE_POWER: number; BOUGHT: number; POWER_MULTIPLIER: number }): number {
   let powerCalc: number = shopItem.BASE_POWER + shopItem.BOUGHT * shopItem.POWER_MULTIPLIER;
-  if (shopItem.NAME === shop.ATTACK_SPEED.NAME) {
+  if (shopItem.NAME === unit.shop.ATTACK_SPEED.NAME) {
     powerCalc = shopItem.BASE_POWER / (1 + shopItem.BOUGHT * shopItem.POWER_MULTIPLIER);
   }
-  if (shopItem.NAME === shop.CRIT_CHANCE.NAME || shopItem === shop.BLOCK_CHANCE) {
+  if (shopItem.NAME === unit.shop.CRIT_CHANCE.NAME || shopItem === unit.shop.BLOCK_CHANCE) {
     powerCalc = shopItem.BASE_POWER + (shopItem.BOUGHT / 1000) * shopItem.POWER_MULTIPLIER;
   }
-  if (shopItem === shop.CRIT_MULTIPLIER) {
+  if (shopItem === unit.shop.CRIT_MULTIPLIER) {
     powerCalc = shopItem.BASE_POWER + (shopItem.BOUGHT / 100) * shopItem.POWER_MULTIPLIER;
   }
   if (powerCalc >= 1) {
@@ -495,13 +217,13 @@ function updateShop(shopItem: any): void {
   const cost = shopCost(shopItem);
   let power = shopMath(shopItem);
   // If it is supposed to show in %, do so
-  if (shopItem === shop.BLOCK_CHANCE || shopItem === shop.CRIT_CHANCE) {
+  if (shopItem === unit.shop.BLOCK_CHANCE || shopItem === unit.shop.CRIT_CHANCE) {
     const powerString = `${power.toString()}%`;
     shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>+ ${powerString}`;
-  } else if (shopItem === shop.ATTACK_SPEED) {
+  } else if (shopItem === unit.shop.ATTACK_SPEED) {
     // Special case for attack speed
     shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>- ${power * 15} ms`;
-  } else if (shopItem === shop.CRIT_MULTIPLIER) {
+  } else if (shopItem === unit.shop.CRIT_MULTIPLIER) {
     power *= 100;
     const powerString = `${power.toString()}%`;
     shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>+ ${powerString}`;
@@ -512,80 +234,80 @@ function updateShop(shopItem: any): void {
 }
 
 function calculatePlayerStats(): void {
-  player.DAMAGE = player.base.DAMAGE + shopMath(shop.ATTACK);
-  player.HEALTH_MAX = player.base.HEALTH_MAX + shopMath(shop.HEALTH);
-  player.HEALTH_REGEN = player.base.HEALTH_REGEN + shopMath(shop.HEALTH_REGEN);
-  player.CRIT_CHANCE = player.base.CRIT_CHANCE + shopMath(shop.CRIT_CHANCE) / 100;
-  player.CRIT_MULTIPLIER = player.base.CRIT_MULTIPLIER + shopMath(shop.CRIT_MULTIPLIER);
-  player.BLOCK_CHANCE = player.base.BLOCK_CHANCE + shopMath(shop.BLOCK_CHANCE);
-  player.ATTACK_COOLDOWN = player.base.ATTACK_COOLDOWN - shopMath(shop.ATTACK_SPEED);
+  unit.player.DAMAGE = unit.player.base.DAMAGE + shopMath(unit.shop.ATTACK);
+  unit.player.HEALTH_MAX = unit.player.base.HEALTH_MAX + shopMath(unit.shop.HEALTH);
+  unit.player.HEALTH_REGEN = unit.player.base.HEALTH_REGEN + shopMath(unit.shop.HEALTH_REGEN);
+  unit.player.CRIT_CHANCE = unit.player.base.CRIT_CHANCE + shopMath(unit.shop.CRIT_CHANCE) / 100;
+  unit.player.CRIT_MULTIPLIER = unit.player.base.CRIT_MULTIPLIER + shopMath(unit.shop.CRIT_MULTIPLIER);
+  unit.player.BLOCK_CHANCE = unit.player.base.BLOCK_CHANCE + shopMath(unit.shop.BLOCK_CHANCE);
+  unit.player.ATTACK_COOLDOWN = unit.player.base.ATTACK_COOLDOWN - shopMath(unit.shop.ATTACK_SPEED);
 }
 
 function calculateEnemyStats() {
   // Sets enemies stats to their values based on what level they are.
-  enemy.HEALTH_MAX = enemy.base.HEALTH_MAX + enemy.LEVEL * enemy.multiplier.HEALTH_MAX;
-  enemy.DAMAGE = enemy.base.DAMAGE + enemy.LEVEL * enemy.multiplier.DAMAGE;
-  enemy.GOLD_DROP = enemy.base.GOLD_DROP + enemy.LEVEL * enemy.multiplier.GOLD_DROP;
-  enemy.HEALTH_REGEN = enemy.base.HEALTH_REGEN + enemy.LEVEL * enemy.multiplier.HEALTH_REGEN;
-  updateHealthBar(enemy, true);
+  unit.enemy.HEALTH_MAX = unit.enemy.base.HEALTH_MAX + unit.enemy.LEVEL * unit.enemy.multiplier.HEALTH_MAX;
+  unit.enemy.DAMAGE = unit.enemy.base.DAMAGE + unit.enemy.LEVEL * unit.enemy.multiplier.DAMAGE;
+  unit.enemy.GOLD_DROP = unit.enemy.base.GOLD_DROP + unit.enemy.LEVEL * unit.enemy.multiplier.GOLD_DROP;
+  unit.enemy.HEALTH_REGEN = unit.enemy.base.HEALTH_REGEN + unit.enemy.LEVEL * unit.enemy.multiplier.HEALTH_REGEN;
+  updateHealthBar(unit.enemy, true);
 }
 
 function shopBuy(shopItem: any): void {
   shopItem.COST = shopCost(shopItem);
 
-  if (player.GOLD >= shopItem.COST) {
-    player.GOLD -= shopItem.COST;
+  if (unit.player.GOLD >= shopItem.COST) {
+    unit.player.GOLD -= shopItem.COST;
     updateGoldDisplay();
     updateShop(shopItem);
     calculatePlayerStats();
-    updateStatFrame(player);
+    updateStatFrame(unit.player);
     shopItem.BOUGHT += 1;
   }
 }
 
 function maxExpRequired(): number {
-  return player.PRESTIGE_EXP_LEVELUP + player.PRESTIGE_EXP_LEVELUP * player.PRESTIGE_LEVEL * player.PRESTIGE_EXP_LEVELUP_MULTIPLIER;
+  return unit.player.PRESTIGE_EXP_LEVELUP + unit.player.PRESTIGE_EXP_LEVELUP * unit.player.PRESTIGE_LEVEL * unit.player.PRESTIGE_EXP_LEVELUP_MULTIPLIER;
 }
 
 function levelUpCheck() {
   const expRequired = maxExpRequired();
-  if (player.PRESTIGE_EXP >= expRequired) {
-    player.PRESTIGE_LEVEL += 1;
-    player.PRESTIGE_POINTS += 1;
-    player.PRESTIGE_EXP -= expRequired;
+  if (unit.player.PRESTIGE_EXP >= expRequired) {
+    unit.player.PRESTIGE_LEVEL += 1;
+    unit.player.PRESTIGE_POINTS += 1;
+    unit.player.PRESTIGE_EXP -= expRequired;
     levelUpCheck();
   }
 }
 
 function calculateExpGain() {
-  const levelsClimbed = enemy.LEVEL - player.HIGHEST_LEVEL_PRESTIGED_AT;
+  const levelsClimbed = unit.enemy.LEVEL - unit.player.HIGHEST_LEVEL_PRESTIGED_AT;
   let gainedExp = 0;
   console.log(`levels climbed${levelsClimbed}`);
   if (levelsClimbed > 0) {
-    player.HIGHEST_LEVEL_PRESTIGED_AT = player.HIGHEST_LEVEL_REACHED;
-    gainedExp = levelsClimbed / 4 + enemy.LEVEL / 100;
+    unit.player.HIGHEST_LEVEL_PRESTIGED_AT = unit.player.HIGHEST_LEVEL_REACHED;
+    gainedExp = levelsClimbed / 4 + unit.enemy.LEVEL / 100;
   } else {
-    gainedExp = enemy.LEVEL / 100;
+    gainedExp = unit.enemy.LEVEL / 100;
   }
-  player.PRESTIGE_EXP += Math.round(gainedExp);
+  unit.player.PRESTIGE_EXP += Math.round(gainedExp);
 }
 function updateAllShops() {
-  updateShop(shop.ATTACK);
-  updateShop(shop.HEALTH);
-  updateShop(shop.HEALTH_REGEN);
-  updateShop(shop.ATTACK_SPEED);
-  updateShop(shop.CRIT_CHANCE);
-  updateShop(shop.CRIT_MULTIPLIER);
-  updateShop(shop.BLOCK_CHANCE);
+  updateShop(unit.shop.ATTACK);
+  updateShop(unit.shop.HEALTH);
+  updateShop(unit.shop.HEALTH_REGEN);
+  updateShop(unit.shop.ATTACK_SPEED);
+  updateShop(unit.shop.CRIT_CHANCE);
+  updateShop(unit.shop.CRIT_MULTIPLIER);
+  updateShop(unit.shop.BLOCK_CHANCE);
 }
 function initialize() {
   calculatePlayerStats();
-  updateStatFrame(player);
-  updateHealthBar(player);
+  updateStatFrame(unit.player);
+  updateHealthBar(unit.player);
   updateGoldDisplay();
-  updateAttackTimerBar(player, true);
-  updateHealthBar(enemy);
-  updateAttackTimerBar(enemy, true);
+  updateAttackTimerBar(unit.player, true);
+  updateHealthBar(unit.enemy);
+  updateAttackTimerBar(unit.enemy, true);
   updatePrestigeDisplay();
   updateAllShops();
 }
@@ -594,7 +316,7 @@ function initialize() {
 ######################################################### */
 
 // Heals a target
-function heal(target: Health & LogicBooleans, amount?: number) {
+function heal(target: types.Health & types.LogicBooleans, amount?: number) {
   if (target.IS_ALIVE && amount != null) {
     // If alive, and amount is given, heal that amount
     target.HEALTH_CURRENT += amount;
@@ -619,22 +341,22 @@ function respawn(target: any) {
   if (target.RESPAWN_TIMER >= respawnCooldown) {
     // If it is the enemy that dies, level it up, give gold to player, etc.
     if (target.IS_PLAYABLE_CHARACTER === false) {
-      enemy.LEVEL += 1;
-      player.GOLD += enemy.GOLD_DROP;
-      createText(enemy.GOLD_DROP.toString(), player, false, true);
+      unit.enemy.LEVEL += 1;
+      unit.player.GOLD += unit.enemy.GOLD_DROP;
+      createText(unit.enemy.GOLD_DROP.toString(), unit.player, false, true);
       updateGoldDisplay();
-      updateStatFrame(player);
-      if (player.HIGHEST_LEVEL_REACHED <= enemy.LEVEL) {
-        player.HIGHEST_LEVEL_REACHED = enemy.LEVEL;
+      updateStatFrame(unit.player);
+      if (unit.player.HIGHEST_LEVEL_REACHED <= unit.enemy.LEVEL) {
+        unit.player.HIGHEST_LEVEL_REACHED = unit.enemy.LEVEL;
       }
     } else {
       // if it was the player that died, reduce level of enemy to make it easier, and heal it up again.
-      if (enemy.LEVEL > 10) {
-        enemy.LEVEL -= 10;
+      if (unit.enemy.LEVEL > 10) {
+        unit.enemy.LEVEL -= 10;
       } else {
-        enemy.LEVEL = 1;
+        unit.enemy.LEVEL = 1;
       }
-      heal(enemy);
+      heal(unit.enemy);
     }
     calculateEnemyStats();
     heal(target);
@@ -654,7 +376,7 @@ function regeneration(target: any) {
   }
 }
 // Checks whenever they're dead
-function checkDeath(victim: Health & LogicBooleans & UIElements & CombatStats & UtilityStats): void {
+function checkDeath(victim: types.Health & types.LogicBooleans & types.UIElements & types.CombatStats & types.UtilityStats): void {
   if (Math.floor(victim.HEALTH_CURRENT) <= 0) {
     // If their hp is 0 is below, cause respawn
     victim.IS_ALIVE = false;
@@ -663,7 +385,7 @@ function checkDeath(victim: Health & LogicBooleans & UIElements & CombatStats & 
 }
 
 // Calculates the damage dealt
-function damageCalculation(attacker: CombatStats, defender: { BLOCK_CHANCE: number }): [number, boolean] {
+function damageCalculation(attacker: types.CombatStats, defender: { BLOCK_CHANCE: number }): [number, boolean] {
   let damageDealt = 0;
   const blockRNG: number = Math.random();
   let critHit = false;
@@ -686,7 +408,7 @@ function damageCalculation(attacker: CombatStats, defender: { BLOCK_CHANCE: numb
   return damageResult;
 }
 
-function attack(attacker: CombatStats & UtilityStats, defender: any): void {
+function attack(attacker: types.CombatStats & types.UtilityStats, defender: any): void {
   const damageResult = damageCalculation(attacker, defender);
   defender.HEALTH_CURRENT -= damageResult[0];
   attacker.ATTACK_TIMER = 0;
@@ -696,7 +418,7 @@ function attack(attacker: CombatStats & UtilityStats, defender: any): void {
   checkDeath(defender);
 }
 
-function attackCount(attacker: any, defender: LogicBooleans): void {
+function attackCount(attacker: any, defender: types.LogicBooleans): void {
   // If the player is dead, or already attacking, end this function(optimization?)
   if (!attacker.IS_ALIVE || !defender.IS_ALIVE) {
     return;
@@ -751,7 +473,7 @@ function backgroundCycle() {
   canvas.style.backgroundColor = `rgb(${red},${green},${blue})`;
 }
 
-function resetAttackState(target: LogicBooleans & CombatStats) {
+function resetAttackState(target: types.LogicBooleans & types.CombatStats) {
   target.IS_ATTACKING = false;
   target.ATTACK_TIMER = 0;
   target.CHARGE_TIMER = 0;
@@ -767,55 +489,55 @@ function animate() {
   // Causes player to lunge forward if it is time to attack
   const speed = 1; // How many % they will move every tick.
   const startDistance = 5;
-  const playerPortrait = player.portrait as HTMLDivElement;
-  const enemyPortrait = enemy.portrait as HTMLDivElement;
-  if (player.IS_ATTACKING) {
+  const playerPortrait = unit.player.portrait as HTMLDivElement;
+  const enemyPortrait = unit.enemy.portrait as HTMLDivElement;
+  if (unit.player.IS_ATTACKING) {
     // As long as it hasn't arrived, keep moving
-    if (!player.IS_FRONT_OF_OPPONENT) {
-      player.xPos += speed;
-      playerPortrait.style.left = `${player.xPos}%`;
+    if (!unit.player.IS_FRONT_OF_OPPONENT) {
+      unit.player.xPos += speed;
+      playerPortrait.style.left = `${unit.player.xPos}%`;
     }
 
-    if (player.xPos + enemy.xPosReversed >= distance) {
+    if (unit.player.xPos + unit.enemy.xPosReversed >= distance) {
       // If close enough, perform attack
-      player.IS_FRONT_OF_OPPONENT = true;
+      unit.player.IS_FRONT_OF_OPPONENT = true;
     }
-    if (player.IS_FRONT_OF_OPPONENT) {
-      player.CHARGE_TIMER += 1;
+    if (unit.player.IS_FRONT_OF_OPPONENT) {
+      unit.player.CHARGE_TIMER += 1;
     }
 
-    if (player.CHARGE_TIMER >= player.CHARGE_COOLDOWN) {
-      attack(player, enemy);
-      resetAttackState(player); // Reset attack
-      player.IS_FRONT_OF_OPPONENT = false;
+    if (unit.player.CHARGE_TIMER >= unit.player.CHARGE_COOLDOWN) {
+      attack(unit.player, unit.enemy);
+      resetAttackState(unit.player); // Reset attack
+      unit.player.IS_FRONT_OF_OPPONENT = false;
     }
-  } else if (!player.IS_ATTACKING && player.xPos > startDistance) {
+  } else if (!unit.player.IS_ATTACKING && unit.player.xPos > startDistance) {
     // Moves it back
-    player.xPos -= speed;
-    playerPortrait.style.left = `${player.xPos}%`;
+    unit.player.xPos -= speed;
+    playerPortrait.style.left = `${unit.player.xPos}%`;
   }
 
-  if (enemy.IS_ATTACKING) {
-    if (!enemy.IS_FRONT_OF_OPPONENT) {
-      enemy.xPosReversed += speed;
-      enemyPortrait.style.right = `${enemy.xPosReversed}%`;
+  if (unit.enemy.IS_ATTACKING) {
+    if (!unit.enemy.IS_FRONT_OF_OPPONENT) {
+      unit.enemy.xPosReversed += speed;
+      enemyPortrait.style.right = `${unit.enemy.xPosReversed}%`;
     }
-    if (player.xPos + enemy.xPosReversed >= distance) {
+    if (unit.player.xPos + unit.enemy.xPosReversed >= distance) {
       // If close enough, perform attack
-      enemy.IS_FRONT_OF_OPPONENT = true;
+      unit.enemy.IS_FRONT_OF_OPPONENT = true;
     }
-    if (enemy.IS_FRONT_OF_OPPONENT) {
-      enemy.CHARGE_TIMER += 1;
-      if (enemy.CHARGE_TIMER >= enemy.CHARGE_COOLDOWN) {
-        attack(enemy, player);
-        resetAttackState(enemy);
-        enemy.IS_FRONT_OF_OPPONENT = false;
+    if (unit.enemy.IS_FRONT_OF_OPPONENT) {
+      unit.enemy.CHARGE_TIMER += 1;
+      if (unit.enemy.CHARGE_TIMER >= unit.enemy.CHARGE_COOLDOWN) {
+        attack(unit.enemy, unit.player);
+        resetAttackState(unit.enemy);
+        unit.enemy.IS_FRONT_OF_OPPONENT = false;
       }
     }
-  } else if (!enemy.IS_ATTACKING && enemy.xPosReversed > startDistance) {
+  } else if (!unit.enemy.IS_ATTACKING && unit.enemy.xPosReversed > startDistance) {
     // Moves it back
-    enemy.xPosReversed -= speed;
-    enemyPortrait.style.right = `${enemy.xPosReversed}%`;
+    unit.enemy.xPosReversed -= speed;
+    enemyPortrait.style.right = `${unit.enemy.xPosReversed}%`;
   }
 
   backgroundCycle();
@@ -823,9 +545,9 @@ function animate() {
 
 // NOTE: Temporary, just for debugging.
 btnDebugState.addEventListener('click', () => {
-  console.log(player);
-  console.log(enemy);
-  console.log(shop);
+  console.log(unit.player);
+  console.log(unit.enemy);
+  console.log(unit.shop);
 });
 
 function degreeDisplay() {
@@ -861,25 +583,25 @@ LOGIC
 */
 
 function resetStats() {
-  player.DAMAGE = player.base.DAMAGE;
-  player.HEALTH_MAX = player.base.HEALTH_MAX;
-  player.HEALTH_CURRENT = player.base.HEALTH_MAX;
-  player.HEALTH_REGEN = player.base.HEALTH_REGEN;
-  player.ATTACK_COOLDOWN = player.base.ATTACK_COOLDOWN;
-  player.ATTACK_TIMER = 0;
-  player.BLOCK_CHANCE = player.base.BLOCK_CHANCE;
-  player.CRIT_CHANCE = player.base.CRIT_CHANCE;
-  player.CRIT_MULTIPLIER = player.base.CRIT_MULTIPLIER;
-  player.GOLD = player.base.GOLD;
-  enemy.DAMAGE = enemy.base.DAMAGE;
-  enemy.HEALTH_MAX = enemy.base.HEALTH_MAX;
-  enemy.HEALTH_CURRENT = enemy.base.HEALTH_MAX;
-  enemy.HEALTH_REGEN = enemy.base.HEALTH_REGEN;
-  enemy.ATTACK_COOLDOWN = enemy.base.ATTACK_COOLDOWN;
-  enemy.ATTACK_TIMER = 0;
-  enemy.BLOCK_CHANCE = enemy.base.BLOCK_CHANCE;
-  enemy.CRIT_CHANCE = enemy.base.CRIT_CHANCE;
-  enemy.CRIT_MULTIPLIER = enemy.base.CRIT_MULTIPLIER;
+  unit.player.DAMAGE = unit.player.base.DAMAGE;
+  unit.player.HEALTH_MAX = unit.player.base.HEALTH_MAX;
+  unit.player.HEALTH_CURRENT = unit.player.base.HEALTH_MAX;
+  unit.player.HEALTH_REGEN = unit.player.base.HEALTH_REGEN;
+  unit.player.ATTACK_COOLDOWN = unit.player.base.ATTACK_COOLDOWN;
+  unit.player.ATTACK_TIMER = 0;
+  unit.player.BLOCK_CHANCE = unit.player.base.BLOCK_CHANCE;
+  unit.player.CRIT_CHANCE = unit.player.base.CRIT_CHANCE;
+  unit.player.CRIT_MULTIPLIER = unit.player.base.CRIT_MULTIPLIER;
+  unit.player.GOLD = unit.player.base.GOLD;
+  unit.enemy.DAMAGE = unit.enemy.base.DAMAGE;
+  unit.enemy.HEALTH_MAX = unit.enemy.base.HEALTH_MAX;
+  unit.enemy.HEALTH_CURRENT = unit.enemy.base.HEALTH_MAX;
+  unit.enemy.HEALTH_REGEN = unit.enemy.base.HEALTH_REGEN;
+  unit.enemy.ATTACK_COOLDOWN = unit.enemy.base.ATTACK_COOLDOWN;
+  unit.enemy.ATTACK_TIMER = 0;
+  unit.enemy.BLOCK_CHANCE = unit.enemy.base.BLOCK_CHANCE;
+  unit.enemy.CRIT_CHANCE = unit.enemy.base.CRIT_CHANCE;
+  unit.enemy.CRIT_MULTIPLIER = unit.enemy.base.CRIT_MULTIPLIER;
 }
 
 // Main loop, runs each x tickrate and keeps the game rolling
@@ -888,16 +610,16 @@ function gameLoop() {
   // Attack function
   tickCounterSpan.innerHTML = tickCount.toString();
 
-  attackCount(player, enemy);
-  attackCount(enemy, player);
-  regeneration(player);
-  regeneration(enemy);
+  attackCount(unit.player, unit.enemy);
+  attackCount(unit.enemy, unit.player);
+  regeneration(unit.player);
+  regeneration(unit.enemy);
   // If they're in respawning state, initiate that.
-  if (player.IS_RESPAWNING) {
-    respawn(player);
+  if (unit.player.IS_RESPAWNING) {
+    respawn(unit.player);
   }
-  if (enemy.IS_RESPAWNING) {
-    respawn(enemy);
+  if (unit.enemy.IS_RESPAWNING) {
+    respawn(unit.enemy);
   }
 
   // Animation function
@@ -922,33 +644,33 @@ Object.keys(shop).forEach(key => {
 */
 
 // NOTE: Temporary fix for above...
-shop.ATTACK.DOM?.addEventListener('click', () => {
-  shopBuy(shop.ATTACK);
-  updateShop(shop.ATTACK);
+unit.shop.ATTACK.DOM?.addEventListener('click', () => {
+  shopBuy(unit.shop.ATTACK);
+  updateShop(unit.shop.ATTACK);
 });
-shop.HEALTH.DOM?.addEventListener('click', () => {
-  shopBuy(shop.HEALTH);
-  updateShop(shop.HEALTH);
+unit.shop.HEALTH.DOM?.addEventListener('click', () => {
+  shopBuy(unit.shop.HEALTH);
+  updateShop(unit.shop.HEALTH);
 });
-shop.HEALTH_REGEN.DOM?.addEventListener('click', () => {
-  shopBuy(shop.HEALTH_REGEN);
-  updateShop(shop.HEALTH_REGEN);
+unit.shop.HEALTH_REGEN.DOM?.addEventListener('click', () => {
+  shopBuy(unit.shop.HEALTH_REGEN);
+  updateShop(unit.shop.HEALTH_REGEN);
 });
-shop.ATTACK_SPEED.DOM?.addEventListener('click', () => {
-  shopBuy(shop.ATTACK_SPEED);
-  updateShop(shop.ATTACK_SPEED);
+unit.shop.ATTACK_SPEED.DOM?.addEventListener('click', () => {
+  shopBuy(unit.shop.ATTACK_SPEED);
+  updateShop(unit.shop.ATTACK_SPEED);
 });
-shop.CRIT_CHANCE.DOM?.addEventListener('click', () => {
-  shopBuy(shop.CRIT_CHANCE);
-  updateShop(shop.CRIT_CHANCE);
+unit.shop.CRIT_CHANCE.DOM?.addEventListener('click', () => {
+  shopBuy(unit.shop.CRIT_CHANCE);
+  updateShop(unit.shop.CRIT_CHANCE);
 });
-shop.CRIT_MULTIPLIER.DOM?.addEventListener('click', () => {
-  shopBuy(shop.CRIT_MULTIPLIER);
-  updateShop(shop.CRIT_MULTIPLIER);
+unit.shop.CRIT_MULTIPLIER.DOM?.addEventListener('click', () => {
+  shopBuy(unit.shop.CRIT_MULTIPLIER);
+  updateShop(unit.shop.CRIT_MULTIPLIER);
 });
-shop.BLOCK_CHANCE.DOM?.addEventListener('click', () => {
-  shopBuy(shop.BLOCK_CHANCE);
-  updateShop(shop.BLOCK_CHANCE);
+unit.shop.BLOCK_CHANCE.DOM?.addEventListener('click', () => {
+  shopBuy(unit.shop.BLOCK_CHANCE);
+  updateShop(unit.shop.BLOCK_CHANCE);
 });
 
 for (let i = 0; i < btnMenu.length; i += 1) {
