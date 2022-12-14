@@ -66,7 +66,7 @@ const PrestigeSelectedContainer = document.getElementById('prestigeUpgradeInfo')
 const PrestigeSelectedName = document.getElementById('pSelectedPrestigeUpgradeName') as HTMLHeadingElement;
 const PrestigeSelectedDesc = document.getElementById('pSelectedPrestigeUpgradeDescription') as HTMLParagraphElement;
 const PrestigeSelectedCost = document.getElementById('spnSelectedPrestigeUpgradeCost') as HTMLSpanElement;
-const PrestigeSelectedBtn = document.getElementById('btnBuySelectedPrestigeUpgrade') as HTMLButtonElement;
+const PrestigeSelectedBtnContainer = document.getElementById('divBuySelectedPrestigeUpgrade') as HTMLButtonElement;
 
 const btnPrestigeUpgrade = document.getElementsByClassName('btnPrestigeUpgrade') as HTMLCollectionOf<HTMLButtonElement>;
 // Debug
@@ -200,6 +200,13 @@ function updatePrestigeDisplay(): void {
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   spnPrestigeExpMax.innerHTML = maxExpRequired().toString();
 }
+
+function updateSelectedPrestigeDisplay(obj: any): void {
+  PrestigeSelectedName.innerHTML = obj.NAME;
+  PrestigeSelectedDesc.innerHTML = obj.DESCRIPTION;
+  PrestigeSelectedCost.innerHTML = (Number(obj.BOUGHT) + 1).toString();
+}
+
 // Updates healthbar
 // If you want to update the max values of the healthbar, you can pass on true to make it update those values as well.
 
@@ -342,6 +349,22 @@ function calculateExpGain() {
   unit.player.PRESTIGE_EXP += Math.round(gainedExp);
 }
 
+function createPrestigePurchaseButton(obj: any) {
+  PrestigeSelectedBtnContainer.innerHTML = '';
+  const btnPurchase = document.createElement('button');
+  btnPurchase.innerHTML = 'Purchase';
+  PrestigeSelectedBtnContainer.appendChild(btnPurchase);
+  btnPurchase.addEventListener('click', () => {
+    const cost = Number(obj.BOUGHT) + 1;
+    if (unit.player.PRESTIGE_POINTS >= cost) {
+      unit.player.PRESTIGE_POINTS -= cost;
+      obj.BOUGHT += 1;
+      updatePrestigeDisplay();
+      updateSelectedPrestigeDisplay(obj);
+    }
+  });
+}
+
 function showPrestigeUpgradeInfo(this: any) {
   if (PrestigeSelectedContainer?.classList.contains('hidden')) {
     PrestigeSelectedContainer.classList.remove('hidden');
@@ -372,9 +395,8 @@ function showPrestigeUpgradeInfo(this: any) {
       break;
   }
 
-  PrestigeSelectedName.innerHTML = obj.NAME;
-  PrestigeSelectedDesc.innerHTML = obj.DESCRIPTION;
-  PrestigeSelectedCost.innerHTML = (Number(obj.BOUGHT) + 1).toString();
+  updateSelectedPrestigeDisplay(obj);
+  createPrestigePurchaseButton(obj);
 }
 
 function updateAllShops() {

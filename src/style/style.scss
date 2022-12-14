@@ -90,15 +90,16 @@ label {
     right: 0;
     top: 0;
     min-width: 200px;
+    max-width: 200px;
     min-height: 100%;
     background-color: antiquewhite;
     padding: 10px;
 
-    #btnBuySelectedPrestigeUpgrade {
+    #divBuySelectedPrestigeUpgrade {
       position: absolute;
       bottom: 10px;
-      width: 120px;
-      margin-left: 5px;
+      width: 100%;
+      text-align: center;
     }
   }
 }
