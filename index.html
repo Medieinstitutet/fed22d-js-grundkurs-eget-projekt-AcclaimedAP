@@ -8,8 +8,8 @@
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projekt</title>
-  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.e0cf7b7a.js"></script>
-  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.7ccabc68.css">
+  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.2f74e343.js"></script>
+  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.a242682c.css">
 </head>
 
 <body>
@@ -92,28 +92,34 @@
           </div>
           <div class="prestigeFlex" id="tier0">
             <h2>Tier 0</h2>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeDamage">Increase Damage</button>
+            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeDamage" data-name="BONUS_DAMAGE">Increase
+              Damage</button>
           </div>
           <div class="prestigeFlex" id="tier1">
             <h2>Tier 1</h2>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeBlock">Block reduce</button>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeLifeSteal">Lifesteal</button>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeGold">Gold Multiplier</button>
+            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeBlock" data-name="REDUCE_BLOCK">Block
+              reduce</button>
+            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeLifeSteal" data-name="LIFESTEAL">Lifesteal</button>
+            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeGold" data-name="GOLD_MULTIPLIER">Gold
+              Multiplier</button>
           </div>
           <div class="prestigeFlex" id="tier2">
             <h2>Tier 2</h2>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeSmite">Smite</button>
+            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeSmite" data-name="SMITE">Smite</button>
           </div>
           <div class="prestigeFlex" id="tier3">
             <h2>Tier 3</h2>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeBlockPen">Block penetration</button>
+            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeBlockPen" data-name="BLOCK_PENETRATION">Block
+              penetration</button>
           </div>
         </div>
         <div class="" id="prestigeUpgradeInfo">
           <h2 id="pSelectedPrestigeUpgradeName">Upgrade Title</h2>
           <p id="pSelectedPrestigeUpgradeDescription">Info about skill</p>
           <p>Cost: <span id="spnSelectedPrestigeUpgradeCost"></span></p>
-          <button id="btnBuySelectedPrestigeUpgrade">Buy Upgrade</button>
+          <div id="divBuySelectedPrestigeUpgrade">
+            <button>Purchase</button>
+          </div>
         </div>
       </div>
       <div class="flexContent menuFrame hidden" id="debug">
