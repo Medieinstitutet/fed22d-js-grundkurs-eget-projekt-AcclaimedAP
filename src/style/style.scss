@@ -154,18 +154,23 @@ label {
     position: absolute;
     font-size: 2rem;
     z-index: 50;
-    color: rgb(206 33 33);
+    color: rgb(211 54 54);
     text-shadow: 0 0 3px black;
+    font-weight: bolder;
+    text-align: center;
   }
 
   .displayTextCrit {
     font-size: 2.5rem;
-    font-weight: bolder;
     color: rgb(235 60 60);
   }
 
   .displayTextGold {
     color: rgb(223 179 68);
+  }
+
+  .displayTextBlock {
+    color: rgb(156 156 156);
   }
 
   #grass {

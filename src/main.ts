@@ -123,21 +123,29 @@ function menuChange(uiElement: Element) {
 
 // Text is any input you want to show, positionTarget is which element you want it to base its position on,
 // you can input if there's a crit(makes text bigger and changes color), or if it is related to gold, which makes the text golden and outputs "+ x gold" instead
-function createText(text: string, positionTarget: any, crit = false, gold?: boolean) {
+function createText(text: string, positionTarget: any, type: string) {
   const leftRandomOffset = Math.random() * 100 - 50;
   const topRandomOffset = Math.random() * 100 - 50;
   const leftOffset = -120;
   const topOffset = -100;
   const textElement = document.createElement('span');
-  textElement.innerHTML = text;
   textElement.classList.add('displayText');
-  if (crit) {
-    textElement.classList.add('displayTextCrit');
-    textElement.innerHTML += '!';
-  }
-  if (gold) {
-    textElement.classList.add('displayTextGold');
-    textElement.innerHTML = `+${textElement.innerHTML} Gold`;
+  switch (type) {
+    case 'crit':
+      textElement.classList.add('displayTextCrit');
+      textElement.innerHTML += `<ruby>${text} <rp>(</rp><rt>Crit!</rt><rp>)</rp></ruby>`;
+      break;
+    case 'gold':
+      textElement.classList.add('displayTextGold');
+      textElement.innerHTML = `+${text} Gold`;
+      break;
+    case 'block':
+      textElement.classList.add('displayTextBlock');
+      textElement.innerHTML += `<ruby>${text} <rp>(</rp><rt>Block!</rt><rp>)</rp></ruby>`;
+      break;
+    default:
+      textElement.innerHTML = text;
+      break;
   }
   const position = positionTarget.image?.getBoundingClientRect();
   textElement.style.left = `${(position.left - leftOffset + leftRandomOffset).toString()}px`;
@@ -283,6 +291,7 @@ function calculateEnemyStats() {
   unit.enemy.DAMAGE = unit.enemy.base.DAMAGE + unit.enemy.LEVEL * unit.enemy.multiplier.DAMAGE;
   unit.enemy.GOLD_DROP = unit.enemy.base.GOLD_DROP + unit.enemy.LEVEL * unit.enemy.multiplier.GOLD_DROP;
   unit.enemy.HEALTH_REGEN = unit.enemy.base.HEALTH_REGEN + unit.enemy.LEVEL * unit.enemy.multiplier.HEALTH_REGEN;
+  unit.enemy.BLOCK_CHANCE = unit.enemy.base.BLOCK_CHANCE + unit.enemy.LEVEL / 1000;
   updateHealthBar(unit.enemy, true);
 }
 
@@ -381,7 +390,7 @@ function respawn(target: any) {
         btnPrestige.disabled = false;
       }
       unit.player.GOLD += unit.enemy.GOLD_DROP;
-      createText(unit.enemy.GOLD_DROP.toString(), unit.player, false, true);
+      createText(unit.enemy.GOLD_DROP.toString(), unit.player, 'gold');
       updateGoldDisplay();
       updateStatFrame(unit.player);
       if (unit.player.HIGHEST_LEVEL_REACHED <= unit.enemy.LEVEL) {
@@ -423,12 +432,13 @@ function checkDeath(victim: types.Health & types.LogicBooleans & types.UIElement
 }
 
 // Calculates the damage dealt
-function damageCalculation(attacker: types.CombatStats, defender: { BLOCK_CHANCE: number }): [number, boolean] {
+function damageCalculation(attacker: types.CombatStats, defender: { BLOCK_CHANCE: number }): [number, string] {
   let damageDealt = 0;
   const blockRNG: number = Math.random();
-  let critHit = false;
+  let type = 'normal';
   if (defender.BLOCK_CHANCE >= blockRNG) {
     // Blocks damage
+    type = 'block';
     damageDealt = attacker.DAMAGE * 0.2; // Deals only 20% of damage if blocked
   } else {
     // Rolls for crit
@@ -437,12 +447,12 @@ function damageCalculation(attacker: types.CombatStats, defender: { BLOCK_CHANCE
     if (attacker.CRIT_CHANCE >= critRNG) {
       // If crit, deals damage * multiplier!
       damageDealt = attacker.DAMAGE * attacker.CRIT_MULTIPLIER;
-      critHit = true;
+      type = 'crit';
     } else {
       damageDealt = attacker.DAMAGE;
     }
   }
-  const damageResult: [number, boolean] = [damageDealt, critHit];
+  const damageResult: [number, string] = [damageDealt, type];
   return damageResult;
 }
 
