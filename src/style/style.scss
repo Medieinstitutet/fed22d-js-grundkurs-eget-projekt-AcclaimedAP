@@ -67,6 +67,7 @@ nav {
   min-height: calc(100vh - 690px);
   max-height: calc(100vh - 690px);
   margin: 10px;
+  margin-top: 0;
   padding: 20px;
   background-color: cadetblue;
   flex-grow: 1;
@@ -79,11 +80,40 @@ label {
 }
 
 #prestige {
+  background-color: brown;
   display: flex;
-  overflow: auto;
+  flex-wrap: nowrap;
+  padding: 0;
+
+  #prestigeUpgradeInfo {
+    position: relative;
+    right: 0;
+    top: 0;
+    min-width: 200px;
+    min-height: 100%;
+    background-color: antiquewhite;
+    padding: 10px;
+
+    #btnBuySelectedPrestigeUpgrade {
+      position: absolute;
+      bottom: 10px;
+      width: 120px;
+      margin-left: 5px;
+    }
+  }
+}
+
+#prestigeContainer {
+  background-color: chartreuse;
+  display: flex;
+  overflow-x: auto;
+  min-height: 100%;
+  max-height: 100%;
+  //max-width: calc(100% - 150px);
 
   #prestigeTitle {
     position: absolute;
+    margin-left: 10px;
   }
 
   .prestigeFlex {
@@ -91,7 +121,7 @@ label {
     margin: 5px;
     padding: 15px;
     margin-top: 40px;
-    min-height: 100%;
+    max-height: 100%;
     min-width: 200px;
     background-color: blue;
   }
