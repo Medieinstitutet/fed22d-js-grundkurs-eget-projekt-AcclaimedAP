@@ -290,13 +290,14 @@ function updateShop(shopItem: any): void {
 }
 
 function calculatePlayerStats(): void {
-  unit.player.DAMAGE = unit.player.base.DAMAGE + shopMath(unit.shop.ATTACK);
-  unit.player.HEALTH_MAX = unit.player.base.HEALTH_MAX + shopMath(unit.shop.HEALTH);
-  unit.player.HEALTH_REGEN = unit.player.base.HEALTH_REGEN + shopMath(unit.shop.HEALTH_REGEN);
-  unit.player.CRIT_CHANCE = unit.player.base.CRIT_CHANCE + shopMath(unit.shop.CRIT_CHANCE) / 100;
-  unit.player.CRIT_MULTIPLIER = unit.player.base.CRIT_MULTIPLIER + shopMath(unit.shop.CRIT_MULTIPLIER);
-  unit.player.BLOCK_CHANCE = unit.player.base.BLOCK_CHANCE + shopMath(unit.shop.BLOCK_CHANCE);
-  unit.player.ATTACK_COOLDOWN = unit.player.base.ATTACK_COOLDOWN - shopMath(unit.shop.ATTACK_SPEED);
+  const p = unit.player;
+  p.DAMAGE = (p.base.DAMAGE + shopMath(unit.shop.ATTACK)) * (1 + p.prestige_upgrades.BONUS_DAMAGE.BOUGHT * p.prestige_upgrades.BONUS_DAMAGE.MULTIPLIER);
+  p.HEALTH_MAX = p.base.HEALTH_MAX + shopMath(unit.shop.HEALTH);
+  p.HEALTH_REGEN = p.base.HEALTH_REGEN + shopMath(unit.shop.HEALTH_REGEN);
+  p.CRIT_CHANCE = p.base.CRIT_CHANCE + shopMath(unit.shop.CRIT_CHANCE) / 100;
+  p.CRIT_MULTIPLIER = p.base.CRIT_MULTIPLIER + shopMath(unit.shop.CRIT_MULTIPLIER);
+  p.BLOCK_CHANCE = p.base.BLOCK_CHANCE + shopMath(unit.shop.BLOCK_CHANCE);
+  p.ATTACK_COOLDOWN = p.base.ATTACK_COOLDOWN - shopMath(unit.shop.ATTACK_SPEED);
 }
 
 function calculateEnemyStats() {
@@ -361,6 +362,8 @@ function createPrestigePurchaseButton(obj: any) {
       obj.BOUGHT += 1;
       updatePrestigeDisplay();
       updateSelectedPrestigeDisplay(obj);
+      calculatePlayerStats();
+      updateStatFrame(unit.player);
     }
   });
 }
@@ -497,7 +500,7 @@ function checkDeath(victim: types.Health & types.LogicBooleans & types.UIElement
 }
 
 // Calculates the damage dealt
-function damageCalculation(attacker: types.CombatStats, defender: { BLOCK_CHANCE: number }): [number, string] {
+function damageCalculation(attacker: any, defender: { BLOCK_CHANCE: number }): [number, string] {
   let damageDealt = 0;
   const blockRNG: number = Math.random();
   let type = 'normal';
@@ -521,7 +524,7 @@ function damageCalculation(attacker: types.CombatStats, defender: { BLOCK_CHANCE
   return damageResult;
 }
 
-function attack(attacker: types.CombatStats & types.UtilityStats, defender: any): void {
+function attack(attacker: any, defender: any): void {
   const damageResult = damageCalculation(attacker, defender);
   defender.HEALTH_CURRENT -= damageResult[0];
   attacker.ATTACK_TIMER = 0;
