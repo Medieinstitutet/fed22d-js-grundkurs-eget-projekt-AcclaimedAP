@@ -804,26 +804,5 @@ function prestigeEventListener(e: any) {
   e.addEventListener('click', showPrestigeUpgradeInfo);
 }
 Array.from(btnPrestigeUpgrade).forEach(prestigeEventListener);
-/*
-unit.player.prestige_upgrades.tier0.BONUS_DAMAGE.BTN?.addEventListener('click', () => {
-  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier0.BONUS_DAMAGE);
-});
-unit.player.prestige_upgrades.tier1.REDUCE_BLOCK.BTN?.addEventListener('click', () => {
-  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier1.REDUCE_BLOCK);
-});
-unit.player.prestige_upgrades.tier1.LIFESTEAL.BTN?.addEventListener('click', () => {
-  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier1.LIFESTEAL);
-});
-unit.player.prestige_upgrades.tier1.GOLD_MULTIPLIER.BTN?.addEventListener('click', () => {
-  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier1.GOLD_MULTIPLIER);
-});
-unit.player.prestige_upgrades.tier2.SMITE.BTN?.addEventListener('click', () => {
-  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier2.SMITE);
-});
-unit.player.prestige_upgrades.tier3.BLOCK_PENETRATION.BTN?.addEventListener('click', () => {
-  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier3.BLOCK_PENETRATION);
-});
-
-*/
 initialize();
 gameLoop(); // Finally we can start playing the game!
