@@ -62,6 +62,13 @@ const spnPrestigeExpCurrent = document.getElementById('spnCurrentExp') as HTMLSp
 const spnPrestigeExpMax = document.getElementById('spnMaxExp') as HTMLSpanElement;
 const btnPrestige = document.getElementById('btnPrestige') as HTMLButtonElement;
 
+const PrestigeSelectedContainer = document.getElementById('prestigeUpgradeInfo') as HTMLDivElement;
+const PrestigeSelectedName = document.getElementById('pSelectedPrestigeUpgradeName') as HTMLHeadingElement;
+const PrestigeSelectedDesc = document.getElementById('pSelectedPrestigeUpgradeDescription') as HTMLParagraphElement;
+const PrestigeSelectedCost = document.getElementById('spnSelectedPrestigeUpgradeCost') as HTMLSpanElement;
+const PrestigeSelectedBtn = document.getElementById('btnBuySelectedPrestigeUpgrade') as HTMLButtonElement;
+
+const btnPrestigeUpgrade = document.getElementsByClassName('btnPrestigeUpgrade') as HTMLCollectionOf<HTMLButtonElement>;
 // Debug
 const tickCounterSpan = document.getElementById('tickCounter') as HTMLSpanElement;
 const btnDebugState = document.getElementById('debugButton') as HTMLButtonElement;
@@ -334,6 +341,42 @@ function calculateExpGain() {
   }
   unit.player.PRESTIGE_EXP += Math.round(gainedExp);
 }
+
+function showPrestigeUpgradeInfo(this: any) {
+  if (PrestigeSelectedContainer?.classList.contains('hidden')) {
+    PrestigeSelectedContainer.classList.remove('hidden');
+  }
+  const data = this.dataset.name;
+  let obj = unit.player.prestige_upgrades.BONUS_DAMAGE;
+  switch (data) {
+    case 'BONUS_DAMAGE':
+      obj = unit.player.prestige_upgrades.BONUS_DAMAGE;
+      break;
+    case 'REDUCE_BLOCK':
+      obj = unit.player.prestige_upgrades.REDUCE_BLOCK;
+      break;
+    case 'LIFESTEAL':
+      obj = unit.player.prestige_upgrades.LIFESTEAL;
+      break;
+    case 'GOLD_MULTIPLIER':
+      obj = unit.player.prestige_upgrades.GOLD_MULTIPLIER;
+      break;
+    case 'SMITE':
+      obj = unit.player.prestige_upgrades.REDUCE_BLOCK;
+      break;
+    case 'BLOCK_PENETRATION':
+      obj = unit.player.prestige_upgrades.BLOCK_PENETRATION;
+      break;
+    default:
+      return;
+      break;
+  }
+
+  PrestigeSelectedName.innerHTML = obj.NAME;
+  PrestigeSelectedDesc.innerHTML = obj.DESCRIPTION;
+  PrestigeSelectedCost.innerHTML = (Number(obj.BOUGHT) + 1).toString();
+}
+
 function updateAllShops() {
   updateShop(unit.shop.ATTACK);
   updateShop(unit.shop.HEALTH);
@@ -735,8 +778,30 @@ btnPrestige.addEventListener('click', () => {
   resetStats();
   initialize();
 });
+function prestigeEventListener(e: any) {
+  e.addEventListener('click', showPrestigeUpgradeInfo);
+}
+Array.from(btnPrestigeUpgrade).forEach(prestigeEventListener);
+/*
+unit.player.prestige_upgrades.tier0.BONUS_DAMAGE.BTN?.addEventListener('click', () => {
+  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier0.BONUS_DAMAGE);
+});
+unit.player.prestige_upgrades.tier1.REDUCE_BLOCK.BTN?.addEventListener('click', () => {
+  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier1.REDUCE_BLOCK);
+});
+unit.player.prestige_upgrades.tier1.LIFESTEAL.BTN?.addEventListener('click', () => {
+  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier1.LIFESTEAL);
+});
+unit.player.prestige_upgrades.tier1.GOLD_MULTIPLIER.BTN?.addEventListener('click', () => {
+  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier1.GOLD_MULTIPLIER);
+});
+unit.player.prestige_upgrades.tier2.SMITE.BTN?.addEventListener('click', () => {
+  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier2.SMITE);
+});
+unit.player.prestige_upgrades.tier3.BLOCK_PENETRATION.BTN?.addEventListener('click', () => {
+  showPrestigeUpgradeInfo(unit.player.prestige_upgrades.tier3.BLOCK_PENETRATION);
+});
 
-// Makes player and enemy stats accurate on start.
-
+*/
 initialize();
 gameLoop(); // Finally we can start playing the game!

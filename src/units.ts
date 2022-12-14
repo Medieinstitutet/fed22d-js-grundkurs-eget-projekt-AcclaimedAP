@@ -23,50 +23,48 @@ export const player = {
   HIGHEST_LEVEL_PRESTIGED_AT: 0,
   PRESTIGE_POINTS: 0,
   prestige_upgrades: {
-    tier0: {
-      BONUS_DAMAGE: {
-        NAME: 'Play Hard',
-        DESCRIPTION: 'Increases your damage by 25% per level',
-        BOUGHT: 0,
-        MULTIPLIER: 0.25,
-      },
+    BONUS_DAMAGE: {
+      NAME: 'Play Hard',
+      DESCRIPTION: 'Increases your damage by 25% per level',
+      BOUGHT: 0,
+      MULTIPLIER: 0.25,
+      BTN: document.getElementById('btnPrestigeUpgradeDamage'),
     },
-    tier1: {
-      REDUCE_BLOCK: {
-        NAME: 'Sneak around',
-        DESCRIPTION: 'Reduce the enemies chance to block by 1%',
-        BOUGHT: 0,
-        MULTIPLIER: 0.01,
-      },
-      LIFESTEAL: {
-        NAME: 'Bloodthirst',
-        DESCRIPTION: 'Gain life equal to 5% of damage dealt',
-        BOUGHT: 0,
-        MULTIPLIER: 0.05,
-      },
-      GOLD_MULTIPLIER: {
-        NAME: 'Stock Market',
-        DESCRIPTION: 'Gain 100% extra gold each time you kill an enemy',
-        BOUGHT: 0,
-        MULTIPLIER: 1,
-      },
+    REDUCE_BLOCK: {
+      NAME: 'Sneak around',
+      DESCRIPTION: 'Reduce the enemies chance to block by 1%',
+      BOUGHT: 0,
+      MULTIPLIER: 0.01,
+      BTN: document.getElementById('btnPrestigeUpgradeBlock'),
     },
-    tier2: {
-      SMITE: {
-        NAME: 'Smite',
-        DESCRIPTION: 'Deal damage 25% of your attack every  600th tick',
-        BOUGHT: 0,
-        MULTIPLIER: 0.25,
-        TIMER: 0,
-      },
+    LIFESTEAL: {
+      NAME: 'Bloodthirst',
+      DESCRIPTION: 'Gain life equal to 5% of damage dealt',
+      BOUGHT: 0,
+      MULTIPLIER: 0.05,
+      BTN: document.getElementById('btnPrestigeUpgradeLifeSteal'),
     },
-    tier3: {
-      BLOCK_PENETRATION: {
-        NAME: 'Right through',
-        DESCRIPTION: 'When the enemy blocks, deal bonus damage',
-        BOUGHT: 0,
-        MULTIPLIER: 0.1,
-      },
+    GOLD_MULTIPLIER: {
+      NAME: 'Stock Market',
+      DESCRIPTION: 'Gain 100% extra gold each time you kill an enemy',
+      BOUGHT: 0,
+      MULTIPLIER: 1,
+      BTN: document.getElementById('btnPrestigeUpgradeGold'),
+    },
+    SMITE: {
+      NAME: 'Smite',
+      DESCRIPTION: 'Deal damage 25% of your attack every  600th tick',
+      BOUGHT: 0,
+      MULTIPLIER: 0.25,
+      TIMER: 0,
+      BTN: document.getElementById('btnPrestigeUpgradeSmite'),
+    },
+    BLOCK_PENETRATION: {
+      NAME: 'Right through',
+      DESCRIPTION: 'When the enemy blocks, deal bonus damage',
+      BOUGHT: 0,
+      MULTIPLIER: 0.1,
+      BTN: document.getElementById('btnPrestigeUpgradeBlockPen'),
     },
   },
   // Used to calculate and able to backtrack
