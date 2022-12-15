@@ -136,7 +136,7 @@ export const enemy = {
   // Determines how much stronger the enemy gets per level
   multiplier: {
     HEALTH_MAX: 1.6,
-    HEALTH_REGEN: 0.1,
+    HEALTH_REGEN: 0.001,
     DAMAGE: 1.4,
     GOLD_DROP: 1.5,
   },

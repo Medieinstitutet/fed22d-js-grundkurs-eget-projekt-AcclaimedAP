@@ -152,6 +152,10 @@ function createText(text: string, positionTarget: any, type: string) {
       textElement.classList.add('displayTextHeal');
       textElement.innerHTML += `<ruby>${text} <rp>(</rp><rt>Heal!</rt><rp>)</rp></ruby>`;
       break;
+    case 'skill':
+      textElement.classList.add('displayTextSkill');
+      textElement.innerHTML += `<ruby>${text} <rp>(</rp><rt>SMITE!</rt><rp>)</rp></ruby>`;
+      break;
     default:
       textElement.innerHTML = text;
       break;
@@ -309,7 +313,7 @@ function calculateEnemyStats() {
   e.HEALTH_MAX = e.base.HEALTH_MAX + e.LEVEL * e.multiplier.HEALTH_MAX;
   e.DAMAGE = e.base.DAMAGE + e.LEVEL * e.multiplier.DAMAGE;
   e.GOLD_DROP = e.base.GOLD_DROP + e.LEVEL * e.multiplier.GOLD_DROP;
-  e.HEALTH_REGEN = e.base.HEALTH_REGEN + (e.LEVEL / 100) * e.multiplier.HEALTH_REGEN;
+  e.HEALTH_REGEN = e.base.HEALTH_REGEN + e.LEVEL * e.multiplier.HEALTH_REGEN;
   e.BLOCK_CHANCE = e.base.BLOCK_CHANCE + e.LEVEL / 1000 - p.prestige_upgrades.REDUCE_BLOCK.BOUGHT * p.prestige_upgrades.REDUCE_BLOCK.MULTIPLIER;
   updateHealthBar(unit.enemy, true);
 }
@@ -393,7 +397,7 @@ function showPrestigeUpgradeInfo(this: any) {
       obj = unit.player.prestige_upgrades.GOLD_MULTIPLIER;
       break;
     case 'SMITE':
-      obj = unit.player.prestige_upgrades.REDUCE_BLOCK;
+      obj = unit.player.prestige_upgrades.SMITE;
       break;
     case 'BLOCK_PENETRATION':
       obj = unit.player.prestige_upgrades.BLOCK_PENETRATION;
@@ -502,6 +506,19 @@ function checkDeath(victim: types.Health & types.LogicBooleans & types.UIElement
     // If their hp is 0 is below, cause respawn
     victim.IS_ALIVE = false;
     respawn(victim);
+  }
+}
+// Cast smite if eligable
+function skillSmite() {
+  const cooldown = 600; // how many ticks has to pass before it will deal damage
+  const smite = unit.player.prestige_upgrades.SMITE;
+  smite.TIMER += 1;
+  if (smite.TIMER >= cooldown && unit.enemy.IS_ALIVE) {
+    console.log('SMITTEN');
+    const damageDealt = unit.player.DAMAGE * smite.BOUGHT * smite.MULTIPLIER;
+    unit.enemy.HEALTH_CURRENT -= damageDealt;
+    createText(damageDealt.toFixed(0), unit.enemy, 'skill');
+    smite.TIMER = 0;
   }
 }
 
@@ -753,6 +770,9 @@ function gameLoop() {
   attackCount(unit.enemy, unit.player);
   regeneration(unit.player);
   regeneration(unit.enemy);
+  if (unit.player.prestige_upgrades.SMITE.BOUGHT >= 0) {
+    skillSmite();
+  }
   // If they're in respawning state, initiate that.
   if (unit.player.IS_RESPAWNING) {
     respawn(unit.player);
@@ -760,7 +780,6 @@ function gameLoop() {
   if (unit.enemy.IS_RESPAWNING) {
     respawn(unit.enemy);
   }
-
   // Animation function
   animate();
 
