@@ -305,7 +305,7 @@ function calculateEnemyStats() {
   unit.enemy.HEALTH_MAX = unit.enemy.base.HEALTH_MAX + unit.enemy.LEVEL * unit.enemy.multiplier.HEALTH_MAX;
   unit.enemy.DAMAGE = unit.enemy.base.DAMAGE + unit.enemy.LEVEL * unit.enemy.multiplier.DAMAGE;
   unit.enemy.GOLD_DROP = unit.enemy.base.GOLD_DROP + unit.enemy.LEVEL * unit.enemy.multiplier.GOLD_DROP;
-  unit.enemy.HEALTH_REGEN = unit.enemy.base.HEALTH_REGEN + unit.enemy.LEVEL * unit.enemy.multiplier.HEALTH_REGEN;
+  unit.enemy.HEALTH_REGEN = unit.enemy.base.HEALTH_REGEN + (unit.enemy.LEVEL / 100) * unit.enemy.multiplier.HEALTH_REGEN;
   unit.enemy.BLOCK_CHANCE = unit.enemy.base.BLOCK_CHANCE + unit.enemy.LEVEL / 1000;
   updateHealthBar(unit.enemy, true);
 }
@@ -355,6 +355,7 @@ function createPrestigePurchaseButton(obj: any) {
   const btnPurchase = document.createElement('button');
   btnPurchase.innerHTML = 'Purchase';
   PrestigeSelectedBtnContainer.appendChild(btnPurchase);
+  // I have no clue how to avoid this anonymous function at this point, since the button is "generic", maybe a global variable to check last pressed button?
   btnPurchase.addEventListener('click', () => {
     const cost = Number(obj.BOUGHT) + 1;
     if (unit.player.PRESTIGE_POINTS >= cost) {
@@ -718,6 +719,13 @@ function resetStats() {
   unit.enemy.BLOCK_CHANCE = unit.enemy.base.BLOCK_CHANCE;
   unit.enemy.CRIT_CHANCE = unit.enemy.base.CRIT_CHANCE;
   unit.enemy.CRIT_MULTIPLIER = unit.enemy.base.CRIT_MULTIPLIER;
+  unit.shop.ATTACK.BOUGHT = 0;
+  unit.shop.ATTACK_SPEED.BOUGHT = 0;
+  unit.shop.BLOCK_CHANCE.BOUGHT = 0;
+  unit.shop.CRIT_CHANCE.BOUGHT = 0;
+  unit.shop.CRIT_MULTIPLIER.BOUGHT = 0;
+  unit.shop.HEALTH.BOUGHT = 0;
+  unit.shop.HEALTH_REGEN.BOUGHT = 0;
 }
 
 // Main loop, runs each x tickrate and keeps the game rolling

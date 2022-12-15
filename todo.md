@@ -20,3 +20,7 @@
 - load & save
 - redo some animations with animate function or css
 - add prestige benefits
+- balance curve(easier scaling)
+- Add crucial info to unitcards(HP, level)
+- fix mobile view
+- when prestiging, make sure shop resets properly

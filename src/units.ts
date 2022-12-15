@@ -184,7 +184,7 @@ export const shop = {
     NAME: 'HEALTH REGENERATION',
     COST: 0,
     BASE_COST: 6,
-    BASE_POWER: 1,
+    BASE_POWER: 0.5,
     COST_MULTIPLIER: 1.2,
     POWER_MULTIPLIER: 0.15,
     BOUGHT: 0,
