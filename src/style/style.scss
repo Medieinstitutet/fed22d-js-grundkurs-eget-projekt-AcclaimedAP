@@ -92,7 +92,9 @@ label {
     min-width: 200px;
     max-width: 200px;
     min-height: 100%;
-    background-color: antiquewhite;
+    background-color: rgb(161 99 48);
+    border: 1px solid black;
+    box-shadow: -2px 0 4px rgba(0 0 0 / 30%);
     padding: 10px;
 
     #divBuySelectedPrestigeUpgrade {
@@ -105,7 +107,7 @@ label {
 }
 
 #prestigeContainer {
-  background-color: chartreuse;
+  background-color: rgb(161 99 48);
   display: flex;
   overflow-x: auto;
   min-height: 100%;
@@ -203,6 +205,10 @@ label {
 
   .displayTextBlock {
     color: rgb(156 156 156);
+  }
+
+  .displayTextHeal {
+    color: rgb(51 165 57);
   }
 
   #grass {

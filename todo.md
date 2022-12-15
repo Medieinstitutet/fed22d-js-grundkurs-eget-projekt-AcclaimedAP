@@ -23,4 +23,4 @@
 - balance curve(easier scaling)
 - Add crucial info to unitcards(HP, level)
 - fix mobile view
-- when prestiging, make sure shop resets properly
+- ✔️when prestiging, make sure shop resets properly

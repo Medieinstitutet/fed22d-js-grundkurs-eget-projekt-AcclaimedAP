@@ -150,6 +150,10 @@ function createText(text: string, positionTarget: any, type: string) {
       textElement.classList.add('displayTextBlock');
       textElement.innerHTML += `<ruby>${text} <rp>(</rp><rt>Block!</rt><rp>)</rp></ruby>`;
       break;
+    case 'heal':
+      textElement.classList.add('displayTextHeal');
+      textElement.innerHTML += `<ruby>${text} <rp>(</rp><rt>Heal!</rt><rp>)</rp></ruby>`;
+      break;
     default:
       textElement.innerHTML = text;
       break;
@@ -301,12 +305,14 @@ function calculatePlayerStats(): void {
 }
 
 function calculateEnemyStats() {
+  const e = unit.enemy;
+  const p = unit.player;
   // Sets enemies stats to their values based on what level they are.
-  unit.enemy.HEALTH_MAX = unit.enemy.base.HEALTH_MAX + unit.enemy.LEVEL * unit.enemy.multiplier.HEALTH_MAX;
-  unit.enemy.DAMAGE = unit.enemy.base.DAMAGE + unit.enemy.LEVEL * unit.enemy.multiplier.DAMAGE;
-  unit.enemy.GOLD_DROP = unit.enemy.base.GOLD_DROP + unit.enemy.LEVEL * unit.enemy.multiplier.GOLD_DROP;
-  unit.enemy.HEALTH_REGEN = unit.enemy.base.HEALTH_REGEN + (unit.enemy.LEVEL / 100) * unit.enemy.multiplier.HEALTH_REGEN;
-  unit.enemy.BLOCK_CHANCE = unit.enemy.base.BLOCK_CHANCE + unit.enemy.LEVEL / 1000;
+  e.HEALTH_MAX = e.base.HEALTH_MAX + e.LEVEL * e.multiplier.HEALTH_MAX;
+  e.DAMAGE = e.base.DAMAGE + e.LEVEL * e.multiplier.DAMAGE;
+  e.GOLD_DROP = e.base.GOLD_DROP + e.LEVEL * e.multiplier.GOLD_DROP;
+  e.HEALTH_REGEN = e.base.HEALTH_REGEN + (e.LEVEL / 100) * e.multiplier.HEALTH_REGEN;
+  e.BLOCK_CHANCE = e.base.BLOCK_CHANCE + e.LEVEL / 1000 - p.prestige_upgrades.REDUCE_BLOCK.BOUGHT * p.prestige_upgrades.REDUCE_BLOCK.MULTIPLIER;
   updateHealthBar(unit.enemy, true);
 }
 
@@ -519,6 +525,14 @@ function damageCalculation(attacker: any, defender: { BLOCK_CHANCE: number }): [
       type = 'crit';
     } else {
       damageDealt = attacker.DAMAGE;
+    }
+  }
+  if (attacker.prestige_upgrades?.LIFESTEAL.BOUGHT) {
+    console.log('"Lifesteal!"');
+    const lifestealAmount: number = damageDealt * attacker.prestige_upgrades.LIFESTEAL.BOUGHT * attacker.prestige_upgrades.LIFESTEAL.MULTIPLIER;
+    heal(attacker, lifestealAmount);
+    if (lifestealAmount >= 1) {
+      createText(lifestealAmount.toFixed(0), attacker, 'heal');
     }
   }
   const damageResult: [number, string] = [damageDealt, type];
