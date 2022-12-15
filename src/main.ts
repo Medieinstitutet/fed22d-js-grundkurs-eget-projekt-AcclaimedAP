@@ -94,9 +94,7 @@ function numberToAsciiConverter(number: number): string {
   let stringLength = digitCounter(number);
   const ascii = 96;
   let loopCount = 0;
-  console.log(`Number: ${number}`);
   let finalString = number.toFixed();
-  console.log(`Finalstring: ${finalString}, stringLength: ${stringLength}`);
   if (stringLength >= 4) {
     while (stringLength >= 4) {
       loopCount += 1;
@@ -460,12 +458,13 @@ function respawn(target: any) {
     // If it is the enemy that dies, level it up, give gold to player, etc.
     if (target.IS_PLAYABLE_CHARACTER === false) {
       unit.enemy.LEVEL += 1;
-      if (!unit.player.PRESTIGE_ENABLED && unit.enemy.LEVEL >= 50) {
+      if (!unit.player.PRESTIGE_ENABLED && unit.enemy.LEVEL >= 30) {
         unit.player.PRESTIGE_ENABLED = true;
         btnPrestige.disabled = false;
       }
-      unit.player.GOLD += unit.enemy.GOLD_DROP;
-      createText(unit.enemy.GOLD_DROP.toString(), unit.player, 'gold');
+      const gd = unit.enemy.GOLD_DROP * (1 + unit.player.prestige_upgrades.GOLD_MULTIPLIER.BOUGHT * unit.player.prestige_upgrades.GOLD_MULTIPLIER.MULTIPLIER);
+      unit.player.GOLD += gd;
+      createText(gd.toString(), unit.player, 'gold');
       updateGoldDisplay();
       updateStatFrame(unit.player);
       if (unit.player.HIGHEST_LEVEL_REACHED <= unit.enemy.LEVEL) {
@@ -512,9 +511,11 @@ function damageCalculation(attacker: any, defender: { BLOCK_CHANCE: number }): [
   const blockRNG: number = Math.random();
   let type = 'normal';
   if (defender.BLOCK_CHANCE >= blockRNG) {
+    const blockDAmpBought = attacker.prestige_upgrades?.BLOCK_PENETRATION.BOUGHT ?? 0;
+    const blockDAmpMulti = attacker.prestige_upgrades?.BLOCK_PENETRATION.multiplier ?? 0;
     // Blocks damage
     type = 'block';
-    damageDealt = attacker.DAMAGE * 0.2; // Deals only 20% of damage if blocked
+    damageDealt = attacker.DAMAGE * 0.2 * (1 + blockDAmpBought * blockDAmpMulti); // Deals only 20% of damage if blocked
   } else {
     // Rolls for crit
     const critRNG: number = Math.random();
