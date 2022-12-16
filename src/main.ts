@@ -786,7 +786,7 @@ function gameLoop() {
   attackCount(unit.enemy, unit.player);
   regeneration(unit.player);
   regeneration(unit.enemy);
-  if (unit.player.prestige_upgrades.SMITE.BOUGHT >= 0) {
+  if (unit.player.prestige_upgrades.SMITE.BOUGHT > 0) {
     skillSmite();
   }
   // If they're in respawning state, initiate that.
