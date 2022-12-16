@@ -19,7 +19,8 @@
 - name select before game begins and info
 - load & save
 - redo some animations with animate function or css
-- add prestige benefits
+- ✔️add prestige benefits
+- ✔️lock prestiges depending on prestige level
 - balance curve(easier scaling)
 - Add crucial info to unitcards(HP, level)
 - fix mobile view
