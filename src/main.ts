@@ -331,6 +331,15 @@ function shopBuy(shopItem: any): void {
   }
 }
 
+function enablePrestigeSkills(tier: string) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const skillButtons = document.getElementById(tier)!.getElementsByTagName('button');
+  for (let i = 0; i < skillButtons.length; i += 1) {
+    console.log(skillButtons[i]);
+    skillButtons[i].disabled = false;
+  }
+}
+
 function maxExpRequired(): number {
   return unit.player.PRESTIGE_EXP_LEVELUP + unit.player.PRESTIGE_EXP_LEVELUP * unit.player.PRESTIGE_LEVEL * unit.player.PRESTIGE_EXP_LEVELUP_MULTIPLIER;
 }
@@ -341,6 +350,13 @@ function levelUpCheck() {
     unit.player.PRESTIGE_LEVEL += 1;
     unit.player.PRESTIGE_POINTS += 1;
     unit.player.PRESTIGE_EXP -= expRequired;
+    // if the level is 0-9, it will try to unlock tier 0, which is always open, if they are 10-19, it will unlock tier1, etc.
+    const tierlevel = unit.player.PRESTIGE_LEVEL;
+    console.log(tierlevel);
+    console.log(tierlevel / 10);
+    const tier = `tier${Math.floor(tierlevel / 10).toFixed(0)}`;
+    console.log(tier);
+    enablePrestigeSkills(tier);
     levelUpCheck();
   }
 }
@@ -351,7 +367,7 @@ function calculateExpGain() {
   console.log(`levels climbed${levelsClimbed}`);
   if (levelsClimbed > 0) {
     unit.player.HIGHEST_LEVEL_PRESTIGED_AT = unit.player.HIGHEST_LEVEL_REACHED;
-    gainedExp = levelsClimbed / 2.5 + unit.enemy.LEVEL / 80;
+    gainedExp = levelsClimbed * 112.5 + unit.enemy.LEVEL / 80;
   } else {
     gainedExp = unit.enemy.LEVEL / 80;
   }
