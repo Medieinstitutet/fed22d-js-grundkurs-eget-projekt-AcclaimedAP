@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/comma-dangle */
 /* hehe... eslint go boom */
@@ -583,19 +584,6 @@ function attack(attacker: any, defender: any): void {
   checkDeath(defender);
 }
 
-function attackCount(attacker: any, defender: types.LogicBooleans): void {
-  // If the player is dead, or already attacking, end this function(optimization?)
-  if (!attacker.IS_ALIVE || !defender.IS_ALIVE) {
-    return;
-  }
-  attacker.ATTACK_TIMER += 1;
-  updateAttackTimerBar(attacker);
-  if (attacker.ATTACK_TIMER >= attacker.ATTACK_COOLDOWN) {
-    // Player Attack
-    attacker.IS_ATTACKING = true;
-  }
-}
-
 function adjustColor(color: number, target: number, speed = 1): number {
   if (color < target) {
     color += speed;
@@ -643,71 +631,87 @@ function resetAttackState(target: types.LogicBooleans & types.CombatStats) {
   target.ATTACK_TIMER = 0;
   target.CHARGE_TIMER = 0;
 }
+
 /*
 NOTE: I tried making this function "general",
 but I can't find a good way to differentiate between them moving left or right, if I do, this code is cut in half.
 TODO: Potential solution would be to generalize it but add cases depending on the object.
 This would probably cut it by 1/3rd.
 */
-function animate() {
-  const distance = 50; // How close they will get, higher number = closer
-  // Causes player to lunge forward if it is time to attack
-  const speed = 1; // How many % they will move every tick.
-  const startDistance = 5;
+function chargingAttack(attacker: any, defender: any) {
   const playerPortrait = unit.player.portrait as HTMLDivElement;
   const enemyPortrait = unit.enemy.portrait as HTMLDivElement;
-  if (unit.player.IS_ATTACKING) {
-    // As long as it hasn't arrived, keep moving
-    if (!unit.player.IS_FRONT_OF_OPPONENT) {
-      unit.player.xPos += speed;
-      playerPortrait.style.left = `${unit.player.xPos}%`;
-    }
-
-    if (unit.player.xPos + unit.enemy.xPosReversed >= distance) {
-      // If close enough, perform attack
-      unit.player.IS_FRONT_OF_OPPONENT = true;
-    }
-    if (unit.player.IS_FRONT_OF_OPPONENT) {
-      unit.player.CHARGE_TIMER += 1;
-    }
-
-    if (unit.player.CHARGE_TIMER >= unit.player.CHARGE_COOLDOWN) {
-      attack(unit.player, unit.enemy);
-      resetAttackState(unit.player); // Reset attack
-      unit.player.IS_FRONT_OF_OPPONENT = false;
-    }
-  } else if (!unit.player.IS_ATTACKING && unit.player.xPos > startDistance) {
-    // Moves it back
-    unit.player.xPos -= speed;
-    playerPortrait.style.left = `${unit.player.xPos}%`;
+  let portrait;
+  attack(attacker, defender);
+  let moveBackAnim = {};
+  if (attacker.IS_PLAYABLE_CHARACTER) {
+    portrait = playerPortrait;
+    moveBackAnim = [{ left: '30%' }, { left: '1%' }];
+  } else {
+    portrait = enemyPortrait;
+    moveBackAnim = [{ right: '30%' }, { right: '1%' }];
   }
+  const moveBackTiming = {
+    duration: 700,
+    easing: 'ease-in-out',
+    fill: 'forwards',
+  };
+  // @ts-ignore
+  const animation = portrait.animate(moveBackAnim, moveBackTiming);
+  animation.play();
 
-  if (unit.enemy.IS_ATTACKING) {
-    if (!unit.enemy.IS_FRONT_OF_OPPONENT) {
-      unit.enemy.xPosReversed += speed;
-      enemyPortrait.style.right = `${unit.enemy.xPosReversed}%`;
-    }
-    if (unit.player.xPos + unit.enemy.xPosReversed >= distance) {
-      // If close enough, perform attack
-      unit.enemy.IS_FRONT_OF_OPPONENT = true;
-    }
-    if (unit.enemy.IS_FRONT_OF_OPPONENT) {
-      unit.enemy.CHARGE_TIMER += 1;
-      if (unit.enemy.CHARGE_TIMER >= unit.enemy.CHARGE_COOLDOWN) {
-        attack(unit.enemy, unit.player);
-        resetAttackState(unit.enemy);
-        unit.enemy.IS_FRONT_OF_OPPONENT = false;
-      }
-    }
-  } else if (!unit.enemy.IS_ATTACKING && unit.enemy.xPosReversed > startDistance) {
-    // Moves it back
-    unit.enemy.xPosReversed -= speed;
-    enemyPortrait.style.right = `${unit.enemy.xPosReversed}%`;
-  }
-
-  backgroundCycle();
+  animation.onfinish = () => {
+    attacker.IS_FRONT_OF_OPPONENT = false;
+    resetAttackState(attacker);
+    attacker.ANIMATION_ACTIVE = false;
+  };
 }
 
+function animate(attacker: any, defender: any) {
+  if (!attacker.IS_ATTACKING && !attacker.ANIMATION_ACTIVE) {
+    const playerPortrait = unit.player.portrait as HTMLDivElement;
+    const enemyPortrait = unit.enemy.portrait as HTMLDivElement;
+    let moveForwardAnim = {};
+    let portrait;
+    if (attacker.IS_PLAYABLE_CHARACTER) {
+      portrait = playerPortrait;
+      moveForwardAnim = [{ left: '1%' }, { left: '30%' }];
+    } else {
+      portrait = enemyPortrait;
+      moveForwardAnim = [{ right: '1%' }, { right: '30%' }];
+    }
+    attacker.ANIMATION_ACTIVE = true;
+
+    const moveForwardTiming = {
+      duration: 700,
+      fill: 'forwards',
+      easing: 'ease-in-out',
+      endDelay: 400,
+    };
+    attacker.IS_ATTACKING = true;
+    // @ts-ignore
+    const animation = portrait.animate(moveForwardAnim, moveForwardTiming);
+    animation.play();
+    console.log('forward anim');
+    animation.onfinish = () => {
+      attacker.IS_FRONT_OF_OPPONENT = true;
+      chargingAttack(attacker, defender);
+    };
+  }
+}
+function attackCount(attacker: any, defender: any): void {
+  // If the player is dead, or already attacking, end this function(optimization?)
+  if (!attacker.IS_ALIVE || !defender.IS_ALIVE) {
+    return;
+  }
+  attacker.ATTACK_TIMER += 1;
+  updateAttackTimerBar(attacker);
+  if (attacker.ATTACK_TIMER >= attacker.ATTACK_COOLDOWN && !attacker.IS_ATTACKING) {
+    // Player Attack
+    console.log('animation start');
+    animate(attacker, defender);
+  }
+}
 // NOTE: Temporary, just for debugging.
 btnDebugState.addEventListener('click', () => {
   console.log(unit.player);
@@ -797,8 +801,7 @@ function gameLoop() {
     respawn(unit.enemy);
   }
   // Animation function
-  animate();
-
+  backgroundCycle();
   // Loopieloop loop - setInterval? Heard it is better with setTimeout for this, but got to ask
   ticksPerSecond();
   degreeDisplay();

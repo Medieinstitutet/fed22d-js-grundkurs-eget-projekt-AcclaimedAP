@@ -80,7 +80,7 @@ export const player = {
   IS_FRONT_OF_OPPONENT: false,
   IS_ALIVE: true,
   IS_RESPAWNING: false,
-
+  ANIMATION_ACTIVE: false,
   // DOM on canvas and position
   xPos: 0,
   portrait: document.getElementById('playerPortrait'),
@@ -127,7 +127,7 @@ export const enemy = {
     HEALTH_MAX: 20,
     HEALTH_REGEN: 0.1,
     DAMAGE: 3,
-    ATTACK_COOLDOWN: 310,
+    ATTACK_COOLDOWN: 3100,
     CRIT_CHANCE: 0.05,
     CRIT_MULTIPLIER: 1.2,
     BLOCK_CHANCE: 0.05,
@@ -146,7 +146,7 @@ export const enemy = {
   IS_FRONT_OF_OPPONENT: false,
   IS_ALIVE: true,
   IS_RESPAWNING: false,
-
+  ANIMATION_ACTIVE: false,
   // DOM and position
   xPosReversed: 0,
   portrait: document.getElementById('enemyPortrait'),
