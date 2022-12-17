@@ -18,10 +18,10 @@
 - add more frames on player and enemy
 - name select before game begins and info
 - load & save
-- redo some animations with animate function or css
+- ✔️redo some animations with animate function or css
 - ✔️add prestige benefits
 - ✔️lock prestiges depending on prestige level
 - balance curve(easier scaling)
 - Add crucial info to unitcards(HP, level)
-- fix mobile view
+- ✔️fix mobile view
 - ✔️when prestiging, make sure shop resets properly

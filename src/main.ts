@@ -282,17 +282,17 @@ function updateShop(shopItem: any): void {
   // If it is supposed to show in %, do so
   if (shopItem === unit.shop.BLOCK_CHANCE || shopItem === unit.shop.CRIT_CHANCE) {
     const powerString = `${power.toString()}%`;
-    shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>+ ${powerString}`;
+    shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold<br>+ ${powerString}</p>`;
   } else if (shopItem === unit.shop.ATTACK_SPEED) {
     // Special case for attack speed
-    shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>- ${power * 15} ms`;
+    shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold<br>- ${power * 15} ms</p>`;
   } else if (shopItem === unit.shop.CRIT_MULTIPLIER) {
     power *= 100;
     const powerString = `${power.toString()}%`;
-    shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>+ ${powerString}`;
+    shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold <br>+ ${powerString}</p>`;
   } else {
     // Everything else.
-    shopItem.DOM.innerHTML = `${shopItem.NAME}<br>${cost} Gold<br>+ ${power}`;
+    shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold<br>+ ${power}</p>`;
   }
 }
 
