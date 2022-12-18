@@ -4,7 +4,6 @@
 @use 'vendor/reset';
 
 :root {
-  // TODO: Går bra att radera kod även här!
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: rem(16px);
   line-height: 24px;
@@ -34,110 +33,58 @@
   align-items: flex-start;
   min-height: 100vh;
   background-color: rgb(29 29 29);
-}
 
-#menuContainer {
-  width: 100%;
-}
+  .menuContainer {
+    width: 100%;
 
-nav {
-  background-color: rgb(80 80 80);
-  padding: 10px;
-  margin: 0 10px;
+    nav {
+      background-color: rgb(80 80 80);
+      padding: 10px;
+      margin: 0 10px;
 
-  button {
-    height: 50px;
-    width: 50px;
-    border: none;
-    background-color: rgb(100 100 100);
-    cursor: pointer;
-  }
+      button {
+        height: 50px;
+        width: 50px;
+        border: none;
+        background-color: rgb(100 100 100);
+        cursor: pointer;
+      }
 
-  button:hover {
-    background-color: rgb(140 140 140);
-    transition: background-color 0.3s ease-in-out;
-  }
+      button:hover {
+        background-color: rgb(140 140 140);
+        transition: background-color 0.3s ease-in-out;
+      }
 
-  button:disabled {
-    background-color: rgb(90 90 90);
-    cursor: not-allowed;
-  }
-}
+      button:disabled {
+        background-color: rgb(90 90 90);
+        cursor: not-allowed;
+      }
+    }
 
-.flexContent {
-  min-height: calc(100vh - 580px);
-  max-height: calc(100vh - 580px);
-  margin: 10px;
-  margin-top: 0;
-  padding: 20px;
-  background-color: rgb(92 92 92);
-  flex-grow: 1;
-  overflow: auto;
-  min-width: calc(100% - 30px);
-}
+    .flexContent {
+      min-height: calc(100vh - 580px);
+      max-height: calc(100vh - 580px);
+      margin: 10px;
+      margin-top: 0;
+      padding: 20px;
+      background-color: rgb(92 92 92);
+      flex-grow: 1;
+      overflow: auto;
+      min-width: calc(100% - 30px);
 
-label {
-  display: block;
-}
-
-#prestige {
-  background-color: brown;
-  display: flex;
-  flex-wrap: nowrap;
-  padding: 0;
-
-  .prestigeUpgradeInfo {
-    position: relative;
-    right: 0;
-    top: 0;
-    min-width: 200px;
-    max-width: 200px;
-    min-height: 100%;
-    background-color: rgb(110 110 110);
-    border: 2px solid black;
-    box-shadow: -2px 0 4px rgba(0 0 0 / 30%);
-    padding: 10px;
-
-    #divBuySelectedPrestigeUpgrade {
-      position: absolute;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
+      label {
+        display: block;
+      }
     }
   }
 }
 
-#prestigeContainer {
-  background-color: rgb(85 85 85);
-  display: flex;
-  overflow-x: auto;
-  min-height: 100%;
-  max-height: 100%;
-  width: 100%;
-  //max-width: calc(100% - 150px);
-
-  #prestigeTitle {
-    position: absolute;
-    margin-left: 10px;
-  }
-
-  .prestigeFlex {
-    text-align: center;
-    margin: 5px;
-    padding: 15px;
-    margin-top: 40px;
-    max-height: 100%;
-    min-width: 200px;
-    background-color: rgb(100 100 100);
-  }
-}
-
 /* The shop */
-#shopButtons {
+.shop {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 
-  button {
+  .shopButton {
     margin: 4px;
     padding: 5px;
     min-width: 100%;
@@ -167,19 +114,72 @@ label {
     }
   }
 
-  button:hover {
+  .shopButton:hover {
     translate: 0 -2px;
     background-color: rgb(120 120 120);
     transition: background-color 0.3s ease-in-out, translate 0.1s ease-in-out;
   }
 
-  button:active {
+  .shopButton:active {
     background-color: rgb(177 126 60);
   }
 
-  button:disabled {
+  .shopButton:disabled {
     background-color: rgb(192 144 81);
     cursor: not-allowed;
+  }
+}
+
+.prestige {
+  background-color: brown;
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 0;
+
+  div {
+    max-height: 100%;
+  }
+
+  .prestigeContainer {
+    background-color: rgb(85 85 85);
+    display: flex;
+    overflow-x: auto;
+    min-height: 100%;
+    width: 100%;
+
+    h2 {
+      position: absolute;
+      margin-left: 10px;
+    }
+
+    .prestigeFlex {
+      text-align: center;
+      margin: 5px;
+      padding: 15px;
+      margin-top: 40px;
+      min-width: 200px;
+      background-color: rgb(100 100 100);
+    }
+  }
+
+  .prestigeUpgradeInfo {
+    position: relative;
+    right: 0;
+    top: 0;
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 100%;
+    background-color: rgb(110 110 110);
+    border: 2px solid black;
+    box-shadow: -2px 0 4px rgba(0 0 0 / 30%);
+    padding: 10px;
+
+    div {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+    }
   }
 }
 
@@ -196,11 +196,10 @@ label {
     position: absolute;
   }
 
-  #dayNight {
+  .background {
     min-width: 1920px;
     max-width: 1920px;
     aspect-ratio: 1 / 1;
-    position: absolute;
     bottom: -960px;
     left: 50%;
     margin-left: -960px;
@@ -249,8 +248,11 @@ label {
   }
 }
 
-#goldDisplay {
+.canvasDisplay {
   position: absolute;
+}
+
+#goldDisplay {
   left: 5px;
   top: 5px;
   background-color: rgb(104 104 104);
@@ -268,34 +270,28 @@ label {
   flex-wrap: nowrap;
   /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
   flex-direction: column;
+  bottom: 30px;
 
-  meter {
-    display: block;
-    width: 90%;
+  .unitImage {
+    bottom: 0;
   }
 
+  meter,
   progress {
-    width: 90%;
     display: block;
+    width: 90%;
   }
 }
 
 #playerPortrait {
   left: 10px;
-  bottom: 30px;
-
-  #playerImage {
-    bottom: 0;
-  }
 }
 
 #enemyPortrait {
   right: 10px;
-  bottom: 30px;
 
   #enemyImage {
     opacity: 0.8;
-    bottom: 0;
   }
 }
 
