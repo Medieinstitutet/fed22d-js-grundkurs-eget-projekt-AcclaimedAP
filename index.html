@@ -9,21 +9,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projekt</title>
   <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.65bdbd59.js"></script>
-  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.41ced9ec.css">
+  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.67a58da9.css">
 </head>
 
 <body>
   <div class="flexContainer">
     <div id="canvas" class="unselectable">
       <!--Combat zone canvas-->
-      <label id="goldDisplay"><span id="goldCount">0</span> Gold</label>
+      <label class="canvasDisplay" id="goldDisplay"><span id="goldCount">0</span> Gold</label>
       <!--player portrait-->
       <div class="portrait" id="playerPortrait">
         <meter class="healthBar" id="playerHealthBar" min="0" low="33" high="50" optimum="67" value="100" max="100"
           aria-label="Player Health points"></meter>
         <progress class="attackBar" id="playerAttackBar" min="0" max="220" value="0"
           aria-label="Player attack timer progress bar"></progress>
-        <img id="playerImage" src="assets/combatzone/player/player_idle_1.svg" alt="player character" />
+        <img class="unitImage" id="playerImage" src="assets/combatzone/player/player_idle_1.svg"
+          alt="player character" />
       </div>
 
       <!--enemy portrait-->
@@ -32,14 +33,14 @@
           aria-label="Player Health points"></meter>
         <progress class="attackBar" id="enemyAttackBar" min="0" max="220" value="0"
           aria-label="Player attack timer progress bar"></progress>
-        <img id="enemyImage" src="assets/combatzone/enemy/slime_idle_1.svg" alt="enemy character" />
+        <img class="unitImage" id="enemyImage" src="assets/combatzone/enemy/slime_idle_1.svg" alt="enemy character" />
       </div>
 
       <!--Visual clutter-->
       <img id="grass" src="assets/combatzone/grass.svg" alt="grass" />
-      <img id="dayNight" src="assets/combatzone/daynightcycle.svg" alt="day and night cycle" />
+      <img class="background" id="dayNight" src="assets/combatzone/daynightcycle.svg" alt="day and night cycle" />
     </div>
-    <div id="menuContainer">
+    <div class="menuContainer" id="menuContainer">
       <nav>
         <button class="btnMenu material-symbols-outlined" id="btnMenuCombatLog" title="Combat log"
           aria-label="Combat log button">article</button>
@@ -48,7 +49,7 @@
         <button class="btnMenu material-symbols-outlined" id="btnMenuShop" title="Shop for upgrades"
           aria-label="shop for upgrades button">storefront</button>
         <button class="btnMenu material-symbols-outlined" id="btnMenuPrestige" title="Prestige upgrades"
-          aria-label="Prestige upgrades button" disabled>self_improvement</button>
+          aria-label="Prestige upgrades button">self_improvement</button>
         <button class="btnMenu material-symbols-outlined" id="btnMenuDebug" title="Debug menu"
           aria-label="debug menu button">logo_dev</button>
       </nav>
@@ -70,7 +71,7 @@
 
       <div class="flexContent menuFrame hidden" id="shop">
         <h2>Shop</h2>
-        <div id="shopButtons">
+        <div class="shop" id="shopButtons">
           <button class="shopButton" id="shopBtnAttack">Attack</button>
           <button class="shopButton" id="shopBtnHealth">Health</button>
           <button class="shopButton" id="shopBtnHealthRegen">Health Regen</button>
@@ -80,8 +81,8 @@
           <button class="shopButton" id="shopBtnBlockChance">Block Chance</button>
         </div>
       </div>
-      <div class="flexContent menuFrame hidden" id="prestige">
-        <div id="prestigeContainer">
+      <div class="flexContent menuFrame prestige hidden" id="prestige">
+        <div class="prestigeContainer" id="prestigeContainer">
           <h2 id="prestigeTitle">Prestige upgrades</h2>
           <div class="prestigeFlex">
             <label>Points Available: <span id="spnPoints"></span> / <span id="spnLevel"></span></label>
@@ -91,28 +92,29 @@
               title="OBS! RESETS YOUR CURRENT PROGRESS FOR PERMANENT PRESTIGE EXPERIENCE">PRESTIGE</button>
           </div>
           <div class="prestigeFlex" id="tier0">
-            <h2>Tier 0</h2>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeDamage" data-name="BONUS_DAMAGE" disabled>Increase
-              Damage</button>
+            <h3>Tier 0</h2>
+              <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeDamage" data-name="BONUS_DAMAGE"
+                disabled>Increase
+                Damage</button>
           </div>
           <div class="prestigeFlex" id="tier1">
-            <h2>Tier 1</h2>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeBlock" data-name="REDUCE_BLOCK" disabled>Block
-              reduce</button>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeLifeSteal" data-name="LIFESTEAL"
-              disabled>Lifesteal</button>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeGold" data-name="GOLD_MULTIPLIER" disabled>Gold
-              Multiplier</button>
+            <h3>Tier 1</h2>
+              <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeBlock" data-name="REDUCE_BLOCK" disabled>Block
+                reduce</button>
+              <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeLifeSteal" data-name="LIFESTEAL"
+                disabled>Lifesteal</button>
+              <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeGold" data-name="GOLD_MULTIPLIER" disabled>Gold
+                Multiplier</button>
           </div>
           <div class="prestigeFlex" id="tier2">
-            <h2>Tier 2</h2>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeSmite" data-name="SMITE" disabled>Smite</button>
+            <h3>Tier 2</h2>
+              <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeSmite" data-name="SMITE" disabled>Smite</button>
           </div>
           <div class="prestigeFlex" id="tier3">
-            <h2>Tier 3</h2>
-            <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeBlockPen" data-name="BLOCK_PENETRATION"
-              disabled>Block
-              penetration</button>
+            <h3>Tier 3</h2>
+              <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeBlockPen" data-name="BLOCK_PENETRATION"
+                disabled>Block
+                penetration</button>
           </div>
         </div>
         <div class="hidden prestigeUpgradeInfo" id="prestigeUpgradeInfo">
