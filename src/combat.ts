@@ -40,9 +40,10 @@ export function respawn(target: any) {
     // If it is the enemy that dies, level it up, give gold to player, etc.
     if (target.IS_PLAYABLE_CHARACTER === false) {
       unit.enemy.LEVEL += 1;
-      if (!unit.player.PRESTIGE_ENABLED && unit.enemy.LEVEL >= 30) {
+      if (!prestige.btnMenuPrestige.disabled && unit.enemy.LEVEL >= 30) {
         unit.player.PRESTIGE_ENABLED = true;
         prestige.btnPrestige.disabled = false;
+        prestige.btnMenuPrestige.disabled = false;
       }
       const gd = unit.enemy.GOLD_DROP * (1 + unit.player.prestige_upgrades.GOLD_MULTIPLIER.BOUGHT * unit.player.prestige_upgrades.GOLD_MULTIPLIER.MULTIPLIER);
       unit.player.GOLD += gd;

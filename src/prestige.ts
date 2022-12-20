@@ -10,6 +10,7 @@ export const spnPrestigePoints = document.getElementById('spnPoints') as HTMLSpa
 export const spnPrestigeLevel = document.getElementById('spnLevel') as HTMLSpanElement;
 export const spnPrestigeExpCurrent = document.getElementById('spnCurrentExp') as HTMLSpanElement;
 export const spnPrestigeExpMax = document.getElementById('spnMaxExp') as HTMLSpanElement;
+export const btnMenuPrestige = document.getElementById('btnMenuPrestige') as HTMLButtonElement;
 export const btnPrestige = document.getElementById('btnPrestige') as HTMLButtonElement;
 export const prestigeSelectedContainer = document.getElementById('prestigeUpgradeInfo') as HTMLDivElement;
 export const prestigeSelectedName = document.getElementById('pSelectedPrestigeUpgradeName') as HTMLHeadingElement;
@@ -119,7 +120,7 @@ export function calculateExpGain() {
   console.log(`levels climbed${levelsClimbed}`);
   if (levelsClimbed > 0) {
     unit.player.HIGHEST_LEVEL_PRESTIGED_AT = unit.player.HIGHEST_LEVEL_REACHED;
-    gainedExp = levelsClimbed * 112.5 + unit.enemy.LEVEL / 80;
+    gainedExp = levelsClimbed / 3 + unit.enemy.LEVEL / 80;
   } else {
     gainedExp = unit.enemy.LEVEL / 80;
   }
