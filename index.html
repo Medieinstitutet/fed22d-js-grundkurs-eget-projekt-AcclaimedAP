@@ -8,8 +8,8 @@
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projekt</title>
-  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.65bdbd59.js"></script>
-  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.67a58da9.css">
+  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.10c89330.js"></script>
+  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.cd82990c.css">
 </head>
 
 <body>
@@ -23,6 +23,9 @@
           aria-label="Player Health points"></meter>
         <progress class="attackBar" id="playerAttackBar" min="0" max="220" value="0"
           aria-label="Player attack timer progress bar"></progress>
+        <div class="canvasStats">
+          <span id="spnCanvasPlayerHealthCurrent"></span> / <span id="spnCanvasPlayerHealthMax"></span>
+        </div>
         <img class="unitImage" id="playerImage" src="assets/combatzone/player/player_idle_1.svg"
           alt="player character" />
       </div>
@@ -33,6 +36,10 @@
           aria-label="Player Health points"></meter>
         <progress class="attackBar" id="enemyAttackBar" min="0" max="220" value="0"
           aria-label="Player attack timer progress bar"></progress>
+        <div class="canvasStats">
+          <span id="spnCanvasEnemyHealthCurrent"></span> / <span id="spnCanvasEnemyHealthMax"></span><br>
+          Level: <span id="spnCanvasEnemyLevel">1</span>
+        </div>
         <img class="unitImage" id="enemyImage" src="assets/combatzone/enemy/slime_idle_1.svg" alt="enemy character" />
       </div>
 
@@ -49,7 +56,7 @@
         <button class="btnMenu material-symbols-outlined" id="btnMenuShop" title="Shop for upgrades"
           aria-label="shop for upgrades button">storefront</button>
         <button class="btnMenu material-symbols-outlined" id="btnMenuPrestige" title="Prestige upgrades"
-          aria-label="Prestige upgrades button">self_improvement</button>
+          aria-label="Prestige upgrades button" disabled>self_improvement</button>
         <button class="btnMenu material-symbols-outlined" id="btnMenuDebug" title="Debug menu"
           aria-label="debug menu button">logo_dev</button>
       </nav>
@@ -60,13 +67,13 @@
       <div class="flexContent menuFrame hidden" id="playerInfo">
         <h2>Player Stats</h2>
         <label>Attack: <span id="spnPlayerAttack"></span></label>
-        <label>Max Health: <span id="spnPlayerHealthMax"></span></label>
+        <label>Max Health: <span class="spnPlayerHealthMax" id="spnPlayerHealthMax"></span></label>
         <label>Health Regen: <span id="spnPlayerHealthRegen"></span></label>
         <label>Attacks per second: <span id="spnPlayerAttackSpeed"></span></label>
         <label> Crit Chance: <span id="spnPlayerCritChance"></span></label>
         <label>Crit Multiplier: <span id="spnPlayerCritMultiplier"></span></label>
         <label>Block Chance: <span id="spnPlayerBlockChance"></span></label>
-        <label>Level: <span id="spnEnemyLevel"></span></label>
+        <label>Level: <span class="spnEnemyLevel" id="spnEnemyLevel"></span></label>
       </div>
 
       <div class="flexContent menuFrame hidden" id="shop">
@@ -92,7 +99,7 @@
               title="OBS! RESETS YOUR CURRENT PROGRESS FOR PERMANENT PRESTIGE EXPERIENCE">PRESTIGE</button>
           </div>
           <div class="prestigeFlex" id="tier0">
-            <h3>Tier 0</h2>
+            <h3>Tier 0</h2>npm
               <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeDamage" data-name="BONUS_DAMAGE"
                 disabled>Increase
                 Damage</button>
