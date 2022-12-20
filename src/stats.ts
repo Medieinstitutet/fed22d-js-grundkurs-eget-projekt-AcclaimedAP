@@ -6,16 +6,21 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import * as unit from './units';
 import * as variable from './variables';
+// eslint-disable-next-line import/no-cycle
 import * as shopFunction from './shop';
 
 export function updateHealthBar(target: any, updateMax = false): void {
+  const spnHealthCurrent = target.spnCanvasHealthCurrent;
   const { healthBar } = target;
-  const healthMax = target.HEALTH_MAX;
   const healthCurrent = target.HEALTH_CURRENT;
   healthBar.value = healthCurrent;
+  spnHealthCurrent.innerHTML = Math.round(healthCurrent);
 
   // Only runs when you want it to.
   if (updateMax) {
+    const healthMax = target.HEALTH_MAX;
+    const spnHealthMax = target.spnCanvasHealthMax;
+    spnHealthMax.innerHTML = Math.round(healthMax);
     healthBar.max = healthMax;
     healthBar.low = healthMax / 3;
     healthBar.high = healthMax / 2;

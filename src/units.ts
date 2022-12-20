@@ -91,7 +91,8 @@ export const player = {
   },
   healthBar: document.getElementById('playerHealthBar'),
   attackTimerBar: document.getElementById('playerAttackBar'),
-
+  spnCanvasHealthCurrent: document.getElementById('spnCanvasPlayerHealthCurrent'),
+  spnCanvasHealthMax: document.getElementById('spnCanvasPlayerHealthMax'),
   // Player info DOM
   statFrame: {
     spnAttack: document.getElementById('spnPlayerAttack'),
@@ -157,6 +158,9 @@ export const enemy = {
   },
   healthBar: document.getElementById('enemyHealthBar'),
   attackTimerBar: document.getElementById('enemyAttackBar'),
+  spnCanvasHealthCurrent: document.getElementById('spnCanvasEnemyHealthCurrent'),
+  spnCanvasHealthMax: document.getElementById('spnCanvasEnemyHealthMax'),
+  spnCanvasEnemyLevel: document.getElementById('spnCanvasEnemyLevel'),
 };
 
 export const shop = {

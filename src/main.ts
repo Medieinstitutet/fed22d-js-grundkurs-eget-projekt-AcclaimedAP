@@ -34,10 +34,10 @@ FUNCTIONS
 function initialize() {
   stat.calculatePlayerStats();
   stat.updateStatFrame(unit.player);
-  stat.updateHealthBar(unit.player);
+  stat.updateHealthBar(unit.player, true);
   canvas.updateGoldDisplay();
   stat.updateAttackTimerBar(unit.player, true);
-  stat.updateHealthBar(unit.enemy);
+  stat.updateHealthBar(unit.enemy, true);
   stat.updateAttackTimerBar(unit.enemy, true);
   prestige.updatePrestigeDisplay();
   shopFunction.updateAllShops();
@@ -70,9 +70,6 @@ function resetStats() {
   unit.shop.HEALTH.BOUGHT = 0;
   unit.shop.HEALTH_REGEN.BOUGHT = 0;
 }
-/* #########################################################
-                 Attack and death logic
-######################################################### */
 
 /*
 

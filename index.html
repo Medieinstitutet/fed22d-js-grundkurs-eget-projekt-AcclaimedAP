@@ -21,6 +21,9 @@
           aria-label="Player Health points"></meter>
         <progress class="attackBar" id="playerAttackBar" min="0" max="220" value="0"
           aria-label="Player attack timer progress bar"></progress>
+        <div class="canvasStats">
+          <span id="spnCanvasPlayerHealthCurrent"></span> / <span id="spnCanvasPlayerHealthMax"></span>
+        </div>
         <img class="unitImage" id="playerImage" src="assets/combatzone/player/player_idle_1.svg"
           alt="player character" />
       </div>
@@ -31,6 +34,10 @@
           aria-label="Player Health points"></meter>
         <progress class="attackBar" id="enemyAttackBar" min="0" max="220" value="0"
           aria-label="Player attack timer progress bar"></progress>
+        <div class="canvasStats">
+          <span id="spnCanvasEnemyHealthCurrent"></span> / <span id="spnCanvasEnemyHealthMax"></span><br>
+          Level: <span id="spnCanvasEnemyLevel">1</span>
+        </div>
         <img class="unitImage" id="enemyImage" src="assets/combatzone/enemy/slime_idle_1.svg" alt="enemy character" />
       </div>
 
@@ -58,13 +65,13 @@
       <div class="flexContent menuFrame hidden" id="playerInfo">
         <h2>Player Stats</h2>
         <label>Attack: <span id="spnPlayerAttack"></span></label>
-        <label>Max Health: <span id="spnPlayerHealthMax"></span></label>
+        <label>Max Health: <span class="spnPlayerHealthMax" id="spnPlayerHealthMax"></span></label>
         <label>Health Regen: <span id="spnPlayerHealthRegen"></span></label>
         <label>Attacks per second: <span id="spnPlayerAttackSpeed"></span></label>
         <label> Crit Chance: <span id="spnPlayerCritChance"></span></label>
         <label>Crit Multiplier: <span id="spnPlayerCritMultiplier"></span></label>
         <label>Block Chance: <span id="spnPlayerBlockChance"></span></label>
-        <label>Level: <span id="spnEnemyLevel"></span></label>
+        <label>Level: <span class="spnEnemyLevel" id="spnEnemyLevel"></span></label>
       </div>
 
       <div class="flexContent menuFrame hidden" id="shop">
@@ -90,7 +97,7 @@
               title="OBS! RESETS YOUR CURRENT PROGRESS FOR PERMANENT PRESTIGE EXPERIENCE">PRESTIGE</button>
           </div>
           <div class="prestigeFlex" id="tier0">
-            <h3>Tier 0</h2>
+            <h3>Tier 0</h2>npm
               <button class="btnPrestigeUpgrade" id="btnPrestigeUpgradeDamage" data-name="BONUS_DAMAGE"
                 disabled>Increase
                 Damage</button>

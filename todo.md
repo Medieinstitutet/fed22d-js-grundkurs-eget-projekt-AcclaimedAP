@@ -22,6 +22,6 @@
 - ✔️add prestige benefits
 - ✔️lock prestiges depending on prestige level
 - balance curve(easier scaling)
-- Add crucial info to unitcards(HP, level)
+- ✔️Add crucial info to unitcards(HP, level)
 - ✔️fix mobile view
 - ✔️when prestiging, make sure shop resets properly

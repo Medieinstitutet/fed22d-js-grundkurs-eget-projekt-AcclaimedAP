@@ -272,12 +272,23 @@
   flex-direction: column;
   bottom: 30px;
 
+  .canvasStats {
+    text-align: center;
+    text-shadow: 0 1px 5px black;
+
+    span {
+      display: inline;
+    }
+  }
+
   .unitImage {
     bottom: 0;
   }
 
   meter,
   progress {
+    margin-left: auto;
+    margin-right: auto;
     display: block;
     width: 90%;
   }

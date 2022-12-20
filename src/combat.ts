@@ -63,7 +63,10 @@ export function respawn(target: any) {
     }
     stat.calculateEnemyStats();
     heal(target);
-
+    const enemyLevelDisplay = unit.enemy.spnCanvasEnemyLevel;
+    if (enemyLevelDisplay) {
+      enemyLevelDisplay.innerHTML = unit.enemy.LEVEL.toString();
+    }
     target.RESPAWN_TIMER = 0;
     target.IS_ALIVE = true;
     target.IS_RESPAWNING = false;

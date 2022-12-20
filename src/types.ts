@@ -24,6 +24,8 @@ export type UtilityStats = {
 export type UIElements = {
   healthBar: HTMLMeterElement;
   attackTimerBar: HTMLMeterElement;
+  spnCanvasHealthCurrent: HTMLSpanElement;
+  spnCanvasHealthMax: HTMLSpanElement;
   xPos?: number;
   xPosReversed?: number;
   portrait: HTMLDivElement;
