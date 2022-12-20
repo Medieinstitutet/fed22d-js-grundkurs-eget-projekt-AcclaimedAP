@@ -19,7 +19,6 @@ export function numberToAsciiConverter(number: number): string {
     }
     const divided = 1000 ** loopCount;
     number /= divided;
-    console.log(number);
     if (number > 100) {
       finalString = Math.round(number).toString() + String.fromCharCode(ascii + loopCount);
     } else if (number > 10) {

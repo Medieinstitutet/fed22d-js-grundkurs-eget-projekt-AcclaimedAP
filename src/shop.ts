@@ -3,19 +3,22 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import * as unit from './units';
+// eslint-disable-next-line import/no-cycle
 import * as stat from './stats';
 import * as canvas from './canvas';
 
 export function shopMath(shopItem: { NAME: string; BASE_POWER: number; BOUGHT: number; POWER_MULTIPLIER: number }): number {
-  let powerCalc: number = shopItem.BASE_POWER + shopItem.BOUGHT * shopItem.POWER_MULTIPLIER;
+  let powerCalc: number = shopItem.BASE_POWER + shopItem.BOUGHT ** shopItem.POWER_MULTIPLIER;
   if (shopItem.NAME === unit.shop.ATTACK_SPEED.NAME) {
     powerCalc = shopItem.BASE_POWER / (1 + shopItem.BOUGHT * shopItem.POWER_MULTIPLIER);
   }
   if (shopItem.NAME === unit.shop.CRIT_CHANCE.NAME || shopItem === unit.shop.BLOCK_CHANCE) {
-    powerCalc = shopItem.BASE_POWER + (shopItem.BOUGHT / 1000) * shopItem.POWER_MULTIPLIER;
+    powerCalc = shopItem.BASE_POWER + (shopItem.BOUGHT / 1000) ** shopItem.POWER_MULTIPLIER;
+    return powerCalc;
   }
   if (shopItem === unit.shop.CRIT_MULTIPLIER) {
-    powerCalc = shopItem.BASE_POWER + (shopItem.BOUGHT / 100) * shopItem.POWER_MULTIPLIER;
+    powerCalc = shopItem.BASE_POWER + (shopItem.BOUGHT / 30) ** shopItem.POWER_MULTIPLIER;
+    return powerCalc;
   }
   if (powerCalc >= 1) {
     return Number(powerCalc.toFixed(0));
@@ -33,18 +36,18 @@ function shopCost(shopItem: { BASE_COST: number; COST_MULTIPLIER: number; BOUGHT
 }
 export function updateShop(shopItem: any): void {
   const cost = shopCost(shopItem);
+  const powerdiff = shopMath(shopItem);
+  shopItem.BOUGHT += 1;
   let power = shopMath(shopItem);
+  shopItem.BOUGHT -= 1;
+  power -= powerdiff;
   // If it is supposed to show in %, do so
-  if (shopItem === unit.shop.BLOCK_CHANCE || shopItem === unit.shop.CRIT_CHANCE) {
-    const powerString = `${power.toString()}%`;
+  if (shopItem === unit.shop.BLOCK_CHANCE || shopItem === unit.shop.CRIT_CHANCE || shopItem === unit.shop.CRIT_MULTIPLIER) {
+    const powerString = `${(power * 100).toFixed(2)}%`;
     shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold<br>+ ${powerString}</p>`;
   } else if (shopItem === unit.shop.ATTACK_SPEED) {
     // Special case for attack speed
     shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold<br>- ${power * 15} ms</p>`;
-  } else if (shopItem === unit.shop.CRIT_MULTIPLIER) {
-    power *= 100;
-    const powerString = `${power.toString()}%`;
-    shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold <br>+ ${powerString}</p>`;
   } else {
     // Everything else.
     shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold<br>+ ${power}</p>`;
@@ -56,11 +59,11 @@ export function shopBuy(shopItem: any): void {
 
   if (unit.player.GOLD >= shopItem.COST) {
     unit.player.GOLD -= shopItem.COST;
+    shopItem.BOUGHT += 1;
     canvas.updateGoldDisplay();
-    updateShop(shopItem);
     stat.calculatePlayerStats();
     stat.updateStatFrame(unit.player);
-    shopItem.BOUGHT += 1;
+    updateShop(shopItem);
   }
 }
 

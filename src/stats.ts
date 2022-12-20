@@ -56,7 +56,7 @@ export function calculatePlayerStats(): void {
     (1 + unit.player.prestige_upgrades.BONUS_DAMAGE.BOUGHT * unit.player.prestige_upgrades.BONUS_DAMAGE.MULTIPLIER);
   unit.player.HEALTH_MAX = unit.player.base.HEALTH_MAX + shopFunction.shopMath(unit.shop.HEALTH);
   unit.player.HEALTH_REGEN = unit.player.base.HEALTH_REGEN + shopFunction.shopMath(unit.shop.HEALTH_REGEN);
-  unit.player.CRIT_CHANCE = unit.player.base.CRIT_CHANCE + shopFunction.shopMath(unit.shop.CRIT_CHANCE) / 100;
+  unit.player.CRIT_CHANCE = unit.player.base.CRIT_CHANCE + shopFunction.shopMath(unit.shop.CRIT_CHANCE);
   unit.player.CRIT_MULTIPLIER = unit.player.base.CRIT_MULTIPLIER + shopFunction.shopMath(unit.shop.CRIT_MULTIPLIER);
   unit.player.BLOCK_CHANCE = unit.player.base.BLOCK_CHANCE + shopFunction.shopMath(unit.shop.BLOCK_CHANCE);
   unit.player.ATTACK_COOLDOWN = unit.player.base.ATTACK_COOLDOWN - shopFunction.shopMath(unit.shop.ATTACK_SPEED);

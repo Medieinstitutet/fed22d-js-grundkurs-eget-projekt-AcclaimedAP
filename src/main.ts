@@ -139,31 +139,24 @@ function gameLoop() {
 
 unit.shop.ATTACK.DOM?.addEventListener('click', () => {
   shopFunction.shopBuy(unit.shop.ATTACK);
-  shopFunction.updateShop(unit.shop.ATTACK);
 });
 unit.shop.HEALTH.DOM?.addEventListener('click', () => {
   shopFunction.shopBuy(unit.shop.HEALTH);
-  shopFunction.updateShop(unit.shop.HEALTH);
 });
 unit.shop.HEALTH_REGEN.DOM?.addEventListener('click', () => {
   shopFunction.shopBuy(unit.shop.HEALTH_REGEN);
-  shopFunction.updateShop(unit.shop.HEALTH_REGEN);
 });
 unit.shop.ATTACK_SPEED.DOM?.addEventListener('click', () => {
   shopFunction.shopBuy(unit.shop.ATTACK_SPEED);
-  shopFunction.updateShop(unit.shop.ATTACK_SPEED);
 });
 unit.shop.CRIT_CHANCE.DOM?.addEventListener('click', () => {
   shopFunction.shopBuy(unit.shop.CRIT_CHANCE);
-  shopFunction.updateShop(unit.shop.CRIT_CHANCE);
 });
 unit.shop.CRIT_MULTIPLIER.DOM?.addEventListener('click', () => {
   shopFunction.shopBuy(unit.shop.CRIT_MULTIPLIER);
-  shopFunction.updateShop(unit.shop.CRIT_MULTIPLIER);
 });
 unit.shop.BLOCK_CHANCE.DOM?.addEventListener('click', () => {
   shopFunction.shopBuy(unit.shop.BLOCK_CHANCE);
-  shopFunction.updateShop(unit.shop.BLOCK_CHANCE);
 });
 
 for (let i = 0; i < utility.btnMenu.length; i += 1) {
@@ -173,7 +166,6 @@ for (let i = 0; i < utility.btnMenu.length; i += 1) {
 }
 
 prestige.btnPrestige.addEventListener('click', () => {
-  console.log('prestige!');
   prestige.calculateExpGain();
   prestige.levelUpCheck();
   prestige.updatePrestigeDisplay();
