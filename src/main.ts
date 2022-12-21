@@ -24,7 +24,7 @@ import * as combat from './combat';
 // Debug
 const tickCounterSpan = document.getElementById('tickCounter') as HTMLSpanElement;
 const btnDebugState = document.getElementById('debugButton') as HTMLButtonElement;
-
+let tickCount = 0;
 /*
 
 FUNCTIONS
@@ -70,14 +70,56 @@ function resetStats() {
   unit.shop.HEALTH.BOUGHT = 0;
   unit.shop.HEALTH_REGEN.BOUGHT = 0;
 }
+// Main loop, runs each x tickrate and keeps the game rolling
 
+function gameLoop() {
+  tickCount += 1;
+  // Attack function
+  tickCounterSpan.innerHTML = tickCount.toString();
+
+  combat.attackCount(unit.player, unit.enemy);
+  combat.attackCount(unit.enemy, unit.player);
+  combat.regeneration(unit.player);
+  combat.regeneration(unit.enemy);
+  if (unit.player.prestige_upgrades.SMITE.BOUGHT > 0) {
+    prestige.skillSmite();
+  }
+  // If they're in respawning state, initiate that.
+  if (unit.player.IS_RESPAWNING) {
+    combat.respawn(unit.player);
+  }
+  if (unit.enemy.IS_RESPAWNING) {
+    combat.respawn(unit.enemy);
+  }
+  // Animation function
+  canvas.backgroundCycle();
+  // Loopieloop loop - setInterval? Heard it is better with setTimeout for this, but got to ask
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  ticksPerSecond();
+  canvas.degreeDisplay();
+  setTimeout(gameLoop, variable.tickrate);
+}
+
+const btnStartGame = document.getElementById('btnGameStart');
+function gameStart() {
+  const inputName = document.getElementById('inputNameSelect') as HTMLInputElement;
+  const popup = document.getElementById('overlay') as HTMLDivElement;
+  if (inputName?.value !== '' || inputName?.value == null) {
+    unit.player.NAME = inputName?.value ?? 'null';
+  } else {
+    unit.player.NAME = 'Player';
+  }
+  initialize();
+  popup?.classList.add('hidden');
+  gameLoop();
+}
 /*
 
 DEBUG
 
 */
 // NOTE: Temporary, just for debugging.
-let tickCount = 0;
+
 btnDebugState.addEventListener('click', () => {
   console.log(unit.player);
   console.log(unit.enemy);
@@ -107,34 +149,6 @@ LOGIC
 
 */
 
-// Main loop, runs each x tickrate and keeps the game rolling
-
-function gameLoop() {
-  tickCount += 1;
-  // Attack function
-  tickCounterSpan.innerHTML = tickCount.toString();
-
-  combat.attackCount(unit.player, unit.enemy);
-  combat.attackCount(unit.enemy, unit.player);
-  combat.regeneration(unit.player);
-  combat.regeneration(unit.enemy);
-  if (unit.player.prestige_upgrades.SMITE.BOUGHT > 0) {
-    prestige.skillSmite();
-  }
-  // If they're in respawning state, initiate that.
-  if (unit.player.IS_RESPAWNING) {
-    combat.respawn(unit.player);
-  }
-  if (unit.enemy.IS_RESPAWNING) {
-    combat.respawn(unit.enemy);
-  }
-  // Animation function
-  canvas.backgroundCycle();
-  // Loopieloop loop - setInterval? Heard it is better with setTimeout for this, but got to ask
-  ticksPerSecond();
-  canvas.degreeDisplay();
-  setTimeout(gameLoop, variable.tickrate);
-}
 // NOTE: Because of how I set it up, any sort of loop does sadly not work, tried a million and one things...
 
 unit.shop.ATTACK.DOM?.addEventListener('click', () => {
@@ -176,5 +190,7 @@ function prestigeEventListener(e: any) {
   e.addEventListener('click', prestige.showPrestigeUpgradeInfo);
 }
 Array.from(prestige.btnPrestigeUpgrade).forEach(prestigeEventListener);
-initialize();
-gameLoop(); // Finally we can start playing the game!
+
+btnStartGame?.addEventListener('click', gameStart);
+
+// Finally we can start playing the game!

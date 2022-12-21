@@ -183,6 +183,55 @@
   }
 }
 
+/* Name select on game start, as well as loading previous save if possible */
+
+//Background
+.overlay {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: rgba($color: #000, $alpha: 80%);
+
+  .infobox {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    background-color: #000;
+    top: 50%;
+    left: 50%;
+    height: 80%;
+    width: 80%;
+  }
+
+  form {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+
+    input {
+      margin: 10px;
+      width: 200px;
+    }
+
+    #btnGameStart {
+      height: 40px;
+      width: 200px;
+    }
+  }
+
+  .divLoad {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+}
+
 /* CANVAS AND VISUAL ON COMBAT ZONE */
 #canvas {
   width: 100%;
