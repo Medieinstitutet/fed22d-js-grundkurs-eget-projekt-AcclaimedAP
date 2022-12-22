@@ -1,4 +1,7 @@
-export const player = {
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable import/no-mutable-exports */
+let player = {
   // player stats
   NAME: 'PlayerName',
   HEALTH_MAX: 100,
@@ -107,7 +110,7 @@ export const player = {
 };
 
 // Enemy object
-export const enemy = {
+let enemy = {
   NAME: 'Slime',
   HEALTH_MAX: 20,
   HEALTH_CURRENT: 20,
@@ -163,7 +166,7 @@ export const enemy = {
   spnCanvasEnemyLevel: document.getElementById('spnCanvasEnemyLevel'),
 };
 
-export const shop = {
+let shop = {
   ATTACK: {
     NAME: 'ATTACK',
     COST: 0,
@@ -235,3 +238,28 @@ export const shop = {
     DOM: document.getElementById('shopBtnBlockChance'),
   },
 };
+function saveProgress() {
+  localStorage.setItem('player', JSON.stringify(player));
+  localStorage.setItem('enemy', JSON.stringify(enemy));
+  localStorage.setItem('shop', JSON.stringify(shop));
+}
+function loadProgress() {
+  if (localStorage.getItem('player') !== null && localStorage.getItem('enemy') !== null && localStorage.getItem('shop') !== null) {
+    player = JSON.parse(localStorage.getItem('player')!);
+    enemy = JSON.parse(localStorage.getItem('enemy')!);
+    shop = JSON.parse(localStorage.getItem('shop')!);
+    player.ANIMATION_ACTIVE = false;
+    player.HEALTH_CURRENT = player.HEALTH_MAX;
+    player.ATTACK_TIMER = 0;
+    player.IS_ATTACKING = false;
+    player.IS_FRONT_OF_OPPONENT = false;
+    enemy.ANIMATION_ACTIVE = false;
+    enemy.ATTACK_TIMER = 0;
+    enemy.IS_FRONT_OF_OPPONENT = false;
+    enemy.IS_ATTACKING = false;
+    enemy.HEALTH_CURRENT = enemy.HEALTH_MAX;
+    console.log(player, enemy, shop);
+  }
+}
+// eslint-disable-next-line object-curly-newline
+export { player, enemy, shop, saveProgress, loadProgress };

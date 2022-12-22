@@ -31,6 +31,10 @@ FUNCTIONS
 
 */
 
+// save and load functionality
+const btnSave = document.getElementById('btnSave') as HTMLButtonElement;
+const btnLoad = document.getElementById('btnLoad') as HTMLButtonElement;
+
 function initialize() {
   stat.calculatePlayerStats();
   stat.updateStatFrame(unit.player);
@@ -99,11 +103,11 @@ function gameLoop() {
   canvas.degreeDisplay();
   setTimeout(gameLoop, variable.tickrate);
 }
-
+const popup = document.getElementById('overlay') as HTMLDivElement;
 const btnStartGame = document.getElementById('btnGameStart');
 function gameStart() {
   const inputName = document.getElementById('inputNameSelect') as HTMLInputElement;
-  const popup = document.getElementById('overlay') as HTMLDivElement;
+
   if (inputName?.value !== '' || inputName?.value == null) {
     unit.player.NAME = inputName?.value ?? 'null';
   } else {
@@ -113,6 +117,14 @@ function gameStart() {
   popup?.classList.add('hidden');
   gameLoop();
 }
+
+function loadSave() {
+  unit.loadProgress();
+  initialize();
+  popup?.classList.add('hidden');
+  gameLoop();
+}
+
 /*
 
 DEBUG
@@ -173,12 +185,14 @@ unit.shop.BLOCK_CHANCE.DOM?.addEventListener('click', () => {
   shopFunction.shopBuy(unit.shop.BLOCK_CHANCE);
 });
 
+// Menu buttons
 for (let i = 0; i < utility.btnMenu.length; i += 1) {
   utility.btnMenu[i].addEventListener('click', () => {
     utility.menuChange(utility.divMenu[i]);
   });
 }
 
+// Prestige level up button
 prestige.btnPrestige.addEventListener('click', () => {
   prestige.calculateExpGain();
   prestige.levelUpCheck();
@@ -191,6 +205,13 @@ function prestigeEventListener(e: any) {
 }
 Array.from(prestige.btnPrestigeUpgrade).forEach(prestigeEventListener);
 
+// Saving and loading
+btnSave.addEventListener('click', unit.saveProgress);
+if (localStorage.getItem('player') !== null && localStorage.getItem('enemy') !== null && localStorage.getItem('shop') !== null) {
+  btnLoad.addEventListener('click', loadSave);
+} else {
+  btnLoad.disabled = true;
+}
 btnStartGame?.addEventListener('click', gameStart);
 
 // Finally we can start playing the game!

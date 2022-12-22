@@ -142,8 +142,8 @@ function resetAttackState(target: types.LogicBooleans & types.CombatStats) {
 }
 
 function chargingAttack(attacker: any, defender: any) {
-  const playerPortrait = unit.player.portrait as HTMLDivElement;
-  const enemyPortrait = unit.enemy.portrait as HTMLDivElement;
+  const playerPortrait = document.getElementById('playerPortrait') as HTMLDivElement;
+  const enemyPortrait = document.getElementById('enemyPortrait') as HTMLDivElement;
   let portrait;
   attack(attacker, defender);
   let moveBackAnim = {};
