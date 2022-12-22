@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable import/no-mutable-exports */
-let player = {
+const player = {
   // player stats
   NAME: 'PlayerName',
   HEALTH_MAX: 100,
@@ -110,7 +111,7 @@ let player = {
 };
 
 // Enemy object
-let enemy = {
+const enemy = {
   NAME: 'Slime',
   HEALTH_MAX: 20,
   HEALTH_CURRENT: 20,
@@ -166,7 +167,7 @@ let enemy = {
   spnCanvasEnemyLevel: document.getElementById('spnCanvasEnemyLevel'),
 };
 
-let shop = {
+const shop = {
   ATTACK: {
     NAME: 'ATTACK',
     COST: 0,
@@ -245,19 +246,33 @@ function saveProgress() {
 }
 function loadProgress() {
   if (localStorage.getItem('player') !== null && localStorage.getItem('enemy') !== null && localStorage.getItem('shop') !== null) {
-    player = JSON.parse(localStorage.getItem('player')!);
-    enemy = JSON.parse(localStorage.getItem('enemy')!);
-    shop = JSON.parse(localStorage.getItem('shop')!);
-    player.ANIMATION_ACTIVE = false;
-    player.HEALTH_CURRENT = player.HEALTH_MAX;
-    player.ATTACK_TIMER = 0;
-    player.IS_ATTACKING = false;
-    player.IS_FRONT_OF_OPPONENT = false;
-    enemy.ANIMATION_ACTIVE = false;
-    enemy.ATTACK_TIMER = 0;
-    enemy.IS_FRONT_OF_OPPONENT = false;
-    enemy.IS_ATTACKING = false;
-    enemy.HEALTH_CURRENT = enemy.HEALTH_MAX;
+    const playerTemp: typeof player = JSON.parse(localStorage.getItem('player')!);
+    const enemyTemp: typeof enemy = JSON.parse(localStorage.getItem('enemy')!);
+    const shopTemp: typeof shop = JSON.parse(localStorage.getItem('shop')!);
+    player.NAME = playerTemp.NAME;
+    player.GOLD = playerTemp.GOLD;
+    player.PRESTIGE_ENABLED = playerTemp.PRESTIGE_ENABLED;
+    player.PRESTIGE_LEVEL = playerTemp.PRESTIGE_LEVEL;
+    player.PRESTIGE_EXP = playerTemp.PRESTIGE_EXP;
+    player.PRESTIGE_EXP_LEVELUP = playerTemp.PRESTIGE_EXP_LEVELUP;
+    player.PRESTIGE_EXP_LEVELUP_MULTIPLIER = playerTemp.PRESTIGE_EXP_LEVELUP_MULTIPLIER;
+    player.HIGHEST_LEVEL_REACHED = playerTemp.HIGHEST_LEVEL_REACHED;
+    player.HIGHEST_LEVEL_PRESTIGED_AT = playerTemp.HIGHEST_LEVEL_PRESTIGED_AT;
+    player.PRESTIGE_POINTS = playerTemp.PRESTIGE_POINTS;
+    player.prestige_upgrades.BONUS_DAMAGE = playerTemp.prestige_upgrades.BONUS_DAMAGE;
+    player.prestige_upgrades.REDUCE_BLOCK = playerTemp.prestige_upgrades.REDUCE_BLOCK;
+    player.prestige_upgrades.LIFESTEAL = playerTemp.prestige_upgrades.LIFESTEAL;
+    player.prestige_upgrades.GOLD_MULTIPLIER = playerTemp.prestige_upgrades.GOLD_MULTIPLIER;
+    player.prestige_upgrades.SMITE = playerTemp.prestige_upgrades.SMITE;
+    player.prestige_upgrades.BLOCK_PENETRATION = playerTemp.prestige_upgrades.BLOCK_PENETRATION;
+    shop.ATTACK.BOUGHT = shopTemp.ATTACK.BOUGHT;
+    shop.HEALTH.BOUGHT = shopTemp.HEALTH.BOUGHT;
+    shop.ATTACK_SPEED.BOUGHT = shopTemp.ATTACK_SPEED.BOUGHT;
+    shop.HEALTH_REGEN.BOUGHT = shopTemp.HEALTH_REGEN.BOUGHT;
+    shop.BLOCK_CHANCE.BOUGHT = shopTemp.BLOCK_CHANCE.BOUGHT;
+    shop.CRIT_CHANCE.BOUGHT = shopTemp.CRIT_CHANCE.BOUGHT;
+    shop.CRIT_MULTIPLIER.BOUGHT = shopTemp.CRIT_MULTIPLIER.BOUGHT;
+    enemy.LEVEL = enemyTemp.LEVEL;
     console.log(player, enemy, shop);
   }
 }
