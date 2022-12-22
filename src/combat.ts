@@ -128,7 +128,6 @@ function damageCalculation(attacker: any, defender: { BLOCK_CHANCE: number }): [
 function attack(attacker: any, defender: any): void {
   const damageResult = damageCalculation(attacker, defender);
   defender.HEALTH_CURRENT -= damageResult[0];
-  attacker.ATTACK_TIMER = 0;
   stat.updateHealthBar(defender);
   utility.output(`${attacker.NAME} attacks ${defender.NAME} and deals ${damageResult[0]} damage!`);
   canvas.createText(damageResult[0].toFixed(0), defender, damageResult[1]);

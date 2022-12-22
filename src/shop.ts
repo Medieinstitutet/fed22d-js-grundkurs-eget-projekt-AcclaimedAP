@@ -10,7 +10,7 @@ import * as canvas from './canvas';
 export function shopMath(shopItem: { NAME: string; BASE_POWER: number; BOUGHT: number; POWER_MULTIPLIER: number }): number {
   let powerCalc: number = shopItem.BASE_POWER + shopItem.BOUGHT ** shopItem.POWER_MULTIPLIER;
   if (shopItem.NAME === unit.shop.ATTACK_SPEED.NAME) {
-    powerCalc = shopItem.BASE_POWER / (1 + shopItem.BOUGHT * shopItem.POWER_MULTIPLIER);
+    powerCalc = shopItem.BASE_POWER + shopItem.BOUGHT * shopItem.POWER_MULTIPLIER;
   }
   if (shopItem.NAME === unit.shop.CRIT_CHANCE.NAME || shopItem === unit.shop.BLOCK_CHANCE) {
     powerCalc = shopItem.BASE_POWER + (shopItem.BOUGHT / 1000) ** shopItem.POWER_MULTIPLIER;
@@ -47,7 +47,7 @@ export function updateShop(shopItem: any): void {
     shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold<br>+ ${powerString}</p>`;
   } else if (shopItem === unit.shop.ATTACK_SPEED) {
     // Special case for attack speed
-    shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold<br>- ${power * 15} ms</p>`;
+    shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold<br>${power * 15} ms</p>`;
   } else {
     // Everything else.
     shopItem.DOM.innerHTML = `<p class="shopUpgradeName">${shopItem.NAME}</p><p class="shopUpgradeCost">${cost} Gold<br>+ ${power}</p>`;
@@ -64,6 +64,12 @@ export function shopBuy(shopItem: any): void {
     stat.calculatePlayerStats();
     stat.updateStatFrame(unit.player);
     updateShop(shopItem);
+    if (shopItem === unit.shop.HEALTH) {
+      stat.updateHealthBar(unit.player, true);
+    }
+    if (shopItem === unit.shop.ATTACK_SPEED) {
+      stat.updateAttackTimerBar(unit.player, true);
+    }
   }
 }
 
