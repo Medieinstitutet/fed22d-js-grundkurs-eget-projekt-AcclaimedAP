@@ -31,8 +31,11 @@ function heal(target: types.Health & types.LogicBooleans, amount?: number) {
 export function respawn(target: any) {
   // gives target max hp
   target.IS_RESPAWNING = true;
-  if (target.image.src !== target.frameState.dead) {
-    target.image.src = target.frameState.dead;
+  const imageDead = target.imageDead as HTMLImageElement;
+  const image = target.image as HTMLImageElement;
+  if (imageDead.classList.contains('hidden')) {
+    imageDead.classList.remove('hidden');
+    image.classList.add('hidden');
   }
   const respawnCooldown = 150;
   target.RESPAWN_TIMER += 1;
@@ -72,7 +75,8 @@ export function respawn(target: any) {
     target.IS_ALIVE = true;
     target.IS_RESPAWNING = false;
     target.ATTACK_TIMER = 0;
-    target.image.src = target.frameState.idle[0];
+    imageDead.classList.add('hidden');
+    image.classList.remove('hidden');
     stat.updateHealthBar(target);
   }
 }
