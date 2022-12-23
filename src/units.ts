@@ -113,10 +113,10 @@ const player = {
 // Enemy object
 const enemy = {
   NAME: 'Slime',
-  HEALTH_MAX: 20,
-  HEALTH_CURRENT: 20,
+  HEALTH_MAX: 15,
+  HEALTH_CURRENT: 15,
   HEALTH_REGEN: 0.1,
-  DAMAGE: 3,
+  DAMAGE: 2,
   ATTACK_TIMER: 0,
   ATTACK_COOLDOWN: 310,
   CHARGE_TIMER: 0,
@@ -129,9 +129,9 @@ const enemy = {
   LEVEL: 1,
   // Used to calculate and able to backtrack
   base: {
-    HEALTH_MAX: 20,
+    HEALTH_MAX: 15,
     HEALTH_REGEN: 0.1,
-    DAMAGE: 3,
+    DAMAGE: 2,
     ATTACK_COOLDOWN: 3100,
     CRIT_CHANCE: 0.05,
     CRIT_MULTIPLIER: 1.2,
@@ -140,10 +140,10 @@ const enemy = {
   },
   // Determines how much stronger the enemy gets per level
   multiplier: {
-    HEALTH_MAX: 1.6,
+    HEALTH_MAX: 1.22,
     HEALTH_REGEN: 0.001,
-    DAMAGE: 1.4,
-    GOLD_DROP: 1.5,
+    DAMAGE: 1.1,
+    GOLD_DROP: 1.4,
   },
   // Logic booleans
   IS_PLAYABLE_CHARACTER: false,

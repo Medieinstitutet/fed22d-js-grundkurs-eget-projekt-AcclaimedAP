@@ -37,7 +37,7 @@ export function respawn(target: any) {
     imageDead.classList.remove('hidden');
     image.classList.add('hidden');
   }
-  const respawnCooldown = 150;
+  const respawnCooldown = 100;
   target.RESPAWN_TIMER += 1;
   if (target.RESPAWN_TIMER >= respawnCooldown) {
     // If it is the enemy that dies, level it up, give gold to player, etc.
@@ -52,7 +52,7 @@ export function respawn(target: any) {
       }
       const gd = unit.enemy.GOLD_DROP * (1 + unit.player.prestige_upgrades.GOLD_MULTIPLIER.BOUGHT * unit.player.prestige_upgrades.GOLD_MULTIPLIER.MULTIPLIER);
       unit.player.GOLD += gd;
-      canvas.createText(gd.toString(), unit.player, 'gold');
+      canvas.createText(gd.toFixed(0), unit.player, 'gold');
       canvas.updateGoldDisplay();
       stat.updateStatFrame(unit.player);
       if (unit.player.HIGHEST_LEVEL_REACHED <= unit.enemy.LEVEL) {
