@@ -45,7 +45,7 @@ export function respawn(target: any) {
       unit.enemy.LEVEL += 1;
       heal(unit.player);
       stat.updateHealthBar(unit.player);
-      if (!prestige.btnMenuPrestige.disabled && unit.enemy.LEVEL >= 30) {
+      if (prestige.btnMenuPrestige.disabled && unit.enemy.LEVEL >= 30) {
         unit.player.PRESTIGE_ENABLED = true;
         prestige.btnPrestige.disabled = false;
         prestige.btnMenuPrestige.disabled = false;
