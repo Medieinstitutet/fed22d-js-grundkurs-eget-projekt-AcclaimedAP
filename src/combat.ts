@@ -43,6 +43,8 @@ export function respawn(target: any) {
     // If it is the enemy that dies, level it up, give gold to player, etc.
     if (target.IS_PLAYABLE_CHARACTER === false) {
       unit.enemy.LEVEL += 1;
+      heal(unit.player);
+      stat.updateHealthBar(unit.player);
       if (!prestige.btnMenuPrestige.disabled && unit.enemy.LEVEL >= 30) {
         unit.player.PRESTIGE_ENABLED = true;
         prestige.btnPrestige.disabled = false;
