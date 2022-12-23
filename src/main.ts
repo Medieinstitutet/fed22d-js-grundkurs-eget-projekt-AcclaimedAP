@@ -66,6 +66,7 @@ function resetStats() {
   unit.enemy.BLOCK_CHANCE = unit.enemy.base.BLOCK_CHANCE;
   unit.enemy.CRIT_CHANCE = unit.enemy.base.CRIT_CHANCE;
   unit.enemy.CRIT_MULTIPLIER = unit.enemy.base.CRIT_MULTIPLIER;
+  unit.enemy.LEVEL = 1;
   unit.shop.ATTACK.BOUGHT = 0;
   unit.shop.ATTACK_SPEED.BOUGHT = 0;
   unit.shop.BLOCK_CHANCE.BOUGHT = 0;
@@ -199,6 +200,10 @@ prestige.btnPrestige.addEventListener('click', () => {
   prestige.updatePrestigeDisplay();
   resetStats();
   initialize();
+  const enemyLevelDisplay = unit.enemy.spnCanvasEnemyLevel;
+  if (enemyLevelDisplay) {
+    enemyLevelDisplay.innerHTML = unit.enemy.LEVEL.toString();
+  }
 });
 function prestigeEventListener(e: any) {
   e.addEventListener('click', prestige.showPrestigeUpgradeInfo);
