@@ -212,6 +212,9 @@ if (localStorage.getItem('player') !== null && localStorage.getItem('enemy') !==
 } else {
   btnLoad.disabled = true;
 }
+
+utility.btnHelpClose.addEventListener('click', utility.toggleHelp);
+utility.btnHelpOpen.addEventListener('click', utility.toggleHelp);
 btnStartGame?.addEventListener('click', gameStart);
 
 // Finally we can start playing the game!

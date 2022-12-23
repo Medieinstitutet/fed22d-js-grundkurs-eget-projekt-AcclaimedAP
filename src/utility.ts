@@ -44,6 +44,12 @@ export function menuChange(uiElement: Element) {
     uiElement.classList.remove('hidden');
   }
 }
+export const btnHelpOpen = document.getElementById('btnHelpOpen') as HTMLButtonElement;
+export const btnHelpClose = document.getElementById('btnHelpClose') as HTMLButtonElement;
+export function toggleHelp() {
+  const helpWindow = document.getElementById('overlayHelp') as HTMLDivElement;
+  helpWindow.classList.toggle('hidden');
+}
 
 export function output(text?: string, style?: string): void {
   const outputBox = document.getElementById('textOutput') as HTMLDivElement;
