@@ -140,10 +140,10 @@ const enemy = {
   },
   // Determines how much stronger the enemy gets per level
   multiplier: {
-    HEALTH_MAX: 1.22,
+    HEALTH_MAX: 1.42,
     HEALTH_REGEN: 0.001,
-    DAMAGE: 1.1,
-    GOLD_DROP: 1.4,
+    DAMAGE: 0.8,
+    GOLD_DROP: 1.3,
   },
   // Logic booleans
   IS_PLAYABLE_CHARACTER: false,

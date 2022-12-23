@@ -69,13 +69,13 @@ export function calculateEnemyStats() {
   let m = 1;
   let dm = 1;
   if (e.LEVEL % 10 === 0) {
-    m = 4;
-    dm = 1.5;
+    m = 4.5;
+    dm = 1.2;
   }
   e.HEALTH_MAX = e.base.HEALTH_MAX + e.LEVEL ** e.multiplier.HEALTH_MAX * m;
   e.DAMAGE = e.base.DAMAGE + e.LEVEL ** e.multiplier.DAMAGE * dm;
   e.GOLD_DROP = e.base.GOLD_DROP + e.LEVEL ** e.multiplier.GOLD_DROP * m;
-  e.HEALTH_REGEN = e.base.HEALTH_REGEN + e.LEVEL * e.multiplier.HEALTH_REGEN * m;
-  e.BLOCK_CHANCE = e.base.BLOCK_CHANCE + (e.LEVEL / 1000 - p.prestige_upgrades.REDUCE_BLOCK.BOUGHT * p.prestige_upgrades.REDUCE_BLOCK.MULTIPLIER) * m;
+  e.HEALTH_REGEN = e.base.HEALTH_REGEN + e.LEVEL * e.multiplier.HEALTH_REGEN * dm;
+  e.BLOCK_CHANCE = e.base.BLOCK_CHANCE + (e.LEVEL / 1000 - p.prestige_upgrades.REDUCE_BLOCK.BOUGHT * p.prestige_upgrades.REDUCE_BLOCK.MULTIPLIER) * dm;
   updateHealthBar(unit.enemy, true);
 }
