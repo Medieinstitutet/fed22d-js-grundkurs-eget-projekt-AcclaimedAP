@@ -25,7 +25,7 @@ const player = {
   PRESTIGE_EXP_LEVELUP_MULTIPLIER: 1.7,
   HIGHEST_LEVEL_REACHED: 0,
   HIGHEST_LEVEL_PRESTIGED_AT: 0,
-  PRESTIGE_POINTS: 15,
+  PRESTIGE_POINTS: 0,
   prestige_upgrades: {
     BONUS_DAMAGE: {
       NAME: 'Play Hard',
