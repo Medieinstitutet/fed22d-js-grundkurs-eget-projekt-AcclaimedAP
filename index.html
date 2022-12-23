@@ -8,12 +8,13 @@
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projekt</title>
-  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.a8f856eb.js"></script>
-  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.a9f155e1.css">
+  <script type="module" crossorigin src="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.4c5c4418.js"></script>
+  <link rel="stylesheet" href="/fed22d-js-grundkurs-eget-projekt-AcclaimedAP/assets/index.b9710e9b.css">
 </head>
 
 <body>
   <div class="flexContainer">
+    <button class="btnHelp" id="btnHelpOpen">?</button>
     <div id="canvas" class="unselectable">
       <!--Combat zone canvas-->
       <label class="canvasDisplay" id="goldDisplay"><span id="goldCount">0</span> Gold</label>
@@ -161,6 +162,26 @@
         <button id="btnLoad">Load a save</button>
       </div>
     </div>
+  </div>
+  <div class="overlay hidden" id="overlayHelp">
+    <button class="btnHelp" id="btnHelpClose">x</button>
+    <div class="infobox" id="">
+      <h2>Help</h2>
+      <h3>How to play</h3>
+      <h4>The game is simple, your character will automatically attack the enemy. When an enemy dies, they will drop
+        gold that you can spend in the shop! Beware, as the enemy will come back even stronger. If you happen to be
+        overpowered by the enemy and die, you will instead fight a weaker enemy, and have more opportunities to make
+        your character even stronger.</h4>
+      <h3>Tips and tricks</h3>
+      <h4>The shop has great ways to improve your ability to kill the enemies! It is highly recommended to focus mainly
+        on Attack damage early on, as well as health and health regen, as you get further, the other upgrades may be
+        more valuable to you.</h4>
+      <h3>Prestige</h3>
+      <h4>After hitting level 30 for the first time, you unlock the Prestige feature. It allows you to reset your
+        current progress(levels, upgrades bought in the shop, etc), to get permanent Prestige Points which can be used
+        to upgrade your character, and they're insanely strong!</h4>
+    </div>
+  </div>
   </div>
   
 </body>
