@@ -1,8 +1,9 @@
-@use "utils/a11y"; // Om det inte funkar, byt @use mot @import
-@use "vendor/reset";
+/* stylelint-disable selector-id-pattern */
+/* stylelint-disable selector-class-pattern */
+@use 'utils/a11y'; // Om det inte funkar, byt @use mot @import
+@use 'vendor/reset';
 
 :root {
-  // TODO: Går bra att radera kod även här!
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: rem(16px);
   line-height: 24px;
@@ -17,48 +18,384 @@
   text-size-adjust: 100%;
 }
 
-// TODO: Radera mig! Jag är bara ett exempel.
-main {
-  padding: 20px;
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
 
-.app {
-  margin-block: 20px;
+/* Functionalities */
+.unselectable {
+  user-select: none;
+}
+
+.flexContainer {
   display: flex;
-  gap: 20px;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: rgb(29 29 29);
 
-  .card {
-    $card-size: 250px;
+  .menuContainer {
+    width: 100%;
 
-    width: 0.6413 * $card-size;
-    height: $card-size;
-    cursor: pointer;
-    background: #102a3f;
-    border-radius: 8px;
-    display: flex;
-    font-weight: bold;
-    align-items: center;
-    justify-content: space-around;
-    text-align: center;
-    box-shadow: 5px 5px 5px rgb(0 0 0 / 20%);
+    nav {
+      background-color: rgb(80 80 80);
+      padding: 10px;
+      margin: 0 10px;
 
-    .front {
-      font-size: rem(50px);
-    }
-
-    .back {
-      display: none;
-    }
-
-    &.visible {
-      .front {
-        display: none;
+      button {
+        height: 50px;
+        width: 50px;
+        border: none;
+        background-color: rgb(100 100 100);
+        cursor: pointer;
       }
 
-      .back {
+      button:hover {
+        background-color: rgb(140 140 140);
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      button:disabled {
+        background-color: rgb(90 90 90);
+        cursor: not-allowed;
+      }
+    }
+
+    .flexContent {
+      min-height: calc(100vh - 580px);
+      max-height: calc(100vh - 580px);
+      margin: 10px;
+      margin-top: 0;
+      padding: 20px;
+      background-color: rgb(92 92 92);
+      flex-grow: 1;
+      overflow: auto;
+      min-width: calc(100% - 30px);
+
+      label {
         display: block;
       }
     }
   }
+}
+
+/* The shop */
+.shop {
+  display: flex;
+  flex-direction: column;
+
+  .shopButton {
+    margin: 4px;
+    padding: 5px;
+    min-width: 100%;
+    cursor: pointer;
+    background-color: rgb(100 100 100);
+    box-shadow: 0 2px 2px rgba(0 0 0 / 22%);
+    border: 2px solid black;
+    translate: 0 0;
+
+    p {
+      display: inline-block;
+      min-width: calc(50% - 40px);
+      margin: 10px;
+      min-height: calc(50% - 40px);
+      vertical-align: middle;
+      font-weight: bolder;
+      text-shadow: 0 2px 2px rgba(0 0 0 / 32%);
+    }
+
+    .shopUpgradeName {
+      text-align: left;
+    }
+
+    .shopUpgradeCost {
+      min-width: 50%;
+      text-align: right;
+    }
+  }
+
+  .shopButton:hover {
+    translate: 0 -2px;
+    background-color: rgb(120 120 120);
+    transition: background-color 0.3s ease-in-out, translate 0.1s ease-in-out;
+  }
+
+  .shopButton:active {
+    background-color: rgb(177 126 60);
+  }
+
+  .shopButton:disabled {
+    background-color: rgb(192 144 81);
+    cursor: not-allowed;
+  }
+}
+
+.prestige {
+  background-color: brown;
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 0;
+
+  div {
+    max-height: 100%;
+  }
+
+  .prestigeContainer {
+    background-color: rgb(85 85 85);
+    display: flex;
+    overflow-x: auto;
+    min-height: 100%;
+    width: 100%;
+
+    h2 {
+      position: absolute;
+      margin-left: 10px;
+    }
+
+    .prestigeFlex {
+      text-align: center;
+      margin: 5px;
+      padding: 15px;
+      margin-top: 40px;
+      min-width: 200px;
+      background-color: rgb(100 100 100);
+    }
+  }
+
+  .prestigeUpgradeInfo {
+    position: relative;
+    right: 0;
+    top: 0;
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 100%;
+    background-color: rgb(110 110 110);
+    border: 2px solid black;
+    box-shadow: -2px 0 4px rgba(0 0 0 / 30%);
+    padding: 10px;
+
+    div {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+
+/* Name select on game start, as well as loading previous save if possible */
+
+//Background
+.overlay {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: rgba($color: #000, $alpha: 80%);
+  backdrop-filter: blur(10px);
+
+  .infobox {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    background-color: rgb(85 85 85);
+    top: 50%;
+    left: 50%;
+    height: 80%;
+    width: 80%;
+    border-radius: 30px;
+    border: 2px solid rgb(185 185 185);
+    overflow: scroll;
+
+    h2 {
+      margin: 20px;
+      text-align: center;
+    }
+
+    h3 {
+      margin: 15px;
+    }
+
+    h4 {
+      margin: 10px;
+    }
+  }
+
+  form {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+
+    input {
+      margin: 10px;
+      width: 200px;
+    }
+
+    #btnGameStart {
+      height: 40px;
+      width: 200px;
+    }
+  }
+
+  .divLoad {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+}
+
+.btnHelp {
+  position: fixed;
+  right: 0;
+  top: 0;
+  border: none;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  z-index: 50;
+}
+
+/* CANVAS AND VISUAL ON COMBAT ZONE */
+#canvas {
+  width: 100%;
+  position: relative;
+  background-color: antiquewhite;
+  height: 500px;
+  overflow: hidden;
+  margin: 0 10px;
+
+  img {
+    position: absolute;
+  }
+
+  .background {
+    min-width: 1920px;
+    max-width: 1920px;
+    aspect-ratio: 1 / 1;
+    bottom: -960px;
+    left: 50%;
+    margin-left: -960px;
+    z-index: 10;
+    transform-origin: center;
+  }
+
+  .displayText {
+    position: absolute;
+    font-size: 2rem;
+    z-index: 50;
+    color: rgb(211 54 54);
+    text-shadow: 0 0 3px black;
+    font-weight: bolder;
+    text-align: center;
+  }
+
+  .displayTextCrit {
+    font-size: 2.5rem;
+    color: rgb(235 60 60);
+  }
+
+  .displayTextGold {
+    color: rgb(223 179 68);
+  }
+
+  .displayTextBlock {
+    color: rgb(156 156 156);
+  }
+
+  .displayTextHeal {
+    color: rgb(51 165 57);
+  }
+
+  .displayTextSkill {
+    font-size: 2.5rem;
+    color: rgb(58 127 230);
+  }
+
+  #grass {
+    min-width: 3000px;
+    bottom: 0%;
+    z-index: 20;
+    left: 50%;
+    margin-left: -960px;
+  }
+}
+
+.canvasDisplay {
+  position: absolute;
+}
+
+#goldDisplay {
+  left: 5px;
+  top: 5px;
+  background-color: rgb(104 104 104);
+  padding: 4px;
+  z-index: 15;
+  box-shadow: 0 4px 4px rgba(0 0 0 / 22%);
+}
+
+.portrait {
+  min-width: 20%;
+  max-height: 420px;
+  aspect-ratio: 3 / 5;
+  z-index: 15;
+  position: absolute;
+  display: flex;
+  flex-wrap: nowrap;
+  /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
+  flex-direction: column;
+  bottom: 30px;
+
+  .canvasStats {
+    text-align: center;
+    text-shadow: 0 1px 5px black;
+
+    span {
+      display: inline;
+    }
+  }
+
+  .unitImage {
+    bottom: 0;
+  }
+
+  meter,
+  progress {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 90%;
+  }
+}
+
+#playerPortrait {
+  left: 10px;
+}
+
+#enemyPortrait {
+  right: 10px;
+
+  #enemyImage {
+    opacity: 0.8;
+  }
+}
+
+/* DEBUG */
+#tickCounter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2000;
+  background-color: cornflowerblue;
+  margin: 4px;
+  padding: 2px;
+  box-shadow: 2px 2px 2px rgba(0 0 0 / 22.6%);
+}
+
+.hidden {
+  display: none !important;
 }
